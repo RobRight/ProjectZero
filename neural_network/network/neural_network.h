@@ -15,6 +15,7 @@
 // ideas: create error class or just merge them all into one in the network class
 
 namespace Network {
+
 	class Node
 	{
 	private:
@@ -143,13 +144,17 @@ namespace Network {
 			weights = in;
 		}
 	};
-	////////////////////////////////////
+
+
 	class Layer
 	{
 	private:
 		/// variables
 		// vector of all nodes in this layer
 		std::vector <Node> nodes;
+		//
+		unsigned int layer_type;
+		unsigned int layer_num;
 		/// functions
 		// call to report an error
 		void error_call(std::string in) {
@@ -173,6 +178,8 @@ namespace Network {
 			// setup
 			runtime_error = false;
 			nodes.clear();
+			layer_type = in_type;
+			layer_num = in_num;
 			// fill node vector with in_n_count nodes
 			for (std::size_t i=0; i<in_n_count; ++i) {
 				// note:
@@ -199,13 +206,11 @@ namespace Network {
 		// format note: < <node1>, <node2>, ..., <nodeN> >
 		std::vector <std::vector <double> > cycle(std::vector <std::vector <double> > in) {
 			// test
-			for (std::size_t i=0; i<in.size(); ++i) {
-				if (in.at(i).size() != nodes.size()) {
-					std::string tm = "cycle - input size not equal to nodes size.  nodes: " +
-						std::to_string(nodes.size()) + " inputs: " +
-						std::to_string(in.at(i).size());
-					error_call(tm);
-				}
+			if (in.size() != nodes.size()) {
+				std::string tm = "cycle - input size not equal to nodes size.  nodes: " +
+					std::to_string(nodes.size()) + " inputs: " +
+					std::to_string(in.at(i).size());
+				error_call(tm);
 			}
 			// cycle
 			std::vector <std::vector <double> > t_out;  // outputs from all nodes
@@ -248,7 +253,8 @@ namespace Network {
 			}
 		}
 	};
-	////////////////////////////////////
+
+
 	class Network
 	{
 	private:
@@ -270,6 +276,7 @@ namespace Network {
 		void print_intro() {
 			std::cout << std::endl;
 			std::cout << "Neural Network" << std::endl;
+			// npl, version, creator, other network config
 			std::cout << "---------------------" << std::endl;
 		}
 
@@ -297,9 +304,10 @@ namespace Network {
 				else t_type = 1;  // hidden
 				// debug
 				if (debug) {
-					std::cout << "Create layer: "  << i << ";\t";
-					std::cout << "nodes: " << t_nc.at(i) << ";\t";
-					std::cout << "connections: " << t_nnc << ";" << std::endl;
+					std::string tm = "Creating layer: " + to_string(i) +
+						"; node: " + t_nc.at(i) + "; connections: " +
+						std:::to_string(t_nnc) + ";";
+					debug_call(tm);
 				}
 				// layer
 				Layer l;
