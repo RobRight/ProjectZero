@@ -256,12 +256,19 @@ namespace Network {
 				error_call(tm);
 			}
 			// cycle
-			std::vector <std::vector <double> > t_out;  // outputs from all nodes
-			std::vector <double> t_in;  // temp input vector for node i
+			std::vector <std::vector <double> t_in;  // formatted input vector
+			// format input FIX
 			for (std::size_t i=0; i<nodes.size(); ++i) {
-				// cycle node, passing inputs, and saving outputs
-				t_in = in.at(i);
-				t_out.push_back(nodes.at(i).cycle(t_in));
+				std::vector <double> tt;
+				for (std::size_t j=0; j<in.size(); ++j) {
+					tt.push_back(in.at(j).at(i));
+				}
+				t_in.push_back(tt);
+			}
+			// input and cycle
+			std::vector <std::vector <double> > t_out;  // outputs from all nodes
+			for (std::size_t i=0; i<t_in.size(); ++i) {
+				t_out.push_back(nodes.at(i).cycle(t_in));	
 			}
 			if (debug) debug_call("cycle end");
 			return t_out;
