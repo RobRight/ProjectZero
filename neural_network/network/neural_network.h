@@ -117,6 +117,7 @@ namespace Network {
 			if (!bias) {
 				if (layer_type == 0) activation_function(in.at(0)); // input layer
 				else t_out = activation_function(sum_inputs(in));  // not input layer
+			}
 			else t_out = 1.0;  // bias node (output 1.0)
 			return generate_outputs(t_out);
 		}
@@ -152,8 +153,7 @@ namespace Network {
 		std::vector <Node> nodes;
 		/// functions
 		// call to report an error
-		void error_call(std::string in)
-		{
+		void error_call(std::string in) {
 			std::cout << "ERROR:Layer: " << in << std::endl;
 			runtime_error = true;
 			exit(0);
@@ -175,22 +175,18 @@ namespace Network {
 			runtime_error = false;
 			nodes.clear();
 			// fill node vector with in_n_count nodes
-			for (std::size_t i=0; i<in_n_count; ++i)
-			{
+			for (std::size_t i=0; i<in_n_count; ++i) {
 				// note:
 				// - weight size = nodes in next layer
 				// - in_n_count includes bias node
 				// - in_next_n_count is 0 when output layer
 
 				// last node bias if not an output layer
-				if (i == (in_n_count-1) && in_type != 2)
-				{  // bias
+				if (i == (in_n_count-1) && in_type != 2) {  // bias
 					Node n;
 					n.setup(in_next_n_count, true, in_mod, in_chance, in_type, in_num);
 					nodes.push_back(n);
-				}
-				else
-				{  // normal
+				} else {  // normal
 					Node n;
 					n.setup(in_next_n_count, false, in_mod, in_chance, in_type, in_num);
 					nodes.push_back(n);
@@ -202,18 +198,15 @@ namespace Network {
 		// input: all inputs for nodes in layer
 		// output: all outputs from all nodes in layer
 		// format note: < <node1>, <node2>, ..., <nodeN> >
-		std::vector <std::vector <double> > cycle(std::vector <std::vector <double> > in)
-		{
+		std::vector <std::vector <double> > cycle(std::vector <std::vector <double> > in) {
 			// test
-			for (std::size_t i=0; i<in.size(); ++i)
-			{
+			for (std::size_t i=0; i<in.size(); ++i) {
 				if (in.at(i).size() != nodes.size()) error_call("cycle - input size not equal to nodes size");
 			}
 			// cycle
 			std::vector <std::vector <double> > t_out;  // outputs from all nodes
 			std::vector <double> t_in;  // temp input vector for node i
-			for (std::size_t i=0; i<nodes.size(); ++i)
-			{
+			for (std::size_t i=0; i<nodes.size(); ++i) {
 				// cycle node, passing inputs, and saving outputs
 				t_in = in.at(i);
 				t_out.push_back(nodes.at(i).cycle(t_in));
@@ -223,37 +216,25 @@ namespace Network {
 
 		// mutate (main)
 		// call all nodes mutate function
-		void mutate()
-		{
-			for (std::size_t i=0; i<nodes.size(); ++i)
-			{
+		void mutate() {
+			for (std::size_t i=0; i<nodes.size(); ++i) {
 				nodes.at(i).mutate();
 			}
 		}
 
-		// return nodes size (info)
-		int info_node_count()
-		{
-			return nodes.size();
-		}
-
 		// export weights (side)
-		std::vector <std::vector <double> > export_weights()
-		{
+		std::vector <std::vector <double> > export_weights() {
 			std::vector <std::vector <double> > t;
-			for (std::size_t i=0; i<nodes.size(); ++i)
-			{
+			for (std::size_t i=0; i<nodes.size(); ++i) {
 				t.push_back(nodes.at(i).export_weights());
 			}
 			return t;
 		}
 
 		// import weights (side)
-		void import_weights(std::vector <std::vector <double> > in)
-		{
+		void import_weights(std::vector <std::vector <double> > in) {
 			if (in.size() != nodes.size()) error_call("import weights size mismatch");
-			for (std::size_t i=0; i<in.size(); ++i)
-			{
+			for (std::size_t i=0; i<in.size(); ++i) {
 				nodes.at(i).import_weights(in.at(i));
 			}
 		}
@@ -267,20 +248,17 @@ namespace Network {
 		bool runtime_error;
 		/// functions
 		// 
-		void error_call(std::string in)
-		{
+		void error_call(std::string in) {
 			std::cout << "ERROR:Network: " << in << std::endl;
 			runtime_error = true;
 			exit(0);
 		}
 		// 
-		void debug_call(std::string in)
-		{
+		void debug_call(std::string in) {
 			std::cout << "DEBUG:network: " << in << std::endl;
 		}
 		//
-		void print_intro()
-		{
+		void print_intro() {
 			std::cout << std::endl;
 			std::cout << "Neural Network" << std::endl;
 			std::cout << "---------------------" << std::endl;
@@ -293,14 +271,12 @@ namespace Network {
 			if (debug) debug_call("create network start");
 			// add bias node to all layers but the output
 			std::vector <unsigned int> t_nc = in_npl;
-			for (std::size_t i = 0; i<(t_nc.size()-1); ++i)
-			{
+			for (std::size_t i = 0; i<(t_nc.size()-1); ++i) {
 				t_nc.at(i) = (t_nc.at(i) + 1);
 			}
 			npl = t_nc;  // set node count variable for reference
 			// create layers
-			for (std::size_t i = 0; i < t_nc.size(); ++i)
-			{
+			for (std::size_t i = 0; i < t_nc.size(); ++i) {
 				// next node count
 				unsigned int t_nnc;
 				if (i == (t_nc.size()-1)) t_nnc = 0;  // output layer
@@ -311,8 +287,7 @@ namespace Network {
 				else if (i == (t_nc.size()-1)) t_type = 2;  // output
 				else t_type = 1;  // hidden
 				// debug
-				if (debug)
-				{
+				if (debug) {
 					std::cout << "Create layer: "  << i << ";\t";
 					std::cout << "nodes: " << t_nc.at(i) << ";\t";
 					std::cout << "connections: " << t_nnc << ";" << std::endl;
@@ -334,8 +309,7 @@ namespace Network {
 		/// functions
 
 		// constructor
-		Network()
-		{
+		Network() {
 			debug = false;
 			runtime_error = false;
 			ID_value = 0;
@@ -344,8 +318,7 @@ namespace Network {
 		}
 
 		// setup (main)
-		void setup(std::vector <unsigned int> in_npl, double in_m, double in_c)
-		{
+		void setup(std::vector <unsigned int> in_npl, double in_m, double in_c) {
 			if (debug) debug_call("setup start");
 			create_network(in_npl, in_m, in_c);
 			if(run_type == 0) print_intro();
@@ -355,21 +328,17 @@ namespace Network {
 		// cycle network (main) (time)
 		// input: input vector (one double per input node)
 		// output: network output (one double per output node)
-		std::vector <double> cycle(std::vector <double> in)
-		{
+		std::vector <double> cycle(std::vector <double> in) {
 			if (debug) debug_call("cycle start");
 			std::vector <std::vector <double> > inputs;
 			std::vector <std::vector <double> > outputs;
-			for (std::size_t i=0; i<layers.size(); ++i)
-			{
+			for (std::size_t i=0; i<layers.size(); ++i) {
 				// input layer
-				if (i == 0)
-				{
+				if (i == 0) {
 					inputs.clear();
 					// format given inputs
 					std::vector <double> t_in;
-					for (std::size_t x=0; x<in.size(); ++x)
-					{
+					for (std::size_t x=0; x<in.size(); ++x) {
 						t_in.push_back(in.at(x));
 						inputs.push_back(t_in);
 					}
@@ -394,10 +363,8 @@ namespace Network {
 		}
 
 		// mutate (main) (time)
-		void mutate()
-		{
-			for (std::size_t i=0; i<layers.size(); ++i)
-			{
+		void mutate() {
+			for (std::size_t i=0; i<layers.size(); ++i) {
 				layers.at(i).mutate();
 			}
 		}
@@ -406,8 +373,7 @@ namespace Network {
 		std::vector <std::vector <std::vector <double> > > export_weights()
 		{
 			std::vector <std::vector <std::vector <double> > > t;
-			for (std::size_t i=0; i<layers.size(); ++i)
-			{
+			for (std::size_t i=0; i<layers.size(); ++i) {
 				t.push_back(layers.at(i).export_weights());
 			}
 			return t;
@@ -417,8 +383,7 @@ namespace Network {
 		void import_weights(std::vector <std::vector <std::vector <double> > > in)
 		{
 			if (in.size() != layers.size()) error_call("import_weights size mismatch");
-			for (std::size_t i=0; i<in.size(); ++i)
-			{
+			for (std::size_t i=0; i<in.size(); ++i) {
 				layers.at(i).import_weights(in.at(i));
 			}
 		}

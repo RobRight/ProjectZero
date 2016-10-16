@@ -13,6 +13,16 @@ double mutate_chance = 0.5;
 std::vector <double> input;
 std::vector <double> output;
 
+void display_output(std::vector <double> in)
+{
+	std::cout << "Outputs:" << std::endl;
+	for (std::size_t i=0; i<in.size(); ++i)
+	{
+		std::cout << "\t" << output.at(i) << std::endl;
+	}
+	std::cout << std::endl;
+}
+
 void test_network()
 {
 	// setup
@@ -28,16 +38,6 @@ void test_network()
 	//input.at(0) = 0.1;	
 	output = n.cycle(input);
 	display_output(output);
-}
-
-void display_output(std::vector <double> in)
-{
-	std::cout << "Outputs:" << std::endl;
-	for (std::size_t i=0; i<in.size(); ++i)
-	{
-		std::cout << "\t" << output.at(i) << std::endl;
-	}
-	std::cout << std::endl;
 }
 
 int main()
