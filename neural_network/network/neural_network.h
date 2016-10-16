@@ -21,6 +21,7 @@ namespace Network {
 	private:
 		/// variables
 		bool runtime_error;
+		bool debug;
 		// weight for each connection
 		std::vector <double> weights;
 		// generated weight allowed min and max values
@@ -319,7 +320,7 @@ namespace Network {
 				t_nc.at(i) = (t_nc.at(i) + 1);
 			}
 			if (debug) debug_call("add bias end");
-			return t_nc
+			return t_nc;
 		}
 
 		// create network (sub) (single)
