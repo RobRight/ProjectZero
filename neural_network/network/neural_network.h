@@ -256,7 +256,7 @@ namespace Network {
 				error_call(tm);
 			}
 			// cycle
-			std::vector <std::vector <double> t_in;  // formatted input vector
+			std::vector <std::vector <double> > t_in;  // formatted input vector
 			// format input FIX
 			for (std::size_t i=0; i<nodes.size(); ++i) {
 				std::vector <double> tt;
