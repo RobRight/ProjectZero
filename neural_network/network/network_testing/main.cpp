@@ -34,11 +34,12 @@ void test_network()
 
 	// test
 	input.clear();
-	input.push_back(0.6);
+	input.push_back(0);
 	output = n.cycle(input);
 	display_output(output);
 	//n.mutate();
-	//input.at(0) = 0.1;	
+	input.clear();
+	input.push_back(0.2);	
 	output = n.cycle(input);
 	display_output(output);
 }
