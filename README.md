@@ -1,5 +1,7 @@
 
-# NNProject
+# ProjectZero
+
+## NNProject
 Neural Network, Trainer and associated Domains
 
 ### Network:
