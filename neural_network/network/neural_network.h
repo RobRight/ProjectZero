@@ -13,6 +13,9 @@
 #define LYRAND (double)rand()/RAND_MAX
 
 // ideas: create error class or just merge them all into one in the network class
+// todo:
+//	- add scale function for input and output to meet network requirements given min and max inputs
+//	- clean up debug info to be nicer looking.  debug should provide info.  add verbose? to show every start and stop of common functions and cluttering output
 
 namespace Network {
 
@@ -126,7 +129,7 @@ namespace Network {
 			if (layer_type != 2) generate_weights(in_w_count);
 			if (debug) {
 				std::string tm = "creating node type: " + std::to_string(in_type) +
-					"bias: " + std::to_string(bias) + "weights: " + std::to_string(in_w_count);
+					"; bias: " + std::to_string(bias) + "; weights: " + std::to_string(in_w_count);
 				debug_call(tm);
 			}
 			if (debug) debug_call("setup end");
@@ -397,6 +400,7 @@ namespace Network {
 		bool debug;
 		bool debugL;
 		bool debugN;
+		bool verbose;
 		bool run_type;  // 0:single, 1:train
 		unsigned int ID_value;
 		std::vector <unsigned int> npl;  // including bias
@@ -408,6 +412,7 @@ namespace Network {
 			debug = false;
 			debugL = false;
 			debugN = false;
+			verbose = false;
 			runtime_error = false;
 			ID_value = 0;
 			run_type = 0;
@@ -438,9 +443,10 @@ namespace Network {
 				else inputs = outputs;
 				// test
 				if (inputs.size() != layers.at(i).return_node_count()) {
-					std::string tm = "cycle - input size mismatch to nodes in layer. input: " +
-						std::to_string(inputs.size()) + " nodes: " +
-						std::to_string(layers.at(i).return_node_count()); 
+					std::string tm = "cycle - input size mismatch to nodes in layer. layer: " +
+						std::to_string(i) + "; input: " +
+						std::to_string(inputs.size()) + "; nodes: " +
+						std::to_string(layers.at(i).return_node_count()) + ";"; 
 					error_call(tm);
 				}
 				// cycle
