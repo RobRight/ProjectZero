@@ -209,7 +209,7 @@ namespace Network {
 			if (in.size() != nodes.size()) {
 				std::string tm = "cycle - input size not equal to nodes size.  nodes: " +
 					std::to_string(nodes.size()) + " inputs: " +
-					std::to_string(in.at(i).size());
+					std::to_string(in.size());
 				error_call(tm);
 			}
 			// cycle
@@ -304,9 +304,9 @@ namespace Network {
 				else t_type = 1;  // hidden
 				// debug
 				if (debug) {
-					std::string tm = "Creating layer: " + to_string(i) +
-						"; node: " + t_nc.at(i) + "; connections: " +
-						std:::to_string(t_nnc) + ";";
+					std::string tm = "Creating layer: " + std::to_string(i) +
+						"; node: " + std::to_string(t_nc.at(i)) +
+						"; connections: " + std::to_string(t_nnc) + ";";
 					debug_call(tm);
 				}
 				// layer
