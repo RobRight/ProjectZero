@@ -222,6 +222,11 @@ namespace Network {
 			}
 		}
 
+		// return node count(info)
+		unsigned int return_node_count() {
+			return nodes.size();
+		}
+
 		// export weights (side)
 		std::vector <std::vector <double> > export_weights() {
 			std::vector <std::vector <double> > t;
@@ -339,14 +344,18 @@ namespace Network {
 					// format given inputs
 					std::vector <double> t_in;
 					for (std::size_t x=0; x<in.size(); ++x) {
+						t_in.clear();
 						t_in.push_back(in.at(x));
 						inputs.push_back(t_in);
 					}
-					inputs.push_back(1.0);  // bias node
+					// bias node
+					t_in.clear();
+					t_in.push_back(1.0);
+					inputs.push_back(t_in);
 				}
 				else inputs = outputs;
 				// test
-				if (inputs.size() != layers.at(i).size()) error_call("input size mismatch nodes in layer");
+				if (inputs.size() != layers.at(i).return_node_count()) error_call("input size mismatch nodes in layer");
 				// cycle
 				if (debug) debug_call("cycle layer");
 				outputs = layers.at(i).cycle(inputs);
