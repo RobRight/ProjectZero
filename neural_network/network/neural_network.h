@@ -141,6 +141,8 @@ namespace Network {
 		// note: how to deal with cycle of bias node
 		std::vector <double> cycle(std::vector <double> in) {
 			if (debug) debug_call("cycle start");
+			// test inputs to node (info not available)
+			// cycle
 			double t_out;  // node output scaler
 			if (!bias) {
 				if (layer_type == 0) activation_function(in.at(0)); // input layer
@@ -246,11 +248,11 @@ namespace Network {
 		// format note: < <node1>, <node2>, ..., <nodeN> >
 		std::vector <std::vector <double> > cycle(std::vector <std::vector <double> > in) {
 			if (debug) debug_call("cycle start");
-			// test
-			if (in.size() != nodes.size()) {
+			// test (redundant - network)
+			if (in.at(0).size() != nodes.size()) {
 				std::string tm = "cycle - input size not equal to nodes size.  nodes: " +
-					std::to_string(nodes.size()) + " inputs: " +
-					std::to_string(in.size());
+					std::to_string(nodes.size()) + "; inputs: " +
+					std::to_string(in.size()) + ";";
 				error_call(tm);
 			}
 			// cycle
@@ -381,14 +383,8 @@ namespace Network {
 		std::vector <std::vector <double> > format_input(std::vector <double> in) {
 			if (debug) debug_call("format input start");
 			std::vector <std::vector <double> > t_out;
-			std::vector <double> t_in;
-			for (std::size_t x=0; x<in.size(); ++x) {
-				t_in.clear();
-				t_in.push_back(in.at(x));
-				t_out.push_back(t_in);
-			}
+			std::vector <double> t_in = in;
 			// bias node
-			t_in.clear();
 			t_in.push_back(1.0);
 			t_out.push_back(t_in);
 			if (debug) debug_call("format input end");
@@ -442,7 +438,7 @@ namespace Network {
 				}
 				else inputs = outputs;
 				// test
-				if (inputs.size() != layers.at(i).return_node_count()) {
+				if (inputs.at(0).size() != layers.at(i).return_node_count()) {
 					std::string tm = "cycle - input size mismatch to nodes in layer. layer: " +
 						std::to_string(i) + "; input: " +
 						std::to_string(inputs.size()) + "; nodes: " +
