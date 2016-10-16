@@ -72,8 +72,7 @@ namespace Network {
 			std::vector <double> t_out;
 			if (layer_type == 2) {
 				// output layer - no weights
-				t_out.push_back(t);
-				return t_out;
+				t_out.push_back(in);
 			} else {
 				// output = out * weight(i)
 				for (std::size_t i=0; i<weights.size(); ++i) {
