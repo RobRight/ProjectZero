@@ -88,7 +88,7 @@ namespace Network {
 			if (layer_type == 2) {
 				// output layer - no weights
 				t_out.push_back(in);
-			} else {
+			} else {  // most common, put first FIX
 				// output = out * weight(i)
 				for (std::size_t i=0; i<weights.size(); ++i) {
 					t_out.push_back(in*weights.at(i));
@@ -109,6 +109,7 @@ namespace Network {
 					unsigned int in_type,
 					unsigned int in_num,
 					bool in_debug ) {
+			if (debug) debug_call("setup start");
 			// settings
 			weight_gen_min = (-1);
 			weight_gen_max = ( 1);
@@ -123,6 +124,12 @@ namespace Network {
 			layer_num = in_num;
 			// generate weights except for output layer
 			if (layer_type != 2) generate_weights(in_w_count);
+			if (debug) {
+				std::string tm = "creating node type: " + std::to_string(in_type) +
+					"bias: " + std::to_string(bias) + "weights: " + std::to_string(in_w_count);
+				debug_call(tm);
+			}
+			if (debug) debug_call("setup end");
 		}
 
 		// cycle (main)
@@ -130,13 +137,16 @@ namespace Network {
 		// output: outputs, one for each connection, with weights applied
 		// note: how to deal with cycle of bias node
 		std::vector <double> cycle(std::vector <double> in) {
+			if (debug) debug_call("cycle start");
 			double t_out;  // node output scaler
 			if (!bias) {
 				if (layer_type == 0) activation_function(in.at(0)); // input layer
 				else t_out = activation_function(sum_inputs(in));  // not input layer
 			}
 			else t_out = 1.0;  // bias node (output 1.0)
-			return generate_outputs(t_out);
+			std::vector <double> t_final_out = generate_outputs(t_out);
+			if (debug) debug_call("cycle end");
+			return t_final_out;
 		}
 
 		// mutate (main)
