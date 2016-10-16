@@ -200,7 +200,12 @@ namespace Network {
 		std::vector <std::vector <double> > cycle(std::vector <std::vector <double> > in) {
 			// test
 			for (std::size_t i=0; i<in.size(); ++i) {
-				if (in.at(i).size() != nodes.size()) error_call("cycle - input size not equal to nodes size");
+				if (in.at(i).size() != nodes.size()) {
+					std::string tm = "cycle - input size not equal to nodes size.  nodes: " +
+						std::to_string(nodes.size()) + " inputs: " +
+						std::to_string(in.at(i).size());
+					error_call(tm);
+				}
 			}
 			// cycle
 			std::vector <std::vector <double> > t_out;  // outputs from all nodes
@@ -354,9 +359,15 @@ namespace Network {
 				}
 				else inputs = outputs;
 				// test
-				if (inputs.size() != layers.at(i).return_node_count()) error_call("input size mismatch nodes in layer");
+				if (inputs.size() != layers.at(i).return_node_count()) {
+					std::string tm = "cycle - input size mismatch to nodes in layer. input: " +
+						std::to_string(inputs.size()) + " nodes: " +
+						std::to_string(layers.at(i).return_node_count()); 
+					error_call(tm);
+				}
 				// cycle
-				if (debug) debug_call("cycle layer");
+				std::string tm = "cycle layer: " + std::to_string(i);
+				if (debug) debug_call(tm);
 				outputs = layers.at(i).cycle(inputs);
 			}
 			// prepare output
