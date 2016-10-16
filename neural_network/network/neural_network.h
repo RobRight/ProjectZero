@@ -434,9 +434,12 @@ namespace Network {
 					error_call(tm);
 				}
 				// cycle
-				std::string tm = "cycle layer: " + std::to_string(i);
-				if (debug) debug_call(tm);
+				if (debug) {
+					std::string tm = "cycle layer: " + std::to_string(i);
+					debug_call(tm);
+				}
 				outputs = layers.at(i).cycle(inputs);
+				if (debug) debug_call("cycle layer complete");
 			}
 			// prepare output
 			std::vector <double> outputs_simple;
