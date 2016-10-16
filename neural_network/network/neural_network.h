@@ -16,6 +16,7 @@
 // todo:
 //	- add scale function for input and output to meet network requirements given min and max inputs
 //	- clean up debug info to be nicer looking.  debug should provide info.  add verbose? to show every start and stop of common functions and cluttering output
+//	- add passing values
 
 namespace Network {
 
