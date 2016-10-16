@@ -29,7 +29,7 @@ namespace Network {
 		//std::vector <unsigned int> connections;  // for selectively connected
 		bool bias;  // true for bias node (output 1 before weight)
 		unsigned int layer_type;  // 0:input, 1:hidden, 2:output
-		unsigned int layer_number;  // layer 1 for input, N for output, else hidden
+		unsigned int layer_num;  // layer 1 for input, N for output, else hidden
 
 		/// functions
 
