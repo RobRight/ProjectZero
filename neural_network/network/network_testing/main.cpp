@@ -29,7 +29,7 @@ void test_network()
 {
 	// setup
 	Network::Network n;
-	n.verbose = verbose
+	n.verbose = verbose;
 	n.debug = debug;
 	//n.debugL = debug;
 	//n.debugN = debug;
