@@ -329,7 +329,8 @@ namespace Network {
 		//
 		void print_intro() {
 			std::cout << std::endl;
-			std::cout << "Neural Network" << std::endl;
+			std::cout << "Neural Network V3.0" << std::endl;
+			std::cout << "WG2016" << std::endl;
 			// npl, version, creator, other network config
 			std::cout << "---------------------" << std::endl;
 		}
@@ -494,7 +495,7 @@ namespace Network {
 						for (std::size_t e=0; e<inputs.at(d).size(); ++e) {
 							tm = tm + std::to_string(inputs.at(d).at(e)) + "; ";
 						}
-						if (d != inputs.size()-1) tm = tm + "\t";
+						if (d != inputs.size()) tm = tm + "\t";
 					}
 					debug_call(tm);
 				}
@@ -507,10 +508,11 @@ namespace Network {
 						for (std::size_t e=0; e<outputs.at(d).size(); ++e) {
 							tm = tm + std::to_string(outputs.at(d).at(e)) + "; ";
 						}
-						if (d != inputs.size()-1) tm = tm + "\t";
+						if (d != inputs.size()) tm = tm + "\t";
 					}
 					debug_call(tm);
-					debug_call("cycle layer complete");
+				}
+				if (debug) debug_call("cycle layer complete");
 				}
 			}
 			// prepare output

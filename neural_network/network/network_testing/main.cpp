@@ -17,7 +17,7 @@ std::vector <double> output;
 
 void display_output(std::vector <double> in)
 {
-	std::cout << "Outputs:" << std::endl;
+	std::cout << "\nOutputs:" << std::endl;
 	for (std::size_t i=0; i<in.size(); ++i)
 	{
 		std::cout << "\t" << output.at(i) << std::endl;
