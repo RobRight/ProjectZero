@@ -12,8 +12,6 @@
 
 #define LYRAND (double)rand()/RAND_MAX
 
-#define VERBOSE true
-
 // ideas: create error class or just merge them all into one in the network class
 // todo:
 //	- add scale function for input and output to meet network requirements given min and max inputs
@@ -334,6 +332,10 @@ namespace Network {
 			std::cout << "DEBUG:Network: " << in << std::endl;
 		}
 		//
+		void info_call(std::string in) {
+			std::cout << "VERB:Network: " << in << std::endl;
+		}
+		//
 		void print_intro() {
 			std::cout << std::endl;
 			std::cout << "Neural Network V3.0" << std::endl;
@@ -374,7 +376,7 @@ namespace Network {
 				else if (i == (npl.size()-1)) t_type = 2;  // output
 				else t_type = 1;  // hidden
 				// debug
-				if (verbose) {
+				if (debug) {
 					std::string tm = "Creating layer: " + std::to_string(i) +
 						"; node: " + std::to_string(npl.at(i)) +
 						"; connections: " + std::to_string(t_nnc) + ";";
@@ -496,7 +498,7 @@ namespace Network {
 				// debug
 				if (verbose) {
 					std::string tm = "cycle layer: " + std::to_string(i);
-					debug_call(tm);
+					info_call(tm);
 					tm = "inputs: ";
 					for (std::size_t d=0; d<inputs.size(); ++d) {
 						for (std::size_t e=0; e<inputs.at(d).size(); ++e) {
@@ -504,7 +506,7 @@ namespace Network {
 						}
 						if (d != inputs.size()-1) tm = tm + "\t";
 					}
-					debug_call(tm);
+					info_call(tm);
 				}
 				// cycle
 				outputs = layers.at(i).cycle(inputs);
@@ -517,7 +519,7 @@ namespace Network {
 						}
 						if (d != outputs.size()-1) tm = tm + "\t";
 					}
-					debug_call(tm);
+					info_call(tm);
 				}
 				if (debug) debug_call("cycle layer complete");
 			}
