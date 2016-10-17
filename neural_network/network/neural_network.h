@@ -513,7 +513,6 @@ namespace Network {
 					debug_call(tm);
 				}
 				if (debug) debug_call("cycle layer complete");
-				}
 			}
 			// prepare output
 			std::vector <double> outputs_simple;
