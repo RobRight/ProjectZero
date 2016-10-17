@@ -12,6 +12,8 @@
 
 #define LYRAND (double)rand()/RAND_MAX
 
+#define VERBOSE true
+
 // ideas: create error class or just merge them all into one in the network class
 // todo:
 //	- add scale function for input and output to meet network requirements given min and max inputs
@@ -336,13 +338,13 @@ namespace Network {
 		// input: desired npl layer given to setup
 		// output: returned with added bias to proper layers
 		std::vector <unsigned int> add_bias(std::vector <unsigned int> in_npl) {
-			//if (debug) debug_call("add bias start");
+			if (debug) debug_call("add bias start");
 			std::vector <unsigned int> t_nc = in_npl;
 			// add bias node to all layers but the output
 			for (std::size_t i = 0; i<(t_nc.size()-1); ++i) {
 				t_nc.at(i) = (t_nc.at(i) + 1);
 			}
-			//if (debug) debug_call("add bias end");
+			if (debug) debug_call("add bias end");
 			return t_nc;
 		}
 
@@ -364,7 +366,7 @@ namespace Network {
 				else if (i == (npl.size()-1)) t_type = 2;  // output
 				else t_type = 1;  // hidden
 				// debug
-				if (debug) {
+				if (verbose) {
 					std::string tm = "Creating layer: " + std::to_string(i) +
 						"; node: " + std::to_string(npl.at(i)) +
 						"; connections: " + std::to_string(t_nnc) + ";";
@@ -389,13 +391,13 @@ namespace Network {
 		// input: input vector to network
 		// output: formatted for passing to input layer
 		std::vector <std::vector <double> > format_input(std::vector <double> in) {
-			//if (debug) debug_call("format input start");
+			if (debug) debug_call("format input start");
 			std::vector <std::vector <double> > t_out;
 			std::vector <double> t_in = in;
 			// bias node
 			t_in.push_back(1.0);
 			t_out.push_back(t_in);
-			//if (debug) debug_call("format input end");
+			if (debug) debug_call("format input end");
 			return t_out;
 		}
 
@@ -455,10 +457,10 @@ namespace Network {
 		void setup( std::vector <unsigned int> in_npl,
 					double in_m,
 					double in_c ) {
-			//if (debug) debug_call("setup start");
+			if (debug) debug_call("setup start");
 			create_network(in_npl, in_m, in_c);
 			if(run_type == 0) print_intro();
-			//if (debug) debug_call("setup end");
+			if (debug) debug_call("setup end");
 		}
 
 		// cycle network (main) (multi) (time)
@@ -484,7 +486,7 @@ namespace Network {
 					error_call(tm);
 				}
 				// debug
-				if (debug) {
+				if (verbose) {
 					std::string tm = "cycle layer: " + std::to_string(i);
 					debug_call(tm);
 					tm = "inputs: ";
@@ -499,7 +501,7 @@ namespace Network {
 				// cycle
 				outputs = layers.at(i).cycle(inputs);
 				// debug
-				if (debug) {
+				if (verbose) {
 					std::string tm = "outputs: ";
 					for (std::size_t d=0; d<outputs.size(); ++d) {
 						for (std::size_t e=0; e<outputs.at(d).size(); ++e) {
