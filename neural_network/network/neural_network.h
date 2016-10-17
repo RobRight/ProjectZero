@@ -495,7 +495,7 @@ namespace Network {
 						for (std::size_t e=0; e<inputs.at(d).size(); ++e) {
 							tm = tm + std::to_string(inputs.at(d).at(e)) + "; ";
 						}
-						if (d != inputs.size()) tm = tm + "\t";
+						if (d != inputs.size()-1) tm = tm + "\t";
 					}
 					debug_call(tm);
 				}
@@ -508,7 +508,7 @@ namespace Network {
 						for (std::size_t e=0; e<outputs.at(d).size(); ++e) {
 							tm = tm + std::to_string(outputs.at(d).at(e)) + "; ";
 						}
-						if (d != inputs.size()) tm = tm + "\t";
+						if (d != outputs.size()-1) tm = tm + "\t";
 					}
 					debug_call(tm);
 				}
