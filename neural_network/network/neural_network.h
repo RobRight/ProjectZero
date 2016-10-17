@@ -489,7 +489,10 @@ namespace Network {
 					debug_call(tm);
 					tm = "inputs: ";
 					for (std::size_t d=0; d<inputs.size(); ++d) {
-						tm = tm + std::to_string(inputs.at(d)) + "; ";
+						for (std::size_t e=0; e<inputs.at(d).size(); ++e) {
+							tm = tm + std::to_string(inputs.at(d)) + "; ";
+						}
+						tm = tm + ";";
 					}
 					debug_call(tm);
 				}
@@ -499,7 +502,10 @@ namespace Network {
 				if (debug) {
 					tm = "outputs: ";
 					for (std::size_t d=0; d<outputs.size(); ++d) {
-						std::to_string(outputs.at(d)) + "; ";
+						for (std::size_t e=0; e<outputs.at(d).size(); ++e) {
+							tm = tm + std::to_string(outputs.at(d)) + "; ";
+						}
+						tm = tm + ";";
 					}
 					debug_call(tm);
 					debug_call("cycle layer complete");
