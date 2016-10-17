@@ -4,7 +4,7 @@
 #include "../neural_network.h"
 
 // - settings -
-bool debug = false;
+bool debug = true;
 bool verbose = true;
 
 std::vector <unsigned int> nc = {1,2,1};  // node count per layer
