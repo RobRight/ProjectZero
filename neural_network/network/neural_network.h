@@ -490,7 +490,7 @@ namespace Network {
 					tm = "inputs: ";
 					for (std::size_t d=0; d<inputs.size(); ++d) {
 						for (std::size_t e=0; e<inputs.at(d).size(); ++e) {
-							tm = tm + std::to_string(inputs.at(d)) + "; ";
+							tm = tm + std::to_string(inputs.at(d).at(e)) + "; ";
 						}
 						tm = tm + ";";
 					}
@@ -500,10 +500,10 @@ namespace Network {
 				outputs = layers.at(i).cycle(inputs);
 				// debug
 				if (debug) {
-					tm = "outputs: ";
+					std::string tm = "outputs: ";
 					for (std::size_t d=0; d<outputs.size(); ++d) {
 						for (std::size_t e=0; e<outputs.at(d).size(); ++e) {
-							tm = tm + std::to_string(outputs.at(d)) + "; ";
+							tm = tm + std::to_string(outputs.at(d).at(e)) + "; ";
 						}
 						tm = tm + ";";
 					}
