@@ -31,7 +31,7 @@ void test_network()
 	Network::Network n;
 	n.verbose = verbose;
 	n.debug = debug;
-	//n.debugL = debug;
+	n.debugL = debug;
 	//n.debugN = debug;
 	n.setup(nc, mutate_mod, mutate_chance);
 
