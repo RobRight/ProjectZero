@@ -399,6 +399,30 @@ namespace Network {
 			return t_out;
 		}
 
+		/*
+		// scale input (sub) (multi)
+		// input: input vector before formatting
+		// output: input vector scalled
+		std::vector <double> scale_input(std::vector <double> in) {
+			std::vector <double> t_out;
+			for (std::size_t i=0; i<in.size(); ++i) {
+				t_out.push_out(in.at(i)/input_max);
+			}
+			return t_out;
+		}
+
+		// scale output (sub) (mulit)
+		// needed??
+		// input: output vector
+		// output: output vector scalled
+		std::vector <double> scale_output(std::vector <double> in) {
+			std::vector <double> t_out;
+			for (std::size_t i=0; i<in.size(); ++i) {
+				t_out.push_back(in.at(i));
+			}
+		}
+		*/
+
 	public:
 		/// variables
 		bool debug;
@@ -408,6 +432,10 @@ namespace Network {
 		bool run_type;  // 0:single, 1:train
 		unsigned int ID_value;
 		std::vector <unsigned int> npl;  // including bias
+		//double input_max;  // for scaling
+		//double input_min;
+		//double output_max;  // result of input to activation
+		//double output_min;
 
 		/// functions
 
@@ -424,7 +452,9 @@ namespace Network {
 		}
 
 		// setup (main) (single)
-		void setup(std::vector <unsigned int> in_npl, double in_m, double in_c) {
+		void setup( std::vector <unsigned int> in_npl,
+					double in_m,
+					double in_c ) {
 			if (debug) debug_call("setup start");
 			create_network(in_npl, in_m, in_c);
 			if(run_type == 0) print_intro();
@@ -453,13 +483,27 @@ namespace Network {
 						std::to_string(layers.at(i).return_node_count()) + ";"; 
 					error_call(tm);
 				}
-				// cycle
+				// debug
 				if (debug) {
 					std::string tm = "cycle layer: " + std::to_string(i);
 					debug_call(tm);
+					tm = "inputs: ";
+					for (std::size_t d=0; d<inputs.size(); ++d) {
+						std::to_string(inputs.at(d)) + "; ";
+					}
+					debug_call(tm);
 				}
+				// cycle
 				outputs = layers.at(i).cycle(inputs);
-				if (debug) debug_call("cycle layer complete");
+				// debug
+				if (debug) {
+					tm = "outputs: ";
+					for (std::size_t d=0; d<outputs.size(); ++d) {
+						std::to_string(outputs.at(d)) + "; ";
+					}
+					debug_call(tm);
+					debug_call("cycle layer complete");
+				}
 			}
 			// prepare output
 			std::vector <double> outputs_simple;
