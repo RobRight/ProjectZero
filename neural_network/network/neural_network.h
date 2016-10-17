@@ -271,6 +271,13 @@ namespace Network {
 			// input and cycle
 			std::vector <std::vector <double> > t_out;  // outputs from all nodes
 			for (std::size_t i=0; i<t_in.size(); ++i) {
+				if (debug) {
+					std::string tm = "input node: " + std::to_string(i) + "; ";
+					for (std::size_t d=0; d<t_in.at(i).size(); ++d) {
+						tm = tm + std::to_string(t_in.at(i).at(d)) + "; ";
+					}
+					debug_call(tm);
+				}
 				t_out.push_back(nodes.at(i).cycle(t_in.at(i)));	
 			}
 			if (debug) debug_call("cycle end");
