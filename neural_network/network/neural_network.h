@@ -489,7 +489,7 @@ namespace Network {
 					debug_call(tm);
 					tm = "inputs: ";
 					for (std::size_t d=0; d<inputs.size(); ++d) {
-						std::to_string(inputs.at(d)) + "; ";
+						tm = tm + std::to_string(inputs.at(d)) + "; ";
 					}
 					debug_call(tm);
 				}

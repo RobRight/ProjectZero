@@ -4,7 +4,7 @@
 #include "../neural_network.h"
 
 // - settings -
-bool debug = false;
+bool debug = true;
 std::vector <unsigned int> nc = {1,2,1};  // node count per layer
 double mutate_mod = 0.1;
 double mutate_chance = 0.5;
@@ -28,8 +28,8 @@ void test_network()
 	// setup
 	Network::Network n;
 	n.debug = debug;
-	n.debugL = debug;
-	n.debugN = debug;
+	//n.debugL = debug;
+	//n.debugN = debug;
 	n.setup(nc, mutate_mod, mutate_chance);
 
 	// test
