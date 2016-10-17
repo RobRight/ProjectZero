@@ -113,6 +113,7 @@ namespace Network {
 					unsigned int in_type,
 					unsigned int in_num,
 					bool in_debug ) {
+			debug = in_debug;
 			if (debug) debug_call("setup start");
 			// settings
 			weight_gen_min = (-1);
@@ -120,7 +121,6 @@ namespace Network {
 			// settings end
 			// set input options
 			runtime_error = false;
-			debug = in_debug;
 			bias = in_bias;
 			mutate_mod = in_mod;
 			mutate_chance = in_chance;
@@ -216,9 +216,9 @@ namespace Network {
 					bool in_debug,
 					bool in_debugN ) {
 			// setup
+			debug = in_debug;
 			if (debug) debug_call("setup start");
 			runtime_error = false;
-			debug = in_debug;
 			nodes.clear();
 			layer_type = in_type;
 			layer_num = in_num;
@@ -336,13 +336,13 @@ namespace Network {
 		// input: desired npl layer given to setup
 		// output: returned with added bias to proper layers
 		std::vector <unsigned int> add_bias(std::vector <unsigned int> in_npl) {
-			if (debug) debug_call("add bias start");
+			//if (debug) debug_call("add bias start");
 			std::vector <unsigned int> t_nc = in_npl;
 			// add bias node to all layers but the output
 			for (std::size_t i = 0; i<(t_nc.size()-1); ++i) {
 				t_nc.at(i) = (t_nc.at(i) + 1);
 			}
-			if (debug) debug_call("add bias end");
+			//if (debug) debug_call("add bias end");
 			return t_nc;
 		}
 
@@ -389,13 +389,13 @@ namespace Network {
 		// input: input vector to network
 		// output: formatted for passing to input layer
 		std::vector <std::vector <double> > format_input(std::vector <double> in) {
-			if (debug) debug_call("format input start");
+			//if (debug) debug_call("format input start");
 			std::vector <std::vector <double> > t_out;
 			std::vector <double> t_in = in;
 			// bias node
 			t_in.push_back(1.0);
 			t_out.push_back(t_in);
-			if (debug) debug_call("format input end");
+			//if (debug) debug_call("format input end");
 			return t_out;
 		}
 
@@ -455,10 +455,10 @@ namespace Network {
 		void setup( std::vector <unsigned int> in_npl,
 					double in_m,
 					double in_c ) {
-			if (debug) debug_call("setup start");
+			//if (debug) debug_call("setup start");
 			create_network(in_npl, in_m, in_c);
 			if(run_type == 0) print_intro();
-			if (debug) debug_call("setup end");
+			//if (debug) debug_call("setup end");
 		}
 
 		// cycle network (main) (multi) (time)
