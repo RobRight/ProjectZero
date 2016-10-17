@@ -148,6 +148,7 @@ namespace Network {
 			// cycle
 			double t_out;  // node output scaler
 			if (!bias) {
+				std::cout << in.size() << in.at(0) << std::endl;
 				//if (layer_type == 0) activation_function(in.at(0)); // input layer
 				t_out = activation_function(sum_inputs(in));  // not input layer
 			}
