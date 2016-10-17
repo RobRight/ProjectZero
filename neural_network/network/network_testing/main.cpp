@@ -45,6 +45,9 @@ void test_network()
 	input.push_back(0.2);	
 	output = n.cycle(input);
 	display_output(output);
+	n.mutate();
+	output = n.cycle(input);
+	display_output(output);
 }
 
 int main()
