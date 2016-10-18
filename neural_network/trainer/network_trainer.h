@@ -748,7 +748,7 @@ namespace Trainer
 			if (debug) std::cout << "debug: round " << round << ";sub " << sub_round << " complete" << std::endl;
 		}
 		// training complete
-		time_delta = double(clock() - time_start) / CLOCK_PER_SEC;
+		time_delta = double(clock() - time_start) / CLOCKS_PER_SEC;
 		if (debug) std::cout << "debug: train() end" << std::endl;
 		if (runtime_error) std::cout << "error: runtime error triggered" << std::endl;
 		else
