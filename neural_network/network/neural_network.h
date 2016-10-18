@@ -153,7 +153,7 @@ namespace Network {
 			// cycle
 			double t_out;  // node output scaler
 			if (!bias) {
-				if (layer_type == 0) t_out = activation_function(in.at(0)); // input layer
+				if (layer_type == 0) t_out = in.at(0); // input layer
 				else t_out = activation_function(sum_inputs(in));  // not input layer
 			}
 			else t_out = 1.0;  // bias node (output 1.0)
