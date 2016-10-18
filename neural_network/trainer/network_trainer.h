@@ -230,8 +230,11 @@ namespace Trainer
 	Network::Network Trainer::generate_network()
 	{
 		Network::Network net;
-		net.setup(nodes_per_layer, mutate_mod, mutate_chance);
+
 		net.ID_value = ID_next;
+		net.run_type = 1;
+		net.setup(nodes_per_layer, mutate_mod, mutate_chance);
+		
 		ID_next++;
 		return net;
 	}
