@@ -15,7 +15,9 @@
 * change params
 * call train()
 *
-* Note:
+* ToDo:
+*	- add sweeping function to determine best values for...
+*		- hidden_layer_size, mutate_mod, mutate_chance, sub_round_max, population_size
 *
 */
 
@@ -74,7 +76,7 @@ namespace Trainer
 		// next unique ID for network
 		unsigned int ID_next;
 		// script start time
-		time_t time_start;
+		clock_t time_start;
 		// script run time
 		double time_delta;
 
@@ -171,7 +173,7 @@ namespace Trainer
 		std::cout << std::endl;
 		std::cout << "------------------------" << std::endl;
 		std::cout << "Network Trainer" << std::endl;
-		std::cout << "by " << "William Gregory" << std::endl;
+		std::cout << "by " << "WG" << std::endl;
 		std::cout << std::endl;
 		std::cout << "population size: " << population_size << std::endl;
 		std::cout << "max rounds: " << round_max << std::endl;
@@ -717,7 +719,7 @@ namespace Trainer
 	void Trainer::train()
 	{
 		if (debug) std::cout << "debug: train() start" << std::endl;
-		time_start = time(0);
+		time_start = clock();
 		while (round < round_max && runtime_error == false)
 		{
 			if (debug) std::cout << "debug: round " << round << "; sub " << sub_round << " start" << std::endl;
@@ -746,7 +748,7 @@ namespace Trainer
 			if (debug) std::cout << "debug: round " << round << ";sub " << sub_round << " complete" << std::endl;
 		}
 		// training complete
-		time_delta = difftime(time(0), time_start);
+		time_delta = double(clock() - time_start) / CLOCK_PER_SEC;
 		if (debug) std::cout << "debug: train() end" << std::endl;
 		if (runtime_error) std::cout << "error: runtime error triggered" << std::endl;
 		else

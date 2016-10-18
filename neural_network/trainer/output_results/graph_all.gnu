@@ -49,4 +49,3 @@ plot loc."avg_error.txt"
 
 
 print "graphs generated"
-
