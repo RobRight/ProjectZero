@@ -156,7 +156,6 @@ namespace Trainer
 		{
 			population.push_back(generate_network());
 		}
-		print_intro();
 		std::string name = "first";
 		debug_check_network(population.at(0), name, false);
 	}
@@ -719,6 +718,7 @@ namespace Trainer
 	void Trainer::train()
 	{
 		if (debug) std::cout << "debug: train() start" << std::endl;
+		print_intro();
 		time_start = clock();
 		while (round < round_max && runtime_error == false)
 		{
