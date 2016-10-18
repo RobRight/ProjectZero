@@ -43,7 +43,9 @@ plot loc."network_output_first.txt" using 1:2 index 0 with linespoints ls 1 titl
 	 ""									  index 1 with linespoints ls 2 title "expected"
 
 ## error
-
+set title "Network Error"
+set output loc."error.png"
+plot loc."avg_error.txt"
 
 
 print "graphs generated"

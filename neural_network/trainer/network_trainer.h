@@ -210,7 +210,7 @@ namespace Trainer
 		std::cout << "------------------------" << std::endl;
 		std::cout << std::endl;
 	}
-
+ 
 	void Trainer::export_error(double in, bool in_clear)
 	{
 		std::ofstream file;
