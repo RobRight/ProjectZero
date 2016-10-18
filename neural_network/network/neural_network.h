@@ -8,15 +8,22 @@
 #include <cstdlib> // RAND_MAX
 #include <time.h> // time for srand and delta times
 #include <math.h> // exp - sigmoid
-#include <string>  // error call
+#include <string>  // messages
+#include <ctime>  // clock
 
 #define LYRAND (double)rand()/RAND_MAX
 
-// ideas: create error class or just merge them all into one in the network class
+// ideas:
+//	- create (error, debug, info)/message class
+//	- create testing class
+
 // todo:
 //	- add scale function for input and output to meet network requirements given min and max inputs
-//	- clean up debug info to be nicer looking.  debug should provide info.  add verbose? to show every start and stop of common functions and cluttering output
-//	- add passing values
+
+// INFO:
+//	- settings
+//  	- debug: provide function start end info to find where error occurs.
+//		- verbose: provide info of internal network states while running
 
 namespace Network {
 
@@ -213,8 +220,7 @@ namespace Network {
 					double in_chance,
 					unsigned int in_type,  // layer type
 					unsigned int in_num,
-					bool in_debug,
-					bool in_debugN ) {
+					bool in_debug ) {
 			// setup
 			debug = in_debug;
 			if (debug) debug_call("setup start");
@@ -232,11 +238,11 @@ namespace Network {
 				// last node bias if not an output layer
 				if (i == (in_n_count-1) && in_type != 2) {  // bias
 					Node n;
-					n.setup(in_next_n_count, true, in_mod, in_chance, in_type, in_num, in_debugN);
+					n.setup(in_next_n_count, true, in_mod, in_chance, in_type, in_num, in_debug);
 					nodes.push_back(n);
 				} else {  // normal
 					Node n;
-					n.setup(in_next_n_count, false, in_mod, in_chance, in_type, in_num, in_debugN);
+					n.setup(in_next_n_count, false, in_mod, in_chance, in_type, in_num, in_debug);
 					nodes.push_back(n);
 				}
 			}
@@ -384,7 +390,7 @@ namespace Network {
 				}
 				// layer
 				Layer l;
-				l.setup(npl.at(i), t_nnc, in_mod, in_chance, t_type, i+1, debugL, debugN);
+				l.setup(npl.at(i), t_nnc, in_mod, in_chance, t_type, i+1, debug);
 				layers.push_back(l);
 			}
 			if (debug) {
@@ -438,8 +444,6 @@ namespace Network {
 	public:
 		/// variables
 		bool debug;
-		bool debugL;
-		bool debugN;
 		bool verbose;
 		bool run_type;  // 0:single, 1:train
 		unsigned int ID_value;
@@ -454,11 +458,9 @@ namespace Network {
 		// constructor
 		Network() {
 			debug = false;
-			debugL = false;
-			debugN = false;
 			verbose = false;
 			runtime_error = false;
-			ID_value = 0;
+			ID_value = 007;
 			run_type = 0;
 			srand(time(0));
 		}
