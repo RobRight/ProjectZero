@@ -1,13 +1,17 @@
 
 # ProjectZero
 
-## NNProject
+## Neural Network:
 Neural Network, Trainer and associated Domains
 
-### Network:
+### - Network:
 * Neural Network
+
+### - Trainer:
 * Network Trainer
 
-### Domains:
+### - Domains:
 * Rover
 * Gridspace
+
+## Q-learner:
