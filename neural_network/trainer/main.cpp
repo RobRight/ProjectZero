@@ -14,10 +14,10 @@ int main()
 	t.round_max = 1000;
 	t.sub_round_max = 60;
 	t.input_min = 1;
-	t.input_max = 5;
+	t.input_max = 2;
 	t.hidden_layer_size = 4;
 	t.mutate_mod = 0.1;
-	t.mutate_chance = 0.5;
+	t.mutate_chance = 0.3;
 	// - settings end -
 
 	//debug = false;

@@ -4,7 +4,7 @@
 * Version 2.1
 *
 * Creaded by William on July 8th, 2016 to Present
-* Copyright © 2016 William.  All rights reserved
+* Copyright (C) 2016 William.  All rights reserved
 *
 */
 
@@ -18,6 +18,9 @@
 * ToDo:
 *	- add sweeping function to determine best values for...
 *		- hidden_layer_size, mutate_mod, mutate_chance, sub_round_max, population_size
+*	- add setting for activation type
+*	- add setting for function to train
+*	- add progress info (an updating bar would be cool)
 *
 */
 
@@ -31,7 +34,8 @@
 //#include <cmath>
 //#include <time.h>
 //#include <string>
-#include <fstream>
+#include <fstream> // file io
+#include <stdlib.h> // system
 
 #include "../network/neural_network.h"
 
@@ -86,6 +90,8 @@ namespace Trainer
 		void print_round();
 		void print_end();
 		void export_error(double, bool);
+		void progress();
+		void generate_population();
 		Network::Network generate_network();
 		double train_function(double);
 		double generate_value();
@@ -142,7 +148,6 @@ namespace Trainer
 		debug = false; // function start and end output notice
 		verbose = false; // extra info while running
 		// settings end
-
 		srand(time(NULL));
 		// do not modify
 		runtime_error = false;
@@ -151,13 +156,6 @@ namespace Trainer
 		nodes_per_layer = { 1, hidden_layer_size, 1 };
 		best_error = HUGE_VAL;
 		ID_next = 1;
-		// generate starting population
-		for (std::size_t i = 0; i < population_size; ++i)
-		{
-			population.push_back(generate_network());
-		}
-		std::string name = "first";
-		debug_check_network(population.at(0), name, false);
 	}
 
 	void Trainer::error_call(std::string in_message)
@@ -169,15 +167,19 @@ namespace Trainer
 	// general training info at start
 	void Trainer::print_intro()
 	{
+		bool fancy = true;
+		if (fancy) system("clear");
 		std::cout << std::endl;
 		std::cout << "------------------------" << std::endl;
 		std::cout << "Network Trainer" << std::endl;
 		std::cout << "by " << "WG" << std::endl;
 		std::cout << std::endl;
 		std::cout << "population size: " << population_size << std::endl;
-		std::cout << "max rounds: " << round_max << std::endl;
+		std::cout << "max round: " << round_max << std::endl;
 		std::cout << "hidden nodes: " << hidden_layer_size << std::endl;
 		std::cout << "mutate mod: " << mutate_mod << std::endl;
+		std::cout << "input min: " << input_min << std::endl;
+		std::cout << "input max: " << input_max << std::endl;
 		std::cout << std::endl;
 	}
 
@@ -222,6 +224,36 @@ namespace Trainer
 	}
 
 	//
+	// progress: sub
+	//
+	void Trainer::progress()
+	{
+		/*
+		unsigned int update_times = 10;
+		for (std::size_t i = 1; i<=update_times; ++i) {
+			if ((round_max / update_times * i) == round) {
+				std::cout << "progress: " << 10*i << std::endl;
+			}
+		}
+		*/
+	}
+
+	//
+	// generate_population: sub
+	// generate starting population
+	//
+	void Trainer::generate_population()
+	{
+		population.clear();
+		for (std::size_t i=0; i<population_size; ++i) {
+			population.push_back(generate_network());
+		}
+		// output first network info
+		std::string name = "first";
+		debug_check_network(population.at(0), name, false);
+	}
+
+	//
 	// generate_network: sub
 	// generate a network, setup and return
 	//
@@ -254,12 +286,12 @@ namespace Trainer
 	{
 		if (debug) std::cout << "train_function()" << std::endl;
 		// x^2+1
-		return (pow(val, 2) + 1.0);
+		//return (pow(val, 2) + 1.0);
 
 		// x>=0.5 return 1, x<0.5 return 0
-		//double t_half = input_min+(input_max-input_min)*0.5;
-		//if (val > t_half) return 1.0;
-		//else return 0.0;
+		double t_half = input_min+(input_max-input_min)*0.5;
+		if (val > t_half) return 1.0;
+		else return 0.0;
 
 		// exponential
 		//return exp(val);
@@ -719,6 +751,8 @@ namespace Trainer
 	{
 		if (debug) std::cout << "debug: train() start" << std::endl;
 		print_intro();
+		progress();
+		generate_population();
 		time_start = clock();
 		while (round < round_max && runtime_error == false)
 		{
