@@ -127,7 +127,7 @@ namespace MAB {
         unsigned int max_round;
         void setup_player() {
             Player p(slot_count);
-            Player player = p;
+            player = p;
         }
         void setup_slots() {
             for (std::size_t i=0; i<slot_count; ++i) {
@@ -145,7 +145,7 @@ namespace MAB {
         void file_operations(unsigned int in_move, unsigned int in_slot, std::vector <double> in_cs) {
             std::ofstream file;
             if (round == 0) file.open("mab_results.txt", std::ios::out | std::ios::trunc);
-            else open("mab_results.txt", std::ios::out | std::ios::app);
+            else file.open("mab_results.txt", std::ios::out | std::ios::app);
             if (!file.is_open()) std::cout << "UNHAPPY FILE" << std::endl;
             else {
                 if (round == 0) {
