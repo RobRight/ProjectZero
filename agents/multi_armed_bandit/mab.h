@@ -55,7 +55,7 @@ namespace MAB {
             return t_move;
         }
     public:
-        Player(unsigned int in_c) {
+        void setup(unsigned int in_c) {
             slot_count = in_c;
             round = 0;
             last_move = 0;
@@ -126,8 +126,7 @@ namespace MAB {
         unsigned int round;
         unsigned int max_round;
         void setup_player() {
-            Player p(slot_count);
-            player = p;
+            player.setup(slot_count);
         }
         void setup_slots() {
             for (std::size_t i=0; i<slot_count; ++i) {
