@@ -290,18 +290,22 @@ namespace Trainer
 
 		// x>=0.5 return 1, x<0.5 return 0
 		double t_half = input_min+(input_max-input_min)*0.5;
-		if (val > t_half) return 1.0;
-		else return 0.0;
+		if (val > t_half) return 2.0;
+		else return 1.0;
+
+		// impulse FIX
+		//if (val >= t_half-0.1 && val <= t_half+0.1) return 1.0;
+		//else return 0.0;
 
 		// exponential
 		//return exp(val);
 
 		// sin(x)
 		// min/max: 0/PI
-		//return sin(val)+1;
+		//return sin(val);
 
 		// cos(x)
-		//return cos(val)+1;
+		//return cos(val);
 
 		// constant
 		//return 10.0;
@@ -370,7 +374,7 @@ namespace Trainer
 	void Trainer::debug_check_network(Network::Network in_pop, std::string in_name, bool print_weights)
 	{
 		if (debug) std::cout << "debug_check_network() start" << std::endl;
-		unsigned int test_points = 10;
+		unsigned int test_points = 100;
 		std::vector <double> temp_test_errors;
 		std::vector <double> temp_inputs_log;
 		std::vector <double> temp_outputs_log;

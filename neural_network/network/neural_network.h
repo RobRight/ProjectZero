@@ -166,7 +166,7 @@ namespace Network {
 		// mutates the node using mod and chance
 		void mutate() {
 			for (std::size_t i=0; i<weights.size(); ++i) {
-				if (LYRAND > mutate_chance) {
+				if (LYRAND < mutate_chance) {
 					// weight = weight + LYRAND*mod - LYRAND*mod
 					weights.at(i) = weights.at(i) + LYRAND*mutate_mod \
 									- LYRAND*mutate_mod;
