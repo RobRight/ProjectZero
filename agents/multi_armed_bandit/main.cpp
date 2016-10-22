@@ -5,7 +5,8 @@
 
 int main() {
 
-    MAB::Casino mab;
+    MAB::Casino mab(0, 10);
+    mab.cycle_games();
 
     return 0;
 }
