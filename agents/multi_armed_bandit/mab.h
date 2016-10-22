@@ -40,7 +40,7 @@ namespace MAB {
         unsigned int move_greedy() {
             unsigned int t_move = 0;
             double t_best = current_standings.at(0);
-            for (std::size_t i=1; i<slot_count; ++i) {
+            for (std::size_t i=1; i<current_standings.at(i); ++i) {
                 if (current_standings.at(i) > t_best) {
                     t_move = i;
                     t_best = current_standings.at(i);
@@ -129,6 +129,8 @@ namespace MAB {
             player.setup(slot_count);
         }
         void setup_slots() {
+            slots.clear();
+            slots_bias.clear();
             for (std::size_t i=0; i<slot_count; ++i) {
                 Slot s(reward_max);
                 double t_bias = s.return_reward_bias();
