@@ -119,7 +119,7 @@ namespace MAB {
     class Casino {
     private:
         Player player;
-        std::vector <double> slots;
+        std::vector <Slot> slots;
         std::vector <double> slots_bias;
         unsigned int reward_max;
         unsigned int slot_count;
