@@ -14,7 +14,7 @@ Node: how and when is reward involved?
 
 class Agent {
 protected:
-    std::vector <double> state;
+    std::vector <double> state;  // store states here? retreive in agent from here?
     std::vector <double> reward;
 public:
     virtual std::vector <double> give_action(void) = 0;

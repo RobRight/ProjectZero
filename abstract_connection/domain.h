@@ -15,7 +15,7 @@ Node:
 
 class Domain {
 protected:
-    std::vector <double> action;
+    std::vector <double> action;  // store action here orrrr in domain?
 public:
     virtual std::vector <double> give_state() = 0;
     virtual std::vector <double> give_reward() = 0;
