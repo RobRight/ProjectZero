@@ -25,3 +25,14 @@ public:
         reward = in;
     }
 };
+
+
+/*
+
+network cycle becomes:
+
+- setup(); (not here)
+
+- BEFORE output cycle(input); NOW get_state(); give_action();
+
+*/

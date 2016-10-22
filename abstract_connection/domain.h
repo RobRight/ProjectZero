@@ -3,9 +3,11 @@
 Agent Abstract Class
 Copyright (c) 2016 William Gregory.  All rights reserved.
 
-Domains recieve an action and give a state.  (reward?)
+Domains recieve an action and give a state.
 
-Node: how and when is reward involved?
+Node: 
+ - how and when is reward involved?
+ - how to incorperate setup functions? 
 
 */
 
@@ -21,3 +23,11 @@ public:
         action = in;
     }
 };
+
+/*
+
+gridspace cycle becomes:
+
+- give_state(); get_action();
+
+*/
