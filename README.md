@@ -1,17 +1,13 @@
 
 # ProjectZero
 
-## Neural Network:
-Neural Network, Trainer and associated Domains
-
-### - Network:
+## Agents:
 * Neural Network
+* Multi Armed Bandit
+* Q-Learner
 
-### - Trainer:
-* Network Trainer
-
-### - Domains:
+## Domains:
 * Rover
 * Gridspace
 
-## Q-learner:
+## Abstract Connection:
