@@ -12,7 +12,7 @@ Player in a casino playing slots, tasked with finding the best paying slot.
 #define _MULTI_ARMED_BANDIT_
 
 #include <vector>
-#include <stdlib>
+#include <stdlib.h>
 #include <time.h>
 #include <fstream>
 #include <iostream>
@@ -143,7 +143,7 @@ namespace MAB {
         }
         // in_move (0:greedy, 1:random)
         void file_operations(unsigned int in_move, unsigned int in_slot, std::vector <double> in_cs) {
-            ofstream file;
+            std::ofstream file;
             if (round == 0) file.open("mab_results.txt", std::ios::out | std::ios::trunc);
             else open("mab_results.txt", std::ios::out | std::ios::app);
             if (!file.is_open()) std::cout << "UNHAPPY FILE" << std::endl;
