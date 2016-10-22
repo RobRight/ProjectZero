@@ -5,22 +5,19 @@ Copyright (c) 2016 William Gregory.  All rights reserved.
 
 Domains recieve an action and give a state.  (reward?)
 
+Node: how and when is reward involved?
+
 */
 
-#include <double>
+#include <vector>
 
 class Domain {
-private:
-    std::vector <double> state;
-    //std::vector <double reward;
+protected:
+    std::vector <double> action;
 public:
+    virtual std::vector <double> give_state() = 0;
+    virtual std::vector <double> give_reward() = 0;
     void get_action(std::vector <double> in) {
-
+        action = in;
     }
-    std::vector <double> give_state(void) {
-        return state;
-    }
-    //std::vector <double> give_reward(void) {
-    //    return reward;
-    //}
 };
