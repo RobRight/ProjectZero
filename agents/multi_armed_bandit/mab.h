@@ -6,6 +6,9 @@ Copyright (c) 2016 William Gregory.  All rights reserved.
 
 Player in a casino playing slots, tasked with finding the best paying slot.
 
+Note: untested, need file output to see any results
+ToDo: add output to file (move type, slot pulled, current_standings, slot_bias', round)
+
 */
 
 #ifndef _MULTI_ARMED_BANDIT_
