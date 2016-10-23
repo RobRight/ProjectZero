@@ -74,10 +74,10 @@ namespace Network {
 		// sum inputs (sub)
 		// input: all inputs to node
 		// output: summation of inputs
-		double sum_inputs(std::vector <double> in) {
+		double sum_inputs(std::vector <double> * in) {
 			double t_avg = 0.0;
-			for (std::size_t i=0; i<in.size(); ++i) {
-				t_avg += in.at(i);
+			for (std::size_t i=0; i<*in.size(); ++i) {
+				t_avg += *in.at(i);
 			}
 			return t_avg;
 			//return t_avg / (double) in.size();
