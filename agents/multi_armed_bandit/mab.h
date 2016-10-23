@@ -135,7 +135,7 @@ namespace MAB {
         unsigned int round;
         unsigned int max_round;
         void print_intro() {
-            std::cout << "Multi-Armed Bandit" << std::endl << std::endl;
+            std::cout << "\nMulti-Armed Bandit\n" << std::endl;
             std::cout << "Rounds: " << max_round << std::endl;
             std::cout << "Slots: " << slot_count << std::endl;
             std::cout << "Max Bias: " << bias_max << std::endl;
