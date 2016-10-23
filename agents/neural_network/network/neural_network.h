@@ -1,9 +1,17 @@
 
-// Neural Network
-// Copyright (C) William 2016.  All rights reserved.
+/*
+
+Neural Network
+Copyright (c) 2016 William Gregory.  All rights reserved.
+
+*/
 
 #ifndef _NEURAL_NETWORK_
 #define _NEURAL_NETWORK_
+
+//#define NN_DEBUG
+//#define NN_VERBOSE
+//#define NN_TEST
 
 #include <iostream>  // cout, endl
 #include <vector>  // .. vectors
@@ -13,24 +21,26 @@
 #include <math.h> // exp - sigmoid
 #include <string>  // messages
 #include <ctime>  // clock
+#include <fstream>  // file IO
 
 #define LYRAND (double)rand()/RAND_MAX
 
-//#define NN_DEBUG
-//#define NN_VERBOSE
-//#define NN_TEST
+/*
 
-// ideas:
-//	- create (error, debug, info)/message class
-//	- create testing class
+Ideas:
+	- create (error, debug, info)/message class or remove functions
+	- create testing class
+	- add scale function for input and output to meet network requirements given min and max inputs
 
-// todo:
-//	- add scale function for input and output to meet network requirements given min and max inputs
+ToDo:
+	- add weight import/export to file (save best network after training)
 
-// INFO:
-//	- settings
-//  	- debug: provide function start end info to find where error occurs.
-//		- verbose: provide info of internal network states while running
+Info:
+	- settings
+		- debug: provide function start end info to find where error occurs.
+		- verbose: provide info of internal network states while running
+
+*/
 
 namespace Network {
 

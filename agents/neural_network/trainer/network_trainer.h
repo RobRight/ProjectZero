@@ -15,6 +15,10 @@
 * change params
 * call train()
 *
+* Node:
+* - train functions:
+*	(0:x^2+1, 1:step, 2:exp(x), 3:sin(x), 4:cos(x), 5:const, 6:sqrt(x)+1, 7:-x)
+*
 * ToDo:
 *	- add sweeping function to determine best values for...
 *		- hidden_layer_size, mutate_mod, mutate_chance, sub_round_max, population_size
@@ -24,8 +28,12 @@
 *
 */
 
-#ifndef _Network_Trainer_
-#define _Network_Trainer_
+#ifndef _NETWORK_TRAINER_
+#define _NETWORK_TRAINER_
+
+//#define NT_DEBUG
+//#define NT_VERBOSE
+//#define NT_TEST
 
 #define PI 3.14159265
 
@@ -34,8 +42,8 @@
 //#include <cmath>
 //#include <time.h>
 //#include <string>
-#include <fstream> // file io
-#include <stdlib.h> // system
+//#include <fstream> // file io
+//#include <stdlib.h> // system
 
 #include "../network/neural_network.h"
 
@@ -123,10 +131,8 @@ namespace Trainer
 		double mutate_mod;
 		// chance for mutating
 		double mutate_chance;
-		// true to list start and end of each function
-		bool debug;
-		// true to print info each sub round and round
-		bool verbose;
+		// train_func_type
+		unsigned int train_func_type;
 
 		// - functions
 		Trainer();
@@ -137,6 +143,7 @@ namespace Trainer
 	Trainer::Trainer()
 	{
 		// settings
+		train_func_type = 0;
 		population_size = 100;  // must be even and positive
 		round_max = 400;  // must greator than zero
 		sub_round_max = 60;  // must be greater than zero
@@ -145,8 +152,6 @@ namespace Trainer
 		hidden_layer_size = 4;  // must be greater than zero
 		mutate_mod = 0.1; // between zero and one
 		mutate_chance = 0.5; // between zero and one
-		debug = false; // function start and end output notice
-		verbose = false; // extra info while running
 		// settings end
 		srand(time(NULL));
 		// do not modify
@@ -167,7 +172,7 @@ namespace Trainer
 	// general training info at start
 	void Trainer::print_intro()
 	{
-		bool fancy = true;
+		bool fancy = false;
 		if (fancy) system("clear");
 		std::cout << std::endl;
 		std::cout << "------------------------" << std::endl;
@@ -282,39 +287,44 @@ namespace Trainer
 	// output:
 	// - expected output of network
 	//
-	double Trainer::train_function(double val)
+	double Trainer::train_function(double& val)
 	{
-		if (debug) std::cout << "train_function()" << std::endl;
-		// x^2+1
-		//return (pow(val, 2) + 1.0);
-
-		// x>=0.5 return 1, x<0.5 return 0
-		double t_half = input_min+(input_max-input_min)*0.5;
-		if (val > t_half) return 2.0;
-		else return 1.0;
-
-		// impulse FIX
-		//if (val >= t_half-0.1 && val <= t_half+0.1) return 1.0;
-		//else return 0.0;
-
-		// exponential
-		//return exp(val);
-
-		// sin(x)
-		// min/max: 0/PI
-		//return sin(val);
-
-		// cos(x)
-		//return cos(val);
-
-		// constant
-		//return 10.0;
-
-		// sqrt(x)+1
-		//return std::sqrt(val)+1;
-
-		// -x
-		//return -val;
+#ifdef NT_DEBUG
+		std::cout << "train_function()" << std::endl;
+#endif
+		double t_out = 0;
+		// (0:x^2+1, 1:step, 2:exp(x), 3:sin(x), 4:cos(x), 5:const, 6:sqrt(x)+1, 7:-x)
+		switch (train_func_type) {
+			case 0:  // x^2+1
+				t_out = (pow(val, 2) + 1.0);
+				break;
+			case 1:  // x>=0.5 return 1, x<0.5 return 0
+				double t_half = input_min+(input_max-input_min)*0.5;
+				if (val > t_half) t_out = 2.0;
+				else t_out = 1.0;
+				break;
+			case 2:  // exponential
+				t_val = exp(val);
+				break;
+			case 3:  // sin(x)
+				t_val = sin(val);
+				break;
+			case 4:  // cos(x)
+				t_val = cos(val);
+				break;
+			case 5:  // constant
+				t_val = 10.0;
+				break;
+			case 6:  // sqrt(x)+1
+				t_val = std::sqrt(val)+1;
+				break;
+			case 7:  // (-x)
+				t_val = -val;
+				break;
+			default:
+				t_val = 0;
+		}
+		return t_val;
 	}
 
 	//
@@ -326,7 +336,9 @@ namespace Trainer
 	// - network input value
 	double Trainer::generate_value()
 	{
-		if (debug) std::cout << "generate_value()" << std::endl;
+#ifdef NT_DEBUG
+		std::cout << "generate_value()" << std::endl;
+#endif
 		return (double)input_min + LYRAND*(input_max - input_min);
 	}
 
@@ -345,7 +357,9 @@ namespace Trainer
 	//
 	double Trainer::scale_value(double in_val, bool in_op, bool in_scale)
 	{
-		if (debug) std::cout << "scale_value()" << std::endl;
+#ifdef NT_DEBUG
+		std::cout << "scale_value()" << std::endl;
+#endif
 		if (in_scale)
 		{
 			if (in_op)
@@ -373,7 +387,9 @@ namespace Trainer
 	//
 	void Trainer::debug_check_network(Network::Network in_pop, std::string in_name, bool print_weights)
 	{
-		if (debug) std::cout << "debug_check_network() start" << std::endl;
+#ifdef NT_DEBUG
+		std::cout << "debug_check_network() start" << std::endl;
+#endif
 		unsigned int test_points = 100;
 		std::vector <double> temp_test_errors;
 		std::vector <double> temp_inputs_log;
@@ -451,7 +467,6 @@ namespace Trainer
 			}
 		}
 		file.close();
-		if (debug) std::cout << "debug_check_network() end" << std::endl;
 	}
 
 	//
@@ -464,7 +479,9 @@ namespace Trainer
 	//
 	void Trainer::generate_round_values()
 	{
-		if (debug) std::cout << "debug: generate_round_values() start" << std::endl;
+#ifdef NT_DEBUG
+		std::cout << "debug: generate_round_values() start" << std::endl;
+#endif
 		// clear last rounds values
 		net_inputs.clear();
 		net_expected_outputs.clear();
@@ -482,7 +499,7 @@ namespace Trainer
 			net_expected_outputs_raw.push_back(t_output);
 		}
 
-		// tests
+#ifdef NT_TEST
 		if (net_inputs.size() != nodes_per_layer.at(0))
 		{
 			error_call("generate_round_values() input size off");
@@ -490,7 +507,9 @@ namespace Trainer
 		if (net_expected_outputs.size() != nodes_per_layer.at(0))
 		{
 			error_call("generate_round_values() output size off");
-		}/*
+		}
+#endif
+		/*
 		 // error if using ex sin(x) because end points may be lower than somewhere else
 		 for (int i=0; i<net_inputs.size(); i++)
 		 {
@@ -506,7 +525,6 @@ namespace Trainer
 		 error_call("generate_round_values() expected output value outside limits");
 		 }
 		 }*/
-		if (debug) std::cout << "debug: generate_round_values() end" << std::endl;
 	}
 
 	//
@@ -522,16 +540,17 @@ namespace Trainer
 	// - - vector of vector outputs
 	// - - each network returns a vector of outputs, one per node
 	//
-	std::vector <std::vector <double> > Trainer::cycle_network(std::vector <double> in_net_inputs, std::vector <Network::Network> in_population)
+	std::vector <std::vector <double> > Trainer::cycle_network(std::vector <double>& in_net_inputs, std::vector <Network::Network>& in_population)
 	{
-		if (debug) std::cout << "debug: cycle_network() start" << std::endl;
+#ifdef NT_DEBUG
+		std::cout << "debug: cycle_network() start" << std::endl;
+#endif
 		// set inputs and cycle
 		std::vector <std::vector <double> > temp_net_outputs;
 		for (std::size_t i = 0; i < in_population.size(); ++i)
 		{
 			temp_net_outputs.push_back(in_population.at(i).cycle(in_net_inputs));
 		}
-		if (debug) std::cout << "debug: cycle_network() end" << std::endl;
 		return temp_net_outputs;
 	}
 
@@ -572,19 +591,22 @@ namespace Trainer
 	//
 	double Trainer::check_network_error(std::vector <double> in_real_out, std::vector <double> in_ex_out)
 	{
-		// test
-		if (debug) std::cout << "debug: check_network_error() start" << std::endl;
+
+#ifdef NT_DEBUG
+		std::cout << "debug: check_network_error() start" << std::endl;
+#endif
+#ifdef NT_TEST
 		if (in_real_out.size() != in_ex_out.size())
 		{
 			error_call("check_network_error() size mismatch");
 		}
+#endif
 		// check each output nodes error
 		double temp_error = 0.0;
 		for (std::size_t i = 0; i < in_real_out.size(); ++i)
 		{
 			temp_error += fitness_function(in_real_out.at(i), in_ex_out.at(i));
 		}
-		if (debug) std::cout << "debug: check_network_error() end" << std::endl;
 		// return average error
 		return temp_error / in_real_out.size();
 	}
@@ -600,7 +622,9 @@ namespace Trainer
 	//  
 	void Trainer::check_population_error(bool is_sub_round)
 	{
-		if (debug) std::cout << "debug: check_population_error() start" << std::endl;
+#ifdef NT_DEBUG
+		std::cout << "debug: check_population_error() start" << std::endl;
+#endif
 		if (is_sub_round)
 		{
 			// first sub round setup
@@ -640,12 +664,11 @@ namespace Trainer
 				}
 			}
 			round_pop_avg_error = temp_round_pop_avg_error / population_size;
-			if (round == 0)
-			{
-				starting_avg_error = round_pop_avg_error;
+			switch (round) {
+				case 0:
+					starting_avg_error = round_pop_avg_error;
 			}
 		}
-		if (debug) std::cout << "debug: check_population_error() end" << std::endl;
 	}
 
 	//
@@ -659,9 +682,11 @@ namespace Trainer
 	// output:
 	// - pruned population
 	//
-	std::vector <Network::Network> Trainer::prune(std::vector <Network::Network> in_pop, std::vector <double> in_pop_errors)
+	std::vector <Network::Network> Trainer::prune(std::vector <Network::Network>& in_pop, std::vector <double>& in_pop_errors)
 	{
-		if (debug) std::cout << "debug: prune() start" << std::endl;
+#ifdef NT_DEBUG
+		std::cout << "debug: prune() start" << std::endl;
+#endif
 		std::vector <Network::Network> temp_new_pop;
 		double temp_avg_error = 0.0; // average error of new pop
 		for (std::size_t i = 0; i < in_pop.size() / 2; ++i)
@@ -681,25 +706,24 @@ namespace Trainer
 				temp_avg_error += round_pop_errors.at(try_2);
 			}
 		}
-		// tests
+#ifdef NT_TEST
 		if (temp_new_pop.size() != in_pop.size() / 2)
 		{
 			error_call("prune() output size wrong");
 		}
-		temp_avg_error = temp_avg_error / temp_new_pop.size();
-		if (verbose)
-		{
+#endif
+#ifdef NT_VERBOSE
+			temp_avg_error = temp_avg_error / temp_new_pop.size();
 			std::cout << "prune results: " << std::endl;
 			std::cout << " - start: " << round_pop_avg_error << std::endl;
 			std::cout << " - end: " << temp_avg_error << std::endl;
 			double prune_improvement = round_pop_avg_error - temp_avg_error;
 			std::cout << " - improvement: " << prune_improvement << std::endl;
-		}
-		if (temp_avg_error > round_pop_avg_error)
-		{
+#endif
+		//if (temp_avg_error > round_pop_avg_error)
+		//{
 			//error_call("prune() average error got worse");
-		}
-		if (debug) std::cout << "debug: prune() end" << std::endl;
+		//}
 		return temp_new_pop;
 	}
 
@@ -714,10 +738,12 @@ namespace Trainer
 	// output:
 	// - populated population
 	//
-	std::vector <Network::Network> Trainer::populate(std::vector <Network::Network> in_pop, unsigned int in_pop_size)
+	std::vector <Network::Network> Trainer::populate(std::vector <Network::Network>& in_pop, unsigned int& in_pop_size)
 	{
-		if (debug) std::cout << "debug: populate() start" << std::endl;
-		// test
+#ifdef NT_DEBUG
+		std::cout << "debug: populate() start" << std::endl;
+#endif
+#ifdef NT_TEST
 		if (in_pop.size() < 2)
 		{
 			error_call("populate() input pop too small");
@@ -726,6 +752,7 @@ namespace Trainer
 		{
 			error_call("populate() input pop and desired size mismatch");
 		}
+#endif
 		// populate until size is 'in_pop_size'
 		std::vector <Network::Network> temp_new_pop = in_pop;
 		while (temp_new_pop.size() < in_pop_size)
@@ -738,12 +765,12 @@ namespace Trainer
 			net.mutate();
 			temp_new_pop.push_back(net);
 		}
-		// test
+#ifdef NT_TEST
 		if (temp_new_pop.size() != in_pop_size)
 		{
 			error_call("populate() output population size wrong");
 		}
-		if (debug) std::cout << "debug: populate() end" << std::endl;
+#endif
 		return temp_new_pop;
 	}
 
@@ -753,14 +780,18 @@ namespace Trainer
 	//
 	void Trainer::train()
 	{
-		if (debug) std::cout << "debug: train() start" << std::endl;
+#ifdef NT_DEBUG
+		std::cout << "debug: train() start" << std::endl;
+#endif
 		print_intro();
 		progress();
 		generate_population();
 		time_start = clock();
 		while (round < round_max && runtime_error == false)
 		{
-			if (debug) std::cout << "debug: round " << round << "; sub " << sub_round << " start" << std::endl;
+#ifdef NT_DEBUG
+			std::cout << "debug: round " << round << "; sub " << sub_round << " start" << std::endl;
+#endif
 			// generate values for this round
 			generate_round_values();
 			// cycle network
@@ -782,12 +813,18 @@ namespace Trainer
 				round++;
 				sub_round = 0;
 			}
-			if (verbose) print_round();
-			if (debug) std::cout << "debug: round " << round << ";sub " << sub_round << " complete" << std::endl;
+#ifdef NT_VERBOSE
+			print_round();
+#endif
+#ifdef NT_DEBUG
+			std::cout << "debug: round " << round << ";sub " << sub_round << " complete" << std::endl;
+#endif
 		}
 		// training complete
 		time_delta = double(clock() - time_start) / CLOCKS_PER_SEC;
-		if (debug) std::cout << "debug: train() end" << std::endl;
+#ifdef NT_DEBUG
+		std::cout << "debug: train() end" << std::endl;
+#endif
 		if (runtime_error) std::cout << "error: runtime error triggered" << std::endl;
 		else
 		{
