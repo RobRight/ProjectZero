@@ -6,6 +6,8 @@ Copyright (c) 2016 William Gregory.  All rights reserved.
 
 Player in a casino playing slots, tasked with finding the best paying slot.
 
+ToDo: currently a constant reward.  add a negitive reward and random reward with a bias.
+
 */
 
 #ifndef _MULTI_ARMED_BANDIT_
@@ -100,7 +102,6 @@ namespace MAB {
     // - generate_payout
     //
     class Slot {
-    // currently a constant reward.  add a negitive reward and random reward with a bias.
     private:
         double reward;
     public:
@@ -117,6 +118,7 @@ namespace MAB {
 
     //
     // Functions:
+    // - print_intro
     // - setup_player
     // - setup_slots
     // - pull_slot
