@@ -168,7 +168,8 @@ namespace Network {
 						t_out = in.at(0); // input layer
 						break;
 					default:
-						t_out = activation_function(sum_inputs(in));  // not input layer
+						double t_summed = sum_inputs(in);
+						t_out = activation_function(t_summed);  // not input layer
 				}
 			}
 			else t_out = 1.0;  // bias node (output 1.0)
@@ -409,7 +410,8 @@ namespace Network {
 #endif
 				// layer
 				Layer l;
-				l.setup(npl.at(i), t_nnc, in_mod, in_chance, t_type, i+1);
+				unsigned int t_num = i+1;
+				l.setup(npl.at(i), t_nnc, in_mod, in_chance, t_type, t_num);
 				layers.push_back(l);
 			}
 #ifdef NN_DEBUG
@@ -574,7 +576,7 @@ namespace Network {
 		}
 
 		// export weights (side)
-		std::vector <std::vector <std::vector <double> > >& export_weights()
+		std::vector <std::vector <std::vector <double> > > export_weights()
 		{
 #ifdef NN_DEBUG
 			debug_call("export weights start");
