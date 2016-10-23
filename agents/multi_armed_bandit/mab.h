@@ -17,7 +17,8 @@ Player in a casino playing slots, tasked with finding the best paying slot.
 #include <fstream>
 #include <iostream>
 
-#define DEBUG true
+#define MAB_DEBUG false
+#define MAB_VERBOSE false
 
 #define LYRAND (double)rand()/RAND_MAX
 
@@ -40,7 +41,7 @@ namespace MAB {
         unsigned int round;
         unsigned int last_move;
         unsigned int move_greedy() {
-            if(DEBUG) std::cout << "DEBUG:Player:move_greedy" << std::endl;
+            if(MAB_DEBUG) std::cout << "DEBUG:Player:move_greedy" << std::endl;
             unsigned int t_move = 0;
             double t_best = current_standings.at(0);
             for (std::size_t i=1; i<current_standings.at(i); ++i) {
@@ -50,12 +51,14 @@ namespace MAB {
                 }
             }
             last_move = 0;
+            if(MAB_VERBOSE) std::cout << "VERBOSE:greedy slot:" << t_move << std::endl;
             return t_move;
         }
         unsigned int move_random() {
-            if(DEBUG) std::cout << "DEBUG:Player:move_random" << std::endl;
+            if(MAB_DEBUG) std::cout << "DEBUG:Player:move_random" << std::endl;
             unsigned int t_move = rand() % slot_count;
             last_move = 1;
+            if(MAB_VERBOSE) std::cout << "VERBOSE:random slot:" << t_move << std::endl;
             return t_move;
         }
     public:
@@ -68,7 +71,7 @@ namespace MAB {
             }
         }
         unsigned int choose_slot() {
-            if(DEBUG) std::cout << "DEBUG:Player:choose_slot" << std::endl;
+            if(MAB_DEBUG) std::cout << "DEBUG:Player:choose_slot" << std::endl;
             unsigned int t_slot;
             if (round < 10) t_slot = move_random();
             else {
@@ -79,12 +82,8 @@ namespace MAB {
             return t_slot;
         }
         void add_reward(unsigned int in_s, unsigned int in_r) {
-            if(DEBUG) std::cout << "DEBUG:Player:add_reward" << std::endl;
-            std::cout << "cs size: " << current_standings.size() << std::endl;
-            std::cout << "slot: " << in_s << std::endl;
-            std::cout << "reward: " << in_r << std::endl;
+            if(MAB_DEBUG) std::cout << "DEBUG:Player:add_reward" << std::endl;
             current_standings.at(in_s) = (current_standings.at(in_s) + in_r) / 2;
-            if(DEBUG) std::cout << "DEBUG:Player:add_reward:END" << std::endl;
         }
         std::vector <double> return_cs() {
             return current_standings;
@@ -139,7 +138,7 @@ namespace MAB {
             player.setup(slot_count);
         }
         void setup_slots() {
-            if(DEBUG) std::cout << "DEBUG:Casino:setup_slots" << std::endl;
+            if(MAB_DEBUG) std::cout << "DEBUG:Casino:setup_slots" << std::endl;
             slots.clear();
             slots_bias.clear();
             for (std::size_t i=0; i<slot_count; ++i) {
@@ -150,14 +149,14 @@ namespace MAB {
             }
         }
         double pull_slot(unsigned int in) {
-            if(DEBUG) std::cout << "DEBUG:Casino:pull_slot" << std::endl;
+            if(MAB_DEBUG) std::cout << "DEBUG:Casino:pull_slot" << std::endl;
             if (in > (slots.size()-1)) return 0.0;  // unknown slot
             double t_payout = slots.at(in).generate_payout();
             return t_payout;
         }
         // in_move (0:greedy, 1:random)
         void file_operations(unsigned int in_move, unsigned int in_slot, std::vector <double> in_cs) {
-            if(DEBUG) std::cout << "DEBUG:Casino:file_operations" << std::endl;
+            if(MAB_DEBUG) std::cout << "DEBUG:Casino:file_operations" << std::endl;
             std::ofstream file;
             if (round == 0) file.open("mab_results.txt", std::ios::out | std::ios::trunc);
             else file.open("mab_results.txt", std::ios::out | std::ios::app);
@@ -165,15 +164,15 @@ namespace MAB {
             else {
                 if (round == 0) {
                     for (std::size_t i=0; i<slots_bias.size(); ++i) {
-                        file << slots_bias.at(i) << "\t";
+                        file << slots_bias.at(i) << ", ";
                     }
                     file << "\n\n";
                 }
-                file << round << "\t";
-                file << in_move << "\t";
-                file << in_slot << "\t";
+                file << round << ", ";
+                file << in_move << ", ";
+                file << in_slot << ", ";
                 for (std::size_t i=0; i<in_cs.size(); ++i) {
-                    file << in_cs.at(i) << "\t";
+                    file << in_cs.at(i) << ", ";
                 }
                 file << "\n";
                 // current_standings
@@ -192,7 +191,7 @@ namespace MAB {
         }
         void cycle_games() {
             while (round < max_round) {
-                if(DEBUG) std::cout << "DEBUG:Casino:cycle_games" << std::endl;
+                if(MAB_DEBUG) std::cout << "DEBUG:Casino:cycle_games" << std::endl;
                 std::vector <double> t_cs = player.return_cs();
                 unsigned int t_slot = player.choose_slot();
                 double t_reward = pull_slot(t_slot);
