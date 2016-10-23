@@ -6,7 +6,7 @@ Copyright (c) 2016 William Gregory.  All rights reserved.
 
 Player in a casino playing slots, tasked with finding the best paying slot.
 
-ToDo: currently a constant reward.  add a negitive reward and random reward with a bias.
+ToDo: currently a constant reward.  add a zero reward and random reward with a bias.
 
 */
 
