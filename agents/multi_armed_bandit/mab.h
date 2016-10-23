@@ -80,7 +80,11 @@ namespace MAB {
         }
         void add_reward(unsigned int in_s, unsigned int in_r) {
             if(DEBUG) std::cout << "DEBUG:Player:add_reward" << std::endl;
+            std::cout << "cs size: " << current_standings.size() << std::endl;
+            std::cout << "slot: " << in_s << std::endl;
+            std::cout << "reward: " << in_r << std::endl;
             current_standings.at(in_s) = (current_standings.at(in_s) + in_r) / 2;
+            if(DEBUG) std::cout << "DEBUG:Player:add_reward:END" << std::endl;
         }
         std::vector <double> return_cs() {
             return current_standings;
