@@ -55,13 +55,13 @@ namespace Network {
 		/// functions
 
 		// call to report an error
-		void error_call(std::string& in) {
+		void error_call(std::string in) {
 			std::cout << "ERROR:Node: " << in << std::endl;
 			runtime_error = true;
 			exit(0);
 		}
 		// 
-		void debug_call(std::string& in) {
+		void debug_call(std::string in) {
 			std::cout << "DEBUG:Node: " << in << std::endl;
 		}
 
@@ -213,13 +213,13 @@ namespace Network {
 		bool runtime_error;
 		/// functions
 		// call to report an error
-		void error_call(std::string& in) {
+		void error_call(std::string in) {
 			std::cout << "ERROR:Layer: " << in << std::endl;
 			runtime_error = true;
 			exit(0);
 		}
 		// 
-		void debug_call(std::string& in) {
+		void debug_call(std::string in) {
 			std::cout << "DEBUG:Layer: " << in << std::endl;
 		}
 
@@ -249,13 +249,15 @@ namespace Network {
 				// - in_next_n_count is 0 when output layer
 
 				// last node bias if not an output layer
+				bool t_bias = true;
 				if (i == (in_n_count-1) && in_type != 2) {  // bias
 					Node n;
-					n.setup(in_next_n_count, true, in_mod, in_chance, in_type, in_num);
+					n.setup(in_next_n_count, t_bias, in_mod, in_chance, in_type, in_num);
 					nodes.push_back(n);
 				} else {  // normal
+					t_bias = false;
 					Node n;
-					n.setup(in_next_n_count, false, in_mod, in_chance, in_type, in_num);
+					n.setup(in_next_n_count, t_bias, in_mod, in_chance, in_type, in_num);
 					nodes.push_back(n);
 				}
 			}
