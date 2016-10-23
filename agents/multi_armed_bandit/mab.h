@@ -130,10 +130,17 @@ namespace MAB {
         Player player;
         std::vector <Slot> slots;
         std::vector <double> slots_bias;
-        unsigned int reward_max;
+        unsigned int bias_max;
         unsigned int slot_count;
         unsigned int round;
         unsigned int max_round;
+        void print_intro() {
+            std::cout << "Multi-Armed Bandit" << std::endl << std::endl;
+            std::cout << "Rounds: " << max_round << std::endl;
+            std::cout << "Slots: " << slot_count << std::endl;
+            std::cout << "Max Bias: " << bias_max << std::endl;
+            std::cout << "--------------------" << std::endl;
+        }
         void setup_player() {
             player.setup(slot_count);
         }
@@ -142,7 +149,7 @@ namespace MAB {
             slots.clear();
             slots_bias.clear();
             for (std::size_t i=0; i<slot_count; ++i) {
-                Slot s(reward_max);
+                Slot s(bias_max);
                 double t_bias = s.return_reward_bias();
                 slots.push_back(s);
                 slots_bias.push_back(t_bias);
@@ -181,7 +188,7 @@ namespace MAB {
         }
     public:
         Casino(unsigned int in_r, unsigned int in_c) {
-            reward_max = 10; // in_r;
+            bias_max = 10; // in_r;
             slot_count = in_c;
             round = 0;
             max_round = 100;
@@ -190,6 +197,7 @@ namespace MAB {
             setup_slots();
         }
         void cycle_games() {
+            print_intro();
             while (round < max_round) {
                 if(MAB_DEBUG) std::cout << "DEBUG:Casino:cycle_games" << std::endl;
                 std::vector <double> t_cs = player.return_cs();
