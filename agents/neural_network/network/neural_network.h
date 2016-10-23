@@ -18,7 +18,7 @@
 
 #define NN_DEBUG false
 #define NN_VERBOSE false
-#define NN_TEST true
+#define NN_TEST false
 
 // ideas:
 //	- create (error, debug, info)/message class
