@@ -2,6 +2,10 @@
 /*
 
 Neural Network
+
+Version 3.0
+
+Created by William Gregory on October 1st, 2016 to Present.
 Copyright (c) 2016 William Gregory.  All rights reserved.
 
 */
