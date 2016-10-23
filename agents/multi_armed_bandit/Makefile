@@ -1,3 +1,3 @@
 
 all:
-    g++ mab.h main.cpp -o run
+	g++ mab.h main.cpp -o run
