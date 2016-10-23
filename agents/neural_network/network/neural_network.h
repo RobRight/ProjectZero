@@ -344,17 +344,17 @@ namespace Network {
 		bool runtime_error;
 		/// functions
 		// 
-		void error_call(std::string& in) {
+		void error_call(std::string in) {
 			std::cout << "ERROR:Network: " << in << std::endl;
 			runtime_error = true;
 			exit(0);
 		}
 		// 
-		void debug_call(std::string& in) {
+		void debug_call(std::string in) {
 			std::cout << "DEBUG:Network: " << in << std::endl;
 		}
 		//
-		void info_call(std::string& in) {
+		void info_call(std::string in) {
 			std::cout << "VERB:Network: " << in << std::endl;
 		}
 		//
