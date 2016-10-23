@@ -589,7 +589,7 @@ namespace Network {
 		}
 
 		// import weights (side)
-		void import_weights(std::vector <std::vector <std::vector <double> > >& in)
+		void import_weights(std::vector <std::vector <std::vector <double> > > in)
 		{
 #ifdef NN_DEBUG
 			debug_call("import weights start");
