@@ -55,20 +55,20 @@ namespace Network {
 		/// functions
 
 		// call to report an error
-		void error_call(std::string &in) {
+		void error_call(std::string& in) {
 			std::cout << "ERROR:Node: " << in << std::endl;
 			runtime_error = true;
 			exit(0);
 		}
 		// 
-		void debug_call(std::string &in) {
+		void debug_call(std::string& in) {
 			std::cout << "DEBUG:Node: " << in << std::endl;
 		}
 
 		// generate weights randomly at start (sub)
 		// input: number of weights to generate
 		// output: populates weight vector
-		void generate_weights(unsigned int &in_size) {
+		void generate_weights(unsigned int& in_size) {
 			weights.clear();
 			// not output node - randomly generate weights
 			for (std::size_t i = 0; i<in_size; ++i) {
@@ -93,7 +93,7 @@ namespace Network {
 		// activation function (sub)
 		// input: scaler input
 		// output: input after activation function
-		double activation_function(double &in) {
+		double activation_function(double& in) {
 			//return 1/(1+exp(-in));  // sigmoid
 			return tanh(in);  // hyperbolic tangent
 		}
@@ -101,7 +101,7 @@ namespace Network {
 		// generate outputs and apply weights (sub)
 		// input: scaler network input after activation function
 		// output: vector, scaler times connection weight
-		std::vector <double> generate_outputs(double &in) {
+		std::vector <double> generate_outputs(double& in) {
 			std::vector <double> t_out;
 			switch (layer_type) {
 				case 0:
@@ -122,12 +122,12 @@ namespace Network {
 
 		// setup (main)
 		// input: node settings
-		void setup(	unsigned int &in_w_count,  // in weight count
-					bool &in_bias,
-					double &in_mod,
-					double &in_chance,
-					unsigned int &in_type,
-					unsigned int &in_num, ) {
+		void setup(	unsigned int& in_w_count,  // in weight count
+					bool& in_bias,
+					double& in_mod,
+					double& in_chance,
+					unsigned int& in_type,
+					unsigned int& in_num, ) {
 #ifdef NN_DEBUG
 			debug_call("setup start");
 #endif
@@ -194,7 +194,7 @@ namespace Network {
 		}
 
 		// import weights (side)
-		void import_weights(std::vector <double> in) {
+		void import_weights(std::vector <double>& in) {
 			weights = in;
 		}
 	};
@@ -213,13 +213,13 @@ namespace Network {
 		bool runtime_error;
 		/// functions
 		// call to report an error
-		void error_call(std::string &in) {
+		void error_call(std::string& in) {
 			std::cout << "ERROR:Layer: " << in << std::endl;
 			runtime_error = true;
 			exit(0);
 		}
 		// 
-		void debug_call(std::string &in) {
+		void debug_call(std::string& in) {
 			std::cout << "DEBUG:Layer: " << in << std::endl;
 		}
 
@@ -227,12 +227,12 @@ namespace Network {
 		/// functions
 
 		// setup layer (main)
-		void setup( unsigned int &in_n_count,  // nodes in layer
-					unsigned int &in_next_n_count,  // nodes in next layer
-					double &in_mod,
-					double &in_chance,
-					unsigned int &in_type,  // layer type
-					unsigned int &in_num ) {
+		void setup( unsigned int& in_n_count,  // nodes in layer
+					unsigned int& in_next_n_count,  // nodes in next layer
+					double& in_mod,
+					double& in_chance,
+					unsigned int& in_type,  // layer type
+					unsigned int& in_num ) {
 			// setup
 #ifdef NN_DEBUG
 			debug_call("setup start");
@@ -342,17 +342,17 @@ namespace Network {
 		bool runtime_error;
 		/// functions
 		// 
-		void error_call(std::string &in) {
+		void error_call(std::string& in) {
 			std::cout << "ERROR:Network: " << in << std::endl;
 			runtime_error = true;
 			exit(0);
 		}
 		// 
-		void debug_call(std::string &in) {
+		void debug_call(std::string& in) {
 			std::cout << "DEBUG:Network: " << in << std::endl;
 		}
 		//
-		void info_call(std::string &in) {
+		void info_call(std::string& in) {
 			std::cout << "VERB:Network: " << in << std::endl;
 		}
 		//
@@ -381,7 +381,7 @@ namespace Network {
 
 		// create network (sub) (single)
 		// input: nodes per layer (excluding bias), mutate mod and chance
-		void create_network(std::vector <unsigned int>& in_npl, double &in_mod, double &in_chance)
+		void create_network(std::vector <unsigned int>& in_npl, double& in_mod, double& in_chance)
 		{
 #ifdef NN_DEBUG
 			debug_call("create network start");
@@ -480,8 +480,8 @@ namespace Network {
 
 		// setup (main) (single)
 		void setup( std::vector <unsigned int>& in_npl,
-					double &in_m,
-					double &in_c ) {
+					double& in_m,
+					double& in_c ) {
 #ifdef NN_DEBUG
 			debug_call("setup start");
 #endif
@@ -569,7 +569,7 @@ namespace Network {
 		}
 
 		// export weights (side)
-		std::vector <std::vector <std::vector <double> > > export_weights()
+		std::vector <std::vector <std::vector <double> > >& export_weights()
 		{
 #ifdef NN_DEBUG
 			debug_call("export weights start");
@@ -582,7 +582,7 @@ namespace Network {
 		}
 
 		// import weights (side)
-		void import_weights(std::vector <std::vector <std::vector <double> > > in)
+		void import_weights(std::vector <std::vector <std::vector <double> > >& in)
 		{
 #ifdef NN_DEBUG
 			debug_call("import weights start");
