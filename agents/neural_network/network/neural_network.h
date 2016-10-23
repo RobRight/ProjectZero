@@ -127,7 +127,7 @@ namespace Network {
 					double& in_mod,
 					double& in_chance,
 					unsigned int& in_type,
-					unsigned int& in_num, ) {
+					unsigned int& in_num ) {
 #ifdef NN_DEBUG
 			debug_call("setup start");
 #endif
@@ -252,12 +252,12 @@ namespace Network {
 				bool t_bias = true;
 				if (i == (in_n_count-1) && in_type != 2) {  // bias
 					Node n;
-					n.setup(in_next_n_count, t_bias, in_mod, in_chance, in_type, in_num);
+					n.setup(in_next_n_count, t_bias, in_mod, in_chance, layer_type, layer_num);
 					nodes.push_back(n);
 				} else {  // normal
 					t_bias = false;
 					Node n;
-					n.setup(in_next_n_count, t_bias, in_mod, in_chance, in_type, in_num);
+					n.setup(in_next_n_count, t_bias, in_mod, in_chance, layer_type, layer_num);
 					nodes.push_back(n);
 				}
 			}
@@ -498,7 +498,10 @@ namespace Network {
 		// input: input vector (one double per input node)
 		// output: network output (one double per output node)
 		std::vector <double> cycle(std::vector <double>& in) {
-			if (debug) debug_call("cycle start");
+			std::string tm = ""; // test and verbose
+#ifdef NN_DEBUG
+			debug_call("cycle start");
+#endif
 			std::vector <std::vector <double> > inputs;
 			std::vector <std::vector <double> > outputs;
 			for (std::size_t i=0; i<layers.size(); ++i) {
@@ -512,7 +515,7 @@ namespace Network {
 				}
 #ifdef NN_TEST
 				if (inputs.at(0).size() != layers.at(i).return_node_count()) {
-					std::string tm = "cycle - input size mismatch to nodes in layer. layer: " +
+					tm = "cycle - input size mismatch to nodes in layer. layer: " +
 						std::to_string(i) + "; input: " +
 						std::to_string(inputs.size()) + "; nodes: " +
 						std::to_string(layers.at(i).return_node_count()) + ";"; 
@@ -520,7 +523,7 @@ namespace Network {
 				}
 #endif
 #ifdef NN_VERBOSE
-				std::string tm = "cycle layer: " + std::to_string(i);
+				tm = "cycle layer: " + std::to_string(i);
 				info_call(tm);
 				tm = "inputs: ";
 				for (std::size_t d=0; d<inputs.size(); ++d) {
@@ -534,7 +537,7 @@ namespace Network {
 				// cycle
 				outputs = layers.at(i).cycle(inputs);
 #ifdef NN_VERBOSE
-				std::string tm = "outputs: ";
+				tm = "outputs: ";
 				for (std::size_t d=0; d<outputs.size(); ++d) {
 					for (std::size_t e=0; e<outputs.at(d).size(); ++e) {
 						tm = tm + std::to_string(outputs.at(d).at(e)) + "; ";
