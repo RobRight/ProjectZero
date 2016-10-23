@@ -172,12 +172,18 @@ namespace MAB {
             if (!file.is_open()) std::cout << "UNHAPPY FILE" << std::endl;
             else {
                 if (round == 0) {
-                    file << "Slot Bias':\n";
                     for (std::size_t i=0; i<slots_bias.size(); ++i) {
-                        file << slots_bias.at(i) << ", ";
+                        if (i==0) file << "Slot: ";
+                        if (i!=0) file << ", ";
+                        file << i;
                     }
-                    file << "\n";
-                    file << "round, move, slot, current_standings\n\n";
+                    for (std::size_t i=0; i<slots_bias.size(); ++i) {
+                        if (i==0) file << "Bias: ";
+                        if (i!=0) file << ", ";
+                        file << slots_bias.at(i);
+                    }
+                    file << "\n\n";
+                    file << "Info: round, move, slot, current_standings";
                 }
                 file << "\n";
                 file << round << ", ";
