@@ -177,13 +177,13 @@ namespace MAB {
                     }
                     file << "\n\n";
                 }
+                file << "\n";
                 file << round << ", ";
                 file << in_move << ", ";
                 file << in_slot << ", ";
                 for (std::size_t i=0; i<in_cs.size(); ++i) {
                     file << in_cs.at(i) << ", ";
                 }
-                file << "\n";
                 // current_standings
                 file.close();
             }
