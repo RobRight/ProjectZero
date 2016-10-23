@@ -177,6 +177,7 @@ namespace MAB {
                         if (i!=0) file << ", ";
                         file << i;
                     }
+                    file << "\n";
                     for (std::size_t i=0; i<slots_bias.size(); ++i) {
                         if (i==0) file << "Bias: ";
                         if (i!=0) file << ", ";
