@@ -70,10 +70,10 @@ namespace MAB {
         unsigned int choose_slot() {
             if(DEBUG) std::cout << "DEBUG:Player:choose_slot" << std::endl;
             unsigned int t_slot;
-            if (round < 10) move_random();
+            if (round < 10) t_slot = move_random();
             else {
-                if (LYRAND > 0.6) move_random();
-                else move_greedy();
+                if (LYRAND > 0.6) t_slot = move_random();
+                else t_slot = move_greedy();
             }
             round++;
             return t_slot;
