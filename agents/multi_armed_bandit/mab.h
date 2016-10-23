@@ -148,7 +148,8 @@ namespace MAB {
         double pull_slot(unsigned int in) {
             if(DEBUG) std::cout << "DEBUG:Casino:pull_slot" << std::endl;
             if (in > (slots.size()-1)) return 0.0;  // unknown slot
-            double payout = slots.at(in).generate_payout();
+            double t_payout = slots.at(in).generate_payout();
+            return t_payout;
         }
         // in_move (0:greedy, 1:random)
         void file_operations(unsigned int in_move, unsigned int in_slot, std::vector <double> in_cs) {
