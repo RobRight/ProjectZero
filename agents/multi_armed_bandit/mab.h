@@ -175,7 +175,7 @@ namespace MAB {
                     for (std::size_t i=0; i<slots_bias.size(); ++i) {
                         file << slots_bias.at(i) << ", ";
                     }
-                    file << "\n\n";
+                    file << "\n";
                 }
                 file << "\n";
                 file << round << ", ";
