@@ -16,9 +16,9 @@
 
 #define LYRAND (double)rand()/RAND_MAX
 
-#define NN_DEBUG false
-#define NN_VERBOSE false
-#define NN_TEST false
+//#define NN_DEBUG
+//#define NN_VERBOSE
+//#define NN_TEST
 
 // ideas:
 //	- create (error, debug, info)/message class
