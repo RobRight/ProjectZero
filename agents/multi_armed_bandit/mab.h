@@ -17,6 +17,8 @@ Player in a casino playing slots, tasked with finding the best paying slot.
 #include <fstream>
 #include <iostream>
 
+#define DEBUG true
+
 #define LYRAND (double)rand()/RAND_MAX
 
 namespace MAB {
@@ -38,6 +40,7 @@ namespace MAB {
         unsigned int round;
         unsigned int last_move;
         unsigned int move_greedy() {
+            if(DEBUG) std::cout << "DEBUG:Player:move_greedy" << std::endl;
             unsigned int t_move = 0;
             double t_best = current_standings.at(0);
             for (std::size_t i=1; i<current_standings.at(i); ++i) {
@@ -50,6 +53,7 @@ namespace MAB {
             return t_move;
         }
         unsigned int move_random() {
+            if(DEBUG) std::cout << "DEBUG:Player:move_random" << std::endl;
             unsigned int t_move = rand() % slot_count;
             last_move = 1;
             return t_move;
@@ -64,6 +68,7 @@ namespace MAB {
             }
         }
         unsigned int choose_slot() {
+            if(DEBUG) std::cout << "DEBUG:Player:choose_slot" << std::endl;
             unsigned int t_slot;
             if (round < 10) move_random();
             else {
@@ -74,6 +79,7 @@ namespace MAB {
             return t_slot;
         }
         void add_reward(unsigned int in_s, unsigned int in_r) {
+            if(DEBUG) std::cout << "DEBUG:Player:add_reward" << std::endl;
             current_standings.at(in_s) = (current_standings.at(in_s) + in_r) / 2;
         }
         std::vector <double> return_cs() {
@@ -129,6 +135,7 @@ namespace MAB {
             player.setup(slot_count);
         }
         void setup_slots() {
+            if(DEBUG) std::cout << "DEBUG:Casino:setup_slots" << std::endl;
             slots.clear();
             slots_bias.clear();
             for (std::size_t i=0; i<slot_count; ++i) {
@@ -139,11 +146,13 @@ namespace MAB {
             }
         }
         double pull_slot(unsigned int in) {
+            if(DEBUG) std::cout << "DEBUG:Casino:pull_slot" << std::endl;
             if (in > (slots.size()-1)) return 0.0;  // unknown slot
             double payout = slots.at(in).generate_payout();
         }
         // in_move (0:greedy, 1:random)
         void file_operations(unsigned int in_move, unsigned int in_slot, std::vector <double> in_cs) {
+            if(DEBUG) std::cout << "DEBUG:Casino:file_operations" << std::endl;
             std::ofstream file;
             if (round == 0) file.open("mab_results.txt", std::ios::out | std::ios::trunc);
             else file.open("mab_results.txt", std::ios::out | std::ios::app);
@@ -178,6 +187,7 @@ namespace MAB {
         }
         void cycle_games() {
             while (round < max_round) {
+                if(DEBUG) std::cout << "DEBUG:Casino:cycle_games" << std::endl;
                 std::vector <double> t_cs = player.return_cs();
                 unsigned int t_slot = player.choose_slot();
                 double t_reward = pull_slot(t_slot);
