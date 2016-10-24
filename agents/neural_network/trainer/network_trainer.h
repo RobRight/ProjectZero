@@ -101,17 +101,17 @@ namespace Trainer
 		void progress();
 		void generate_population();
 		Network::Network generate_network();
-		double train_function(double);
+		double train_function(double&);
 		double generate_value();
 		double scale_value(double, bool, bool);
 		void debug_check_network(Network::Network, std::string, bool);
 		void generate_round_values();
-		std::vector <std::vector <double> > cycle_network(std::vector <double>, std::vector <Network::Network>);
+		std::vector <std::vector <double> > cycle_network(std::vector <double>&, std::vector <Network::Network>&);
 		double fitness_function(double, double);
-		double check_network_error(std::vector <double>, std::vector <double>);
+		double check_network_error(std::vector <double>&, std::vector <double>&);
 		void check_population_error(bool);
-		std::vector <Network::Network> prune(std::vector <Network::Network>, std::vector <double>);
-		std::vector <Network::Network> populate(std::vector <Network::Network>, unsigned int);
+		std::vector <Network::Network> prune(std::vector <Network::Network>&, std::vector <double>&);
+		std::vector <Network::Network> populate(std::vector <Network::Network>&, unsigned int&);
 
 	public:
 		// - variables
@@ -589,7 +589,7 @@ namespace Trainer
 	// return:
 	// - error for given network
 	//
-	double Trainer::check_network_error(std::vector <double> in_real_out, std::vector <double> in_ex_out)
+	double Trainer::check_network_error(std::vector <double>& in_real_out, std::vector <double>& in_ex_out)
 	{
 
 #ifdef NT_DEBUG
