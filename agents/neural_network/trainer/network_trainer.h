@@ -304,27 +304,27 @@ namespace Trainer
 				else t_out = 1.0;
 				break;
 			case 2:  // exponential
-				t_val = exp(val);
+				t_out = exp(val);
 				break;
 			case 3:  // sin(x)
-				t_val = sin(val);
+				t_out = sin(val);
 				break;
 			case 4:  // cos(x)
-				t_val = cos(val);
+				t_out = cos(val);
 				break;
 			case 5:  // constant
-				t_val = 10.0;
+				t_out = 10.0;
 				break;
 			case 6:  // sqrt(x)+1
-				t_val = std::sqrt(val)+1;
+				t_out = std::sqrt(val)+1;
 				break;
 			case 7:  // (-x)
-				t_val = -val;
+				t_out = -val;
 				break;
 			default:
-				t_val = 0;
+				t_out = 0;
 		}
-		return t_val;
+		return t_out;
 	}
 
 	//
