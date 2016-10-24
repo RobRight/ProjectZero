@@ -10,6 +10,10 @@ int main()
 	Trainer::Trainer t;
 
 	// - settings start -
+
+	// (0:x^2+1, 1:step, 2:exp(x), 3:sin(x), 4:cos(x), 5:const, 6:sqrt(x)+1, 7:-x)
+	t.train_func_type = 0;
+
 	t.population_size = 100;
 	t.round_max = 50000;
 	t.sub_round_max = 60;
