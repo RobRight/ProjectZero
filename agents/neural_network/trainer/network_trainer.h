@@ -293,13 +293,13 @@ namespace Trainer
 		std::cout << "train_function()" << std::endl;
 #endif
 		double t_out = 0;
+		double t_half = input_min+(input_max-input_min)*0.5;
 		// (0:x^2+1, 1:step, 2:exp(x), 3:sin(x), 4:cos(x), 5:const, 6:sqrt(x)+1, 7:-x)
 		switch (train_func_type) {
 			case 0:  // x^2+1
 				t_out = (pow(val, 2) + 1.0);
 				break;
 			case 1:  // x>=0.5 return 1, x<0.5 return 0
-				double t_half = input_min+(input_max-input_min)*0.5;
 				if (val > t_half) t_out = 2.0;
 				else t_out = 1.0;
 				break;
