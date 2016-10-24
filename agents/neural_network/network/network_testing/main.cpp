@@ -3,6 +3,10 @@
 
 #include "../neural_network.h"
 
+//#define NN_DEBUG
+//#define NN_VERBOSE
+//#define NN_TEST
+
 // - settings -
 std::vector <unsigned int> nc = {1,2,1};  // node count per layer
 double mutate_mod = 0.1;
