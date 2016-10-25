@@ -235,8 +235,9 @@ namespace Trainer
 	{
 		unsigned int update_interval = 0.1;  // setting
 		double progress = (double)round/round_max;
+		std::cout << progress << std::endl;
 		if (int(progress*100) % update_interval == 0) {
-			std::cout << "progress: " << progress*100 << std::endl;  // test
+			//std::cout << "progress: " << progress*100 << std::endl;  // test
 			/*
 			unsigned int bar_width = 40;  // setting
 			std::cout << "[";
@@ -800,6 +801,7 @@ namespace Trainer
 #ifdef NT_DEBUG
 			std::cout << "debug: round " << round << "; sub " << sub_round << " start" << std::endl;
 #endif
+			progress();
 			// generate values for this round
 			generate_round_values();
 			// cycle network
@@ -820,7 +822,6 @@ namespace Trainer
 				// round complete
 				round++;
 				sub_round = 0;
-				progress();
 			}
 #ifdef NT_VERBOSE
 			print_round();
