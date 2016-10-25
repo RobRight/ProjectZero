@@ -251,7 +251,6 @@ namespace Trainer
 			}
 			std::cout << "] " << int(progress * 100) << "%" << "\r";
 			std::cout.flush();
-			
 		}
 	}
 
