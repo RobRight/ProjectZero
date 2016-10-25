@@ -242,11 +242,14 @@ namespace Trainer
 			
 			unsigned int bar_width = 40;  // setting
 			std::cout << "[";
+			unsigned int bar_pos_em = bar_width * (1-progress);
 			unsigned int bar_pos = bar_width * progress;
-			for (std::size_t i=0; i<bar_pos; ++i) {
+			for (std::size_t i=1; i<=bar_pos; ++i) {
 				if (i < bar_pos) std::cout << "=";
-				else if (i==bar_pos) std::cout << ">";
-				else std::cout << " ";
+				else std::cout << ">";
+			}
+			for (std::size_t i=0; i<bar_pos_em; ++i) {
+				std::cout << " ";
 			}
 			std::cout << "]" << int(progress * 100) << " %\r";
 			std::cout.flush();
