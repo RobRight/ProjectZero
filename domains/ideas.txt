@@ -1,0 +1,5 @@
+* traveling salesman
+* handwritten character recognition
+* walking through a crowd
+* stabalizing a quad rotor
+* path planning
