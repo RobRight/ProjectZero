@@ -201,6 +201,7 @@ namespace Trainer
 	// training info after complete
 	void Trainer::print_end()
 	{
+		std::cout << std::endl;
 		std::cout << "Training complete" << std::endl;
 		if (time_delta > 60)
 		{
@@ -240,8 +241,8 @@ namespace Trainer
 			
 			unsigned int bar_width = 40;  // setting
 			std::cout << "[";
-			unsigned int bar_pos_em = bar_width * (1-progress);
 			unsigned int bar_pos = bar_width * progress;
+			unsigned int bar_pos_em = bar_width - bar_pos;
 			for (std::size_t i=1; i<=bar_pos; ++i) {
 				if (i < bar_pos) std::cout << "=";
 				else std::cout << ">";
