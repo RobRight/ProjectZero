@@ -156,7 +156,7 @@ namespace Trainer
 		srand(time(NULL));
 		// do not modify
 		runtime_error = false;
-		round = 0;
+		round = 1;
 		sub_round = 0;
 		nodes_per_layer = { 1, hidden_layer_size, 1 };
 		best_error = HUGE_VAL;
@@ -201,6 +201,7 @@ namespace Trainer
 	// training info after complete
 	void Trainer::print_end()
 	{
+		std::cout << std::endl;
 		std::cout << std::endl;
 		std::cout << "Training complete" << std::endl;
 		if (time_delta > 60)
@@ -798,7 +799,7 @@ namespace Trainer
 		print_intro();
 		generate_population();
 		time_start = clock();
-		while (round < round_max && runtime_error == false)
+		while (round <= round_max && runtime_error == false)
 		{
 #ifdef NT_DEBUG
 			std::cout << "debug: round " << round << "; sub " << sub_round << " start" << std::endl;
