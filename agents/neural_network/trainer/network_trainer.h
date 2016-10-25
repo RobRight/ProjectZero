@@ -233,14 +233,23 @@ namespace Trainer
 	//
 	void Trainer::progress()
 	{
-		/*
-		unsigned int update_times = 10;
-		for (std::size_t i = 1; i<=update_times; ++i) {
-			if ((round_max / update_times * i) == round) {
-				std::cout << "progress: " << 10*i << std::endl;
+		unsigned int update_interval = 0.1;  // setting
+		double progress = (double)round/round_max;
+		if (progress % update_interval = 0) {
+			std::cout << "progress: " << progress*100 << std::endl;  // test
+			/*
+			unsigned int bar_width = 40;  // setting
+			std::cout << "[";
+			unsigned int bar_pos = bar_width * progress;
+			for (std::size_t i=0; i<bar_pos; ++i) {
+				if (i < bar_pos) std::cout << "=";
+				else if (i==bar_pos) std::cout << ">";
+				else std::cout << " ";
 			}
+			std::cout << "]" << int(progress * 100) << " %\r";
+			std::cout.flush();
+			*/
 		}
-		*/
 	}
 
 	//
