@@ -793,7 +793,6 @@ namespace Trainer
 		std::cout << "debug: train() start" << std::endl;
 #endif
 		print_intro();
-		progress();
 		generate_population();
 		time_start = clock();
 		while (round < round_max && runtime_error == false)
@@ -821,6 +820,7 @@ namespace Trainer
 				// round complete
 				round++;
 				sub_round = 0;
+				progress();
 			}
 #ifdef NT_VERBOSE
 			print_round();
