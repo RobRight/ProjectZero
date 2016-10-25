@@ -156,7 +156,7 @@ namespace Trainer
 		srand(time(NULL));
 		// do not modify
 		runtime_error = false;
-		round = 1;
+		round = 0;
 		sub_round = 0;
 		nodes_per_layer = { 1, hidden_layer_size, 1 };
 		best_error = HUGE_VAL;
