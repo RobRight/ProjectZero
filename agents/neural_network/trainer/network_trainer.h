@@ -802,7 +802,6 @@ namespace Trainer
 #ifdef NT_DEBUG
 			std::cout << "debug: round " << round << "; sub " << sub_round << " start" << std::endl;
 #endif
-			progress();
 			// generate values for this round
 			generate_round_values();
 			// cycle network
@@ -814,6 +813,7 @@ namespace Trainer
 			sub_round++;
 			if (sub_round == sub_round_max)
 			{
+				progress();
 				check_population_error(false); // false: round
 				population = prune(population, round_pop_errors);
 				population = populate(population, population_size);
