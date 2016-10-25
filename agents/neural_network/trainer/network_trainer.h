@@ -233,7 +233,7 @@ namespace Trainer
 	//
 	void Trainer::progress()
 	{
-		unsigned int update_interval = 1;  // setting
+		double update_interval = 1.0;  // setting
 		double progress = (double)round/round_max;
 		if (progress*100 % update_interval == 0) {
 			std::cout << "progress: " << int(progress*100) << std::endl;  // test
