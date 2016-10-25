@@ -237,6 +237,7 @@ namespace Trainer
 		double progress = (double)round/round_max;
 		unsigned int t_progress = int(progress*10000);
 		if (t_progress % update_interval == 0) {
+			std::cout << progress << ": " << t_progress << "; ";
 			std::cout << "progress: " << int(progress*100) << std::endl;  // test
 			/*
 			unsigned int bar_width = 40;  // setting
