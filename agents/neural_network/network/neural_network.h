@@ -529,7 +529,6 @@ namespace Network {
 					default:
 						inputs = outputs;
 				}
-#ifdef NN_TEST
 				if (inputs.at(0).size() != layers.at(i).return_node_count()) {
 					tm = "cycle - input size mismatch to nodes in layer. layer: " +
 						std::to_string(i) + "; input: " +
@@ -537,7 +536,6 @@ namespace Network {
 						std::to_string(layers.at(i).return_node_count()) + ";"; 
 					error_call(tm);
 				}
-#endif
 #ifdef NN_VERBOSE
 				tm = "cycle layer: " + std::to_string(i);
 				info_call(tm);
