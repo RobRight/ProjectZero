@@ -14,13 +14,12 @@ Node:
 #include <vector>
 
 class Domain {
-protected:
-    std::vector <double> action;  // store action here orrrr in domain?
+    std::vector <double> recieved_action;
 public:
-    virtual std::vector <double> give_state() = 0;
-    virtual std::vector <double> give_reward() = 0;
-    void get_action(std::vector <double> in) {
-        action = in;
+    virtual std::vector <double> give_state(void) = 0;
+    virtual std::vector <double> give_reward(void) = 0; // ?
+    virtual void get_action(std::vector <double> in) {
+        recieved_action = in;
     }
 };
 

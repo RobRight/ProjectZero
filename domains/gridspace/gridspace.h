@@ -12,6 +12,7 @@
 
 // ToDo:
 // complete bot player option
+// needs scaling, add to network?
 
 #include <iostream> // cout, endl
 #include <vector>   // vector
@@ -19,15 +20,15 @@
 #include <cstdlib>  // rand, srand, hmm
 #include <ctime>	// time
 
+#include "../../abstract_connection/domain.h"
+
 ///////////////////////////////////////////////////////////////
-class Grid
+class Grid : Domain
 {
 private:
 	//// variables
 	// error when true
 	bool runtime_error;
-	bool debug;
-	bool verbose;
 	// true when playing game, fale to exit
 	bool play;
 	// game score
@@ -38,6 +39,7 @@ private:
 	int level;
 	// player type
 	bool human_player;
+	bool bot_display_grid;
 	// grid size
 	int grid_x;
 	int grid_y;
@@ -86,7 +88,8 @@ private:
 	// human get move
 	int human_get_move();
 	// comp get move
-	int comp_get_move(int);
+	void get_action(std::vector <double>);
+	std::vector <double> give_state();
 	// apply move
 	std::vector <std::vector <int> > apply_move(std::vector <std::vector <int> >, int);
 	// check target reached
@@ -104,13 +107,12 @@ public:
 
 Grid::Grid()
 {
-	// - settings - 
-	debug = false;
-	verbose = false;
+	// - settings -
 	// player position (updated)
 	player_x = 0;
 	player_y = 0;
 	// display optioins
+	bot_display_grid = true;
 	display_include_space = true;
 	display_clear_screen = true;
 	//
@@ -122,6 +124,8 @@ Grid::Grid()
 	// - do not modify -
 	play = true;
 	runtime_error = false;
+	target_x.clear();
+	target_y.clear();
 	score = 0;
 	targets_hit = 0;
 	level = 1;
@@ -229,7 +233,7 @@ std::vector <std::vector <int> > Grid::place_grid_player(std::vector <std::vecto
 //
 void Grid::display_grid(std::vector <std::vector <int> > in_grid)
 {
-	debug_call("display_grid() start");
+	debug_call("display_grid()");
 	if (display_clear_screen && !debug) system("clear");
 	std::cout << "Grid Space: " << std::endl << std::endl;
 	std::cout << " - score: " << score << std::endl;
@@ -290,7 +294,7 @@ bool Grid::check_legal_move(int in_move)
 //
 int Grid::human_get_move()
 {
-	debug_call("human_get_move() start");
+	debug_call("human_get_move()");
 	int t_move;
 	bool choose_move = true;
 	while (choose_move)
@@ -355,15 +359,53 @@ int Grid::human_get_move()
 //
 // Get move from computer (function call)
 //
-int Grid::comp_get_move(int in_move)
+void Grid::get_action(std::vector <double> in)
 {
-	debug_call("comp_get_move()");
-	if (in_move == move_n || in_move == move_e || in_move == move_s || in_move == move_w)
-		return in_move;
-	else {
-		error_call("come_set_move() input fail");
-		return 0;
+#ifdef GS_DEBUG
+	debug_call("get_action()");
+#endif
+	if (in.size() == 4) {
+		unsigned int t_max_pos = 0;
+		double t_max_val = in.at(0);
+		// find max value
+		for (std::size_t i=0; i<4; ++i) {
+			if (in.at(i) > t_max_val) {
+				t_max_pos = i;
+				t_max_val = in.at(i);
+			}
+		}
+		// set move
+		switch (t_max_pos) {
+			case 0:
+				t_move = move_n;
+				break;
+			case 1:
+				t_move = move_s;
+				break;
+			case 2:
+				t_move = move_e;
+				break;
+			default:
+				t_move = move_w;
+		}
+	} else {
+		error_call("get_action() input fail");
 	}
+}
+
+//
+// Return dx, dy from player to target
+//
+std::vector <double> Grid::give_state() {
+#ifdef GS_DEBUG
+	debug_call("give_state()");
+#endif
+	std::vector <double> t_out;
+	int t_x = player_x - target_x.at(0);  // only one target
+	int t_y = player_y - target_y.at(0);
+	t_out.push_back(t_x);
+	t_out.push_back(t_y);
+	return t_out;
 }
 
 //
@@ -371,7 +413,9 @@ int Grid::comp_get_move(int in_move)
 //
 std::vector <std::vector <int> > Grid::apply_move(std::vector <std::vector <int> > in_grid, int in_move)
 {
-	debug_call("apply_move() start");
+#ifdef GS_DEBUG
+	debug_call("apply_move()");
+#endif
 	int new_player_x = player_x;
 	int new_player_y = player_y;
 	if (in_move == move_n)
@@ -390,7 +434,6 @@ std::vector <std::vector <int> > Grid::apply_move(std::vector <std::vector <int>
 	// set new player position values
 	player_x = new_player_x;
 	player_y = new_player_y;
-	debug_call("apply_move() end");
 	// return
 	return in_grid;
 }
@@ -400,7 +443,9 @@ std::vector <std::vector <int> > Grid::apply_move(std::vector <std::vector <int>
 //
 bool Grid::check_target_reached()
 {
+#ifdef GS_DEBUG
 	debug_call("check_target_reached() start");
+#endif
 	for (int i=0; i<target_x.size(); ++i)
 	{
 		if (player_x == target_x.at(i))
@@ -420,16 +465,7 @@ bool Grid::check_target_reached()
 		t_all_targets_hit = true;
 		++level;
 	}
-	debug_call("check_target_reached() end");
 	return t_all_targets_hit;
-}
-
-//
-// Check grid progress (distance, direction)
-//
-void Grid::check_grid_progress(std::vector <std::vector <int> > in_grid)
-{
-	
 }
 
 //
@@ -437,7 +473,9 @@ void Grid::check_grid_progress(std::vector <std::vector <int> > in_grid)
 //
 void Grid::main_run_human()
 {
+#ifdef GS_DEBUG
 	debug_call("main_run_human() start");
+#endif
 	// generate grid
 	grid = generate_grid(grid_x, grid_y);
 	// generate targets
@@ -447,6 +485,7 @@ void Grid::main_run_human()
 	{
 		grid = place_grid_target(grid, target_x.at(i), target_y.at(i));
 	}
+	// place player
 	grid = place_grid_player(grid, player_x, player_y);
 	// cycle game
 	while(play && !runtime_error)
@@ -456,7 +495,6 @@ void Grid::main_run_human()
 		grid = apply_move(grid, move);
 		if (check_target_reached())
 		{
-			//play = false;
 			// next round
 			targets_hit = 0;
 			generate_targets(level);
@@ -466,12 +504,39 @@ void Grid::main_run_human()
 			}
 		}
 	}
-	debug_call("main_run_human() end");
 }
 
 void Grid::main_run_bot()
 {
-	// under development
+	unsigned int t_targets = 1;  // target count (const)
+	// generate grid
+	grid = generate_grid(grid_x, grid_y);
+	// generate targets
+	generate_targets(t_targets);
+	// place targets
+	for (int i=0; i<target_x.size(); ++i)
+	{
+		grid = place_grid_target(grid, target_x.at(i), target_y.at(i));
+	}
+	// place player
+	grid = place_grid_player(grid, player_x, player_y);
+	while(play && !runtime_error)
+	{
+		if (bot_display_grid) display_grid(grid);
+		//give_state();  // trainer should call this
+		//unsigned int t_move = get_action(); // domain.h
+		grid = apply_move(grid, t_move);
+		if (check_target_reached())
+		{
+			// next round
+			targets_hit = 0;
+			generate_targets(t_targets);
+			for (int i=0; i<target_x.size(); ++i)
+			{
+				grid = place_grid_target(grid, target_x.at(i), target_y.at(i));
+			}
+		}
+	}
 }
 
 void Grid::play_game(int in_x, int in_y, bool in_pt)

@@ -6,16 +6,17 @@ Copyright (c) 2016 William Gregory.  All rights reserved.
 
 Agents give an action and recieve a state.
 
-Node: how and when is reward involved?
-
+Node:
+    - how and when is reward involved?
+    - how to organize function calls so give_action passes value to get_action in the domain
 */
 
 #include <vector>
 
 class Agent {
 protected:
-    std::vector <double> state;  // store states here? retreive in agent from here?
-    std::vector <double> reward;
+    std::vector <double> recieved_state;  // store states here. retreive in agent from here.
+    std::vector <double> recieved_reward;
 public:
     virtual std::vector <double> give_action(void) = 0;
     void get_state(std::vector <double> in) {
