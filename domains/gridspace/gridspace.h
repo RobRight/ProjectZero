@@ -20,10 +20,10 @@
 #include <cstdlib>  // rand, srand, hmm
 #include <ctime>	// time
 
-#include "../../abstract_connection/domain.h"
+//#include "../../abstract_connection/domain.h"
 
 ///////////////////////////////////////////////////////////////
-class Grid : Domain
+class Grid
 {
 private:
 	//// variables
@@ -94,8 +94,6 @@ private:
 	std::vector <std::vector <int> > apply_move(std::vector <std::vector <int> >, int);
 	// check target reached
 	bool check_target_reached();
-	// check grid progress
-	void check_grid_progress(std::vector <std::vector <int> >);
 	// main run human
 	void main_run_human();
 	// main run bot
