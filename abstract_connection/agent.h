@@ -4,9 +4,10 @@
 Agent Abstract Class
 Copyright (c) 2016 William Gregory.  All rights reserved.
 
-Agents give an action and recieve a state.
+Agents give an action and recieve a state and an optional reward.
 
 Node:
+    - how to incorperate setup functions? 
     - how and when is reward involved?
     - how to organize function calls so give_action passes value to get_action in the domain
 */
@@ -20,10 +21,10 @@ protected:
 public:
     virtual std::vector <double> give_action(void) = 0;
     void get_state(std::vector <double> in) {
-        state = in;
+        recieved_state = in;
     }
     void get_reward(std::vector <double> in) {
-        reward = in;
+        recieved_reward = in;
     }
 };
 
