@@ -40,8 +40,10 @@ namespace Trainer
 
         void get_state(std::vector <double>&);
         std::vector <double> give_action();
-        void get_reward(double);
+        void get_reward(double&);
 
+		std::vector <double> cycle_network(std::vector <double>&);
+		void cycle();
         std::vector <Network::Network> prune(std::vector <Network::Network>&, std::vector <double>&);
         std::vector <Network::Network> populate(std::vector <Network::Network>&, unsigned int&);
     public:
@@ -86,15 +88,15 @@ namespace Trainer
     //----------------------------
     // get state from domain
     void get_state(std::vector <double>& in) {
-		state = in;
+		last_state = in;
     }
 
     // give action to domain
     std::vector <double> give_action() {
-		return 
+		return last_action;
     }
 
-    void get_reward(double in_val) {
+    void get_reward(double& in_val) {
 		last_fitness = in_val;
     }
     //-----------------------------
@@ -128,9 +130,16 @@ namespace Trainer
 		}
 	}
 
+	std::vector <double> cycle_network(std::vector <double>& in) {
+
+	}
+
 	//
 	void Trainer::cycle() {
-
+		get_state();
+		cycle_network();
+		give_action();
+		get_reward();
 	}
 
     //
