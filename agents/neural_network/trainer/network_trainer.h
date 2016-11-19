@@ -7,21 +7,17 @@ Version 3.0
 Created by William Gregory on October 27th to present.
 Copyright (c) William Gregory.  All rights reserved.
 
-idea: generate a new domain for each test.
-
 */
 
 #ifndef _NETWORK_TRAINER_
 #define _NETWORK_TRAINER_
 
 //#define NT_DEBUG
-//#define NT_VERBOSE
-//#define NT_TEST
 
 #define PI 3.14159265
 
-#include "../../gridspace.h"  // domain
-#include "../network/neural_network.h"
+#include "../network/neural_network.h"  // agent
+#include "domain.h"  // domain
 
 namespace Trainer
 {
@@ -32,35 +28,44 @@ namespace Trainer
         std::vector <double> best_fitness;
         std::vector <Network::Network> best_network;
         unsigned int current_round;
-        //unsigned int current_sub_round;
-        bool runtime_error;
+		unsigned int ID_next;
+
+		std::vector <double> last_state;
+		std::vector <double> last_action;
+		double last_fitness;
+		std::vector <double> pop_fitness;
 
         void print_intro();
         void print_end();
 
-        std::vector <double> get_state();
-        void give_action(std::vector <double>&);
-        double get_reward();
+        void get_state(std::vector <double>&);
+        std::vector <double> give_action();
+        void get_reward(double);
 
-        double test(Network::Network);  // test net sub_round times, return total reward
         std::vector <Network::Network> prune(std::vector <Network::Network>&, std::vector <double>&);
         std::vector <Network::Network> populate(std::vector <Network::Network>&, unsigned int&);
     public:
         unsigned int round_max;
-        //unsigned int round_sub_max;
         unsigned int population_size;
         std::vector <unsigned int> nodes_per_layer;
+		double mutate_mod;
+		double mutate_chance;
 
         Trainer();
         void train();
     };
 
     Trainer::Trainer() {
-
         // do not modify
         runtime_error = false;
         current_round = 0;
-        //current_sub_round = 0;
+		ID_next = 1;
+		// settings
+		round_max = 1000;
+		population_size = 100;
+	    hidden_layer_size = 4;
+	    mutate_mod = 0.1;
+	    mutate_chance = 0.3;
     }
 
     void Trainer::print_intro() {
@@ -80,43 +85,53 @@ namespace Trainer
 
     //----------------------------
     // get state from domain
-    std::vector <double> get_state() {
-        std::vector <double> t_out;
-        t_out = domain.give_state();
-        return t_out;
+    void get_state(std::vector <double>& in) {
+		state = in;
     }
 
     // give action to domain
-    void give_action(std::vector <double>& in) {
-        domain.get_action(in);
+    std::vector <double> give_action() {
+		return 
     }
 
-    double get_reward() {
-        double t_out;
-        domain.get_reward();
-        return t_out;
+    void get_reward(double in_val) {
+		last_fitness = in_val;
     }
     //-----------------------------
 
-    Grid new_domain() {
-        Grid g;
-        g.play_game(10, 10, false);
-        return g;
-    }
+	//
+	// generate_network: sub
+	// generate a network, setup and return
+	//
+	// output:
+	// - output generally configured network
+	//
+	Network::Network Trainer::generate_network()
+	{
+		Network::Network net;
+		net.ID_value = ID_next;
+		net.run_type = 1;
+		net.setup(nodes_per_layer, mutate_mod, mutate_chance);
+		ID_next++;
+		return net;
+	}
 
-    double test() {
-        std::vector <double> state;
-		std::vector <double> action;
-        double reward;
-        for (std::size_t i=0; i<sub_round; ++i) {
-            Grid domain = new_domain();
-            state = domain.give_state();
-		    action = cycle_network(state, population);
-            domain.get_action(action);
-            reward += domain.give_reward();
-        }
-        return reward;
-    }
+	//
+	// generate_population: sub
+	// generate starting population
+	//
+	void Trainer::generate_population()
+	{
+		population.clear();
+		for (std::size_t i=0; i<population_size; ++i) {
+			population.push_back(generate_network());
+		}
+	}
+
+	//
+	void Trainer::cycle() {
+
+	}
 
     //
 	// prune: main
@@ -132,43 +147,20 @@ namespace Trainer
 #ifdef NT_DEBUG
 		std::cout << "debug: prune() start" << std::endl;
 #endif
+		int try_1;
+		int try_2;
 		std::vector <Network::Network> temp_new_pop;
-		double temp_avg_error = 0.0; // average error of new pop
 		for (std::size_t i = 0; i < in_pop.size() / 2; ++i)
 		{
-			int try_1 = rand() % in_pop.size();
-			int try_2 = rand() % in_pop.size();
+			try_1 = rand() % in_pop.size();
+			try_2 = rand() % in_pop.size();
 			while (try_1 == try_2)
-			{
 				try_2 = rand() % in_pop.size();
-			}
-			if (in_pop_errors.at(try_1) < in_pop_errors.at(try_2)) {
+			if (in_pop_error.at(try_1) < in_pop_error.at(try_2))
 				temp_new_pop.push_back(in_pop.at(try_1));
-				temp_avg_error += round_pop_errors.at(try_1);
-			}
-			else {
+			else
 				temp_new_pop.push_back(in_pop.at(try_2));
-				temp_avg_error += round_pop_errors.at(try_2);
-			}
 		}
-#ifdef NT_TEST
-		if (temp_new_pop.size() != in_pop.size() / 2)
-		{
-			error_call("prune() output size wrong");
-		}
-#endif
-#ifdef NT_VERBOSE
-			temp_avg_error = temp_avg_error / temp_new_pop.size();
-			std::cout << "prune results: " << std::endl;
-			std::cout << " - start: " << round_pop_avg_error << std::endl;
-			std::cout << " - end: " << temp_avg_error << std::endl;
-			double prune_improvement = round_pop_avg_error - temp_avg_error;
-			std::cout << " - improvement: " << prune_improvement << std::endl;
-#endif
-		//if (temp_avg_error > round_pop_avg_error)
-		//{
-			//error_call("prune() average error got worse");
-		//}
 		return temp_new_pop;
     }
 
@@ -187,23 +179,14 @@ namespace Trainer
 #ifdef NT_DEBUG
 		std::cout << "debug: populate() start" << std::endl;
 #endif
-#ifdef NT_TEST
-		if (in_pop.size() < 2)
-		{
-			error_call("populate() input pop too small");
-		}
-		if (in_pop_size <= in_pop.size())
-		{
-			error_call("populate() input pop and desired size mismatch");
-		}
-#endif
-		// populate until size is 'in_pop_size'
+		int copy_index;
+		Network::Network net;
 		std::vector <Network::Network> temp_new_pop = in_pop;
 		while (temp_new_pop.size() < in_pop_size)
 		{
-			int copy_index = rand() % in_pop.size();
+			copy_index = rand() % in_pop.size();
 			// generate a new network
-			Network::Network net = generate_network();
+			net = generate_network();
 			// set to same weight as random
 			net.import_weights(in_pop.at(copy_index).export_weights());
 			net.mutate();
@@ -228,12 +211,13 @@ namespace Trainer
 #ifdef NT_DEBUG
 			std::cout << "debug: round " << round << "; sub " << sub_round << " start" << std::endl;
 #endif
-            for (std::size_t i=0; i<population.size(); ++i) {
-                test(population.at(i));
-            }
+			for (std::size_t i=0; i<population.size(); ++i) {
+				generate_domain();
+				cycle();
+			}
 			prune();
             populate();
         }
-        double delta_time = (clock() - time_start); // clocks per second?
+        double delta_time = (clock() - time_start) / CLOCKS_PER_SEC;
     }
 }
