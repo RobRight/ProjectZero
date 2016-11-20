@@ -29,6 +29,7 @@ namespace Trainer
         std::vector <Network::Network> best_network;
         unsigned int current_round;
 		unsigned int ID_next;
+		CB::Pendulum domain;  // DOMAIN
 
 		std::vector <double> last_state;
 		std::vector <double> last_action;
@@ -87,19 +88,28 @@ namespace Trainer
 
     //----------------------------
     // get state from domain
-    void get_state(std::vector <double>& in) {
-		last_state = in;
+    void get_state() {
+		last_state = domain.give_state();
+		//last_state = in;
     }
 
     // give action to domain
-    std::vector <double> give_action() {
-		return last_action;
+    void give_action() {
+		domain.get_action(last_action);
+		//return last_action;
     }
 
-    void get_reward(double& in_val) {
-		last_fitness = in_val;
+    void get_reward() {
+		last_fitness = domain.give_reward();
+		//last_fitness = in_val;
     }
     //-----------------------------
+
+	CB::Pendulum Trainer::generate_domain()
+	{
+		CB::Pendulum pend;
+		return pend;
+	}
 
 	//
 	// generate_network: sub
@@ -131,15 +141,18 @@ namespace Trainer
 	}
 
 	std::vector <double> cycle_network(std::vector <double>& in) {
-
+		//
 	}
 
 	//
 	void Trainer::cycle() {
-		get_state();
-		cycle_network();
-		give_action();
-		get_reward();
+		unsigned int test_count = 10;
+		for (std::size_t i = 0; i<test_count; ++i) {
+			get_state();
+			cycle_network();
+			give_action();
+			get_reward();
+		}
 	}
 
     //
@@ -221,7 +234,8 @@ namespace Trainer
 			std::cout << "debug: round " << round << "; sub " << sub_round << " start" << std::endl;
 #endif
 			for (std::size_t i=0; i<population.size(); ++i) {
-				generate_domain();
+				
+				domain = generate_domain();
 				cycle();
 			}
 			prune();
