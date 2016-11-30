@@ -104,17 +104,26 @@ namespace Trainer
     //----------------------------
     // get state from domain
     void Trainer::get_state() {
+#ifdef NT_DEBUG
+		std::cout << "debug: get_state() start" << std::endl;
+#endif
 		last_state = domain.give_state();
 		//last_state = in;
     }
 
     // give action to domain
     void Trainer::give_action() {
+#ifdef NT_DEBUG
+		std::cout << "debug: give_action() start" << std::endl;
+#endif
 		domain.get_action(last_action);
 		//return last_action;
     }
 
     void Trainer::get_reward() {
+#ifdef NT_DEBUG
+		std::cout << "debug: get_reward() start" << std::endl;
+#endif
 		last_fitness = domain.give_reward().at(0);
     }
     //-----------------------------
@@ -122,6 +131,9 @@ namespace Trainer
 	// generate single domain and return
 	CB::Pendulum Trainer::generate_domain()
 	{
+#ifdef NT_DEBUG
+		std::cout << "debug: generate_domain() start" << std::endl;
+#endif
 		CB::Pendulum pend;
 		return pend;
 	}
@@ -135,6 +147,9 @@ namespace Trainer
 	//
 	Network::Network Trainer::generate_network()
 	{
+#ifdef NT_DEBUG
+		std::cout << "debug: generate_network() start" << std::endl;
+#endif
 		Network::Network net;
 		net.ID_value = ID_next;
 		net.run_type = 1;
@@ -150,6 +165,9 @@ namespace Trainer
 	//
 	void Trainer::generate_population()
 	{
+#ifdef NT_DEBUG
+		std::cout << "debug: generate_population() start" << std::endl;
+#endif
 		population.clear();
 		for (std::size_t i=0; i<population_size; ++i) {
 			population.push_back(generate_network());
@@ -159,6 +177,9 @@ namespace Trainer
 
 	// cycle network with given inputs and return outputs
 	std::vector <double> Trainer::cycle_network(std::vector <double>& in_val, unsigned int& in_count) {
+#ifdef NT_DEBUG
+		std::cout << "debug: cycle_network() start" << std::endl;
+#endif
 		std::vector <double> t_out;
 		t_out = population.at(in_count).cycle(in_val);
 		return t_out;
@@ -166,11 +187,17 @@ namespace Trainer
 
 	// add last fitness to pop_fitness
 	void Trainer::log_reward(double& in_val, unsigned int& in_count) {
+#ifdef NT_DEBUG
+		std::cout << "debug: log_reward() start" << std::endl;
+#endif
 		pop_fitness.at(in_count) += in_val;
 	}
 
 	// cycle agent - domain for 'test_count' iterations
 	void Trainer::cycle() {
+#ifdef NT_DEBUG
+		std::cout << "debug: cycle() start" << std::endl;
+#endif
 		for (std::size_t i = 0; i<test_count; ++i) {
 			get_state();
 			last_action = cycle_network(last_state, network_test_count);
