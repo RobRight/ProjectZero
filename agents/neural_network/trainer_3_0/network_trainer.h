@@ -87,6 +87,11 @@ namespace Trainer
 		output_layer_size = 1;
 	    mutate_mod = 0.1;
 	    mutate_chance = 0.3;
+		// end settings
+		// do not modify
+		nodes_per_layer.push_back(input_layer_size);
+		nodes_per_layer.push_back(hidden_layer_size);
+		nodes_per_layer.push_back(output_layer_size);
     }
 
     void Trainer::print_intro() {
