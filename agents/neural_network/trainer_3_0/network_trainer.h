@@ -190,7 +190,6 @@ namespace Trainer
 			population.push_back(generate_network());
 			pop_fitness.push_back(0.0);
 		}
-		std::cout << "DONE" << std::endl;
 	}
 
 	// cycle network with given inputs and return outputs
