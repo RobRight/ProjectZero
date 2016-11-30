@@ -17,7 +17,7 @@ Copyright (c) William Gregory.  All rights reserved.
 #define PI 3.14159265
 
 #include "../network/neural_network.h"  // agent
-#include "../../../domains/_not_mine/cart_balance/cart_balance.h"  // domain
+#include "../../../domains/_not_mine/cart_balance/cart_balance.h"  // DOMAIN SPECIFIC
 
 namespace Trainer
 {
@@ -32,6 +32,7 @@ namespace Trainer
 		unsigned int ID_next;
 		unsigned int network_test_count;  // current
 		CB::Pendulum domain;  // domain // DOMAIN SPECIFIC
+		bool runtime_error;
 
 		std::vector <double> last_state;
 		std::vector <double> last_action;
@@ -40,9 +41,9 @@ namespace Trainer
         void print_intro();
         void print_end();
 
-        void get_state(std::vector <double>&);
-        std::vector <double> give_action();
-        void get_reward(double&);
+        void get_state();
+        void give_action();
+        void get_reward();
 
 		CB::Pendulum generate_domain();  // DOMAIN SPECIFIC
 		Network::Network generate_network();
@@ -61,6 +62,9 @@ namespace Trainer
 		double mutate_mod;
 		double mutate_chance;
 		unsigned int test_count;  // domain cycles
+		unsigned int input_layer_size;
+		unsigned int hidden_layer_size;
+		unsigned int output_layer_size;
 
         Trainer();
         void train();
@@ -75,7 +79,9 @@ namespace Trainer
 		test_count = 100;
 		round_max = 1000;
 		population_size = 100;
+		input_layer_size = 2;
 	    hidden_layer_size = 4;
+		output_layer_size = 1;
 	    mutate_mod = 0.1;
 	    mutate_chance = 0.3;
     }
@@ -110,7 +116,6 @@ namespace Trainer
 
     void Trainer::get_reward() {
 		last_fitness = domain.give_reward();
-		//last_fitness = in_val;
     }
     //-----------------------------
 
@@ -155,7 +160,7 @@ namespace Trainer
 	// cycle network with given inputs and return outputs
 	std::vector <double> Trainer::cycle_network(std::vector <double>& in_val, unsigned int& in_count) {
 		std::vector <double> t_out;
-		t_out.at(in_count).cycle(in_val);
+		t_out = population.at(in_count).cycle(in_val);
 		return t_out;
 	}
 
@@ -254,14 +259,14 @@ namespace Trainer
 		print_intro();
 		generate_population();
 		clock_t time_start = clock();
-		while (round <= round_max && !runtime_error)
+		while (current_round <= round_max && !runtime_error)
 		{
 #ifdef NT_DEBUG
-			std::cout << "debug: round " << round << "; sub " << sub_round << " start" << std::endl;
+			std::cout << "debug: round " << current_round << "; sub " << sub_round << " start" << std::endl;
 #endif
 			for (std::size_t i=0; i<population.size(); ++i)
 			{
-				network_run_count = i;
+				network_test_count = i;
 				domain = generate_domain();
 				cycle();
 			}
@@ -272,3 +277,5 @@ namespace Trainer
         double delta_time = (clock() - time_start) / CLOCKS_PER_SEC;
     }
 }
+
+#endif
