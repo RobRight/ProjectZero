@@ -319,7 +319,9 @@ namespace Trainer
             population = populate(population, population_size);
         }
         double delta_time = (clock() - time_start) / CLOCKS_PER_SEC;
+		print_end();
     }
+
 }
 
 #endif
