@@ -93,6 +93,7 @@ namespace Trainer
 #ifdef NT_DEBUG
 		std::cout << "debug: print_intro() start" << std::endl;
 #endif
+		std::cout << "TEST HERE" << std::endl;
         std::cout << std::endl;
         std::cout << "Network Trainer" << std::endl;
         std::cout << "version 3.0" << std::endl;
