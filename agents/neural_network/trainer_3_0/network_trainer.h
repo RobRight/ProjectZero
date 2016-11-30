@@ -13,6 +13,7 @@ Copyright (c) William Gregory.  All rights reserved.
 #define _NETWORK_TRAINER_
 
 //#define NT_DEBUG
+//#define NT_VERBOSE
 
 #define PI 3.14159265
 
