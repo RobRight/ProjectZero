@@ -80,8 +80,8 @@ namespace Trainer
         current_round = 0;
 		ID_next = 1;
 		// settings
-		test_count = 100;
-		round_max = 1000;
+		test_count = 10;
+		round_max = 100;
 		population_size = 100;
 		input_layer_size = 2;
 	    hidden_layer_size = 4;
