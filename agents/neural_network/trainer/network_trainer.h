@@ -29,6 +29,7 @@ namespace Trainer
         std::vector <Network::Network> best_network;
         unsigned int current_round;
 		unsigned int ID_next;
+		unsigned int network_test_count;
 		CB::Pendulum domain;  // DOMAIN
 
 		std::vector <double> last_state;
@@ -141,7 +142,9 @@ namespace Trainer
 	}
 
 	std::vector <double> cycle_network(std::vector <double>& in) {
-		//
+		std::vector <double> t_out;
+		t_out.at(network_test_count).cycle(in);
+		return t_out;
 	}
 
 	//
@@ -233,8 +236,9 @@ namespace Trainer
 #ifdef NT_DEBUG
 			std::cout << "debug: round " << round << "; sub " << sub_round << " start" << std::endl;
 #endif
-			for (std::size_t i=0; i<population.size(); ++i) {
-				
+			for (std::size_t i=0; i<population.size(); ++i)
+			{
+				network_run_count = i;
 				domain = generate_domain();
 				cycle();
 			}
