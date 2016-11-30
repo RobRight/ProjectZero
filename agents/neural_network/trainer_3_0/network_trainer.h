@@ -178,10 +178,12 @@ namespace Trainer
 		std::cout << "debug: generate_population() start" << std::endl;
 #endif
 		population.clear();
+		pop_fitness.clear();
 		for (std::size_t i=0; i<population_size; ++i) {
 			population.push_back(generate_network());
 			pop_fitness.push_back(0.0);
 		}
+		std::cout << "DONE" << std::endl;
 	}
 
 	// cycle network with given inputs and return outputs
