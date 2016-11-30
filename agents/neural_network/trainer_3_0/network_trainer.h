@@ -115,7 +115,7 @@ namespace Trainer
     }
 
     void Trainer::get_reward() {
-		last_fitness = domain.give_reward();
+		last_fitness = domain.give_reward().at(0);
     }
     //-----------------------------
 
