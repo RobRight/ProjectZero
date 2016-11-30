@@ -17,7 +17,7 @@ Copyright (c) William Gregory.  All rights reserved.
 #define PI 3.14159265
 
 #include "../network/neural_network.h"  // agent
-#include "domain.h"  // domain
+#include "../../../domains/_not_mine/cart_balance/cart_balance.h"  // domain
 
 namespace Trainer
 {
@@ -25,17 +25,17 @@ namespace Trainer
 	{
 	private:
         std::vector <Network::Network> population;
+		std::vector <double> pop_fitness;
         std::vector <double> best_fitness;
         std::vector <Network::Network> best_network;
         unsigned int current_round;
 		unsigned int ID_next;
-		unsigned int network_test_count;
-		CB::Pendulum domain;  // DOMAIN
+		unsigned int network_test_count;  // current
+		CB::Pendulum domain;  // domain // DOMAIN SPECIFIC
 
 		std::vector <double> last_state;
 		std::vector <double> last_action;
 		double last_fitness;
-		std::vector <double> pop_fitness;
 
         void print_intro();
         void print_end();
@@ -44,8 +44,14 @@ namespace Trainer
         std::vector <double> give_action();
         void get_reward(double&);
 
-		std::vector <double> cycle_network(std::vector <double>&);
+		CB::Pendulum generate_domain();  // DOMAIN SPECIFIC
+		Network::Network generate_network();
+		void generate_population();
+		std::vector <double> cycle_network(std::vector <double>&, unsigned int&);
+		void log_reward(double&, unsigned int&);
 		void cycle();
+		void error_manager(std::vector <double>&);
+
         std::vector <Network::Network> prune(std::vector <Network::Network>&, std::vector <double>&);
         std::vector <Network::Network> populate(std::vector <Network::Network>&, unsigned int&);
     public:
@@ -54,6 +60,7 @@ namespace Trainer
         std::vector <unsigned int> nodes_per_layer;
 		double mutate_mod;
 		double mutate_chance;
+		unsigned int test_count;  // domain cycles
 
         Trainer();
         void train();
@@ -65,6 +72,7 @@ namespace Trainer
         current_round = 0;
 		ID_next = 1;
 		// settings
+		test_count = 100;
 		round_max = 1000;
 		population_size = 100;
 	    hidden_layer_size = 4;
@@ -89,23 +97,24 @@ namespace Trainer
 
     //----------------------------
     // get state from domain
-    void get_state() {
+    void Trainer::get_state() {
 		last_state = domain.give_state();
 		//last_state = in;
     }
 
     // give action to domain
-    void give_action() {
+    void Trainer::give_action() {
 		domain.get_action(last_action);
 		//return last_action;
     }
 
-    void get_reward() {
+    void Trainer::get_reward() {
 		last_fitness = domain.give_reward();
 		//last_fitness = in_val;
     }
     //-----------------------------
 
+	// generate single domain and return
 	CB::Pendulum Trainer::generate_domain()
 	{
 		CB::Pendulum pend;
@@ -132,30 +141,44 @@ namespace Trainer
 	//
 	// generate_population: sub
 	// generate starting population
+	// fill pop_fitness with zeros
 	//
 	void Trainer::generate_population()
 	{
 		population.clear();
 		for (std::size_t i=0; i<population_size; ++i) {
 			population.push_back(generate_network());
+			pop_fitness.push_back(0.0);
 		}
 	}
 
-	std::vector <double> cycle_network(std::vector <double>& in) {
+	// cycle network with given inputs and return outputs
+	std::vector <double> Trainer::cycle_network(std::vector <double>& in_val, unsigned int& in_count) {
 		std::vector <double> t_out;
-		t_out.at(network_test_count).cycle(in);
+		t_out.at(in_count).cycle(in_val);
 		return t_out;
 	}
 
-	//
+	// add last fitness to pop_fitness
+	void Trainer::log_reward(double& in_val, unsigned int& in_count) {
+		pop_fitness.at(in_count) += in_val;
+	}
+
+	// cycle agent - domain for 'test_count' iterations
 	void Trainer::cycle() {
-		unsigned int test_count = 10;
 		for (std::size_t i = 0; i<test_count; ++i) {
 			get_state();
-			cycle_network();
+			last_action = cycle_network(last_state, network_test_count);
 			give_action();
 			get_reward();
+			log_reward(last_fitness, network_test_count);
 		}
+	}
+
+	//
+	void Trainer::error_manager(std::vector <double>& in_fitness) {
+		// check for best fitness
+		// average fitness
 	}
 
     //
@@ -242,8 +265,9 @@ namespace Trainer
 				domain = generate_domain();
 				cycle();
 			}
-			prune();
-            populate();
+			error_manager(pop_fitness);
+			population = prune(population, pop_fitness);
+            population = populate(population, population_size);
         }
         double delta_time = (clock() - time_start) / CLOCKS_PER_SEC;
     }
