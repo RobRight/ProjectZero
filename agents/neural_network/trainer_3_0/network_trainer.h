@@ -298,7 +298,7 @@ namespace Trainer
 		while (current_round <= round_max && !runtime_error)
 		{
 #ifdef NT_DEBUG
-			std::cout << "debug: round " << current_round << "; sub " << sub_round << " start" << std::endl;
+			std::cout << "debug: round " << current_round << " start" << std::endl;
 #endif
 			for (std::size_t i=0; i<population.size(); ++i)
 			{
