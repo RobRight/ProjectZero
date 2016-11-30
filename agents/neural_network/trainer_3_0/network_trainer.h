@@ -12,7 +12,7 @@ Copyright (c) William Gregory.  All rights reserved.
 #ifndef _NETWORK_TRAINER_
 #define _NETWORK_TRAINER_
 
-#define NT_DEBUG
+//#define NT_DEBUG
 //#define NT_VERBOSE
 
 #define PI 3.14159265
@@ -80,8 +80,8 @@ namespace Trainer
         current_round = 0;
 		ID_next = 1;
 		// settings
-		test_count = 1;
-		round_max = 1;
+		test_count = 10;
+		round_max = 100;
 		population_size = 100;
 		input_layer_size = 2;
 	    hidden_layer_size = 4;
@@ -318,6 +318,7 @@ namespace Trainer
 			error_manager(pop_fitness);
 			population = prune(population, pop_fitness);
             population = populate(population, population_size);
+			++current_round;
         }
         double delta_time = (clock() - time_start) / CLOCKS_PER_SEC;
 		print_end();
