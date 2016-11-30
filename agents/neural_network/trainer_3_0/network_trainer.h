@@ -12,7 +12,7 @@ Copyright (c) William Gregory.  All rights reserved.
 #ifndef _NETWORK_TRAINER_
 #define _NETWORK_TRAINER_
 
-//#define NT_DEBUG
+#define NT_DEBUG
 
 #define PI 3.14159265
 
@@ -93,7 +93,6 @@ namespace Trainer
 #ifdef NT_DEBUG
 		std::cout << "debug: print_intro() start" << std::endl;
 #endif
-		std::cout << "TEST HERE" << std::endl;
         std::cout << std::endl;
         std::cout << "Network Trainer" << std::endl;
         std::cout << "version 3.0" << std::endl;
