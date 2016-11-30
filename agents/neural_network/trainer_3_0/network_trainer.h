@@ -80,8 +80,8 @@ namespace Trainer
         current_round = 0;
 		ID_next = 1;
 		// settings
-		test_count = 10;
-		round_max = 100;
+		test_count = 1;
+		round_max = 1;
 		population_size = 100;
 		input_layer_size = 2;
 	    hidden_layer_size = 4;
@@ -197,6 +197,7 @@ namespace Trainer
 #ifdef NT_DEBUG
 		std::cout << "debug: cycle_network() start" << std::endl;
 #endif
+		if (in_val.size() != input_layer_size) runtime_error = true; // ERROR
 		std::vector <double> t_out;
 		t_out = population.at(in_count).cycle(in_val);
 		return t_out;
