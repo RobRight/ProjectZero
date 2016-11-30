@@ -6,7 +6,7 @@
 #include "network_trainer.h"
 
 //#define NT_DEBUG
-//#define NT_VERBOSE
+#define NT_VERBOSE
 //#define NT_TEST
 
 int main()
