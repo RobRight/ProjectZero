@@ -27,13 +27,16 @@ namespace Trainer
 	private:
         std::vector <Network::Network> population;
 		std::vector <double> pop_fitness;
-        std::vector <double> best_fitness;
-        std::vector <Network::Network> best_network;
+        double best_fitness;
+        Network::Network best_network;
+		double first_avg_fitness;
+		double last_avg_fitness;
         unsigned int current_round;
 		unsigned int ID_next;
 		unsigned int network_test_count;  // current
 		CB::Pendulum domain;  // domain // DOMAIN SPECIFIC
 		bool runtime_error;
+		double delta_time;
 
 		std::vector <double> last_state;
 		std::vector <double> last_action;
@@ -80,14 +83,15 @@ namespace Trainer
         current_round = 0;
 		ID_next = 1;
 		// settings
-		test_count = 10;
-		round_max = 100;
+		test_count = 100;
+		round_max = 1000;
 		population_size = 100;
 		input_layer_size = 2;
 	    hidden_layer_size = 4;
 		output_layer_size = 1;
 	    mutate_mod = 0.1;
 	    mutate_chance = 0.3;
+		best_fitness = HUGE_VAL;
 		// end settings
 		// do not modify
 		nodes_per_layer.clear();
@@ -113,7 +117,11 @@ namespace Trainer
 #endif
         std::cout << std::endl;
         std::cout << "--------------------" << std::endl;
-        std::cout << "training complete" << std::endl;
+		std::cout << "run time: " << delta_time << std::endl;
+		std::cout << "training complete" << std::endl;
+        std::cout << "best fitness: " << best_fitness << std::endl;
+		std::cout << "inital avg fitness: " << first_avg_fitness << std::endl;
+		std::cout << "last avg fitness: " << last_avg_fitness << std::endl;
         std::cout << std::endl;
     }
 
@@ -229,6 +237,21 @@ namespace Trainer
 	void Trainer::error_manager(std::vector <double>& in_fitness) {
 		// check for best fitness
 		// average fitness
+		double temp_avg_fitness = 0.0;
+		for (std::size_t i=0; i<in_fitness.size(); ++i) {
+			double temp_fitness = in_fitness.at(i);
+			temp_avg_fitness += temp_fitness;
+			if (in_fitness.at(i) < best_fitness) {
+				best_fitness = temp_fitness;
+				best_network = population.at(i);
+			}
+		} last_avg_fitness = temp_avg_fitness / in_fitness.size();
+		if (current_round == 0) first_avg_fitness = last_avg_fitness;
+		// clear fitness
+		pop_fitness.clear();
+		for (std::size_t i=0; i<population_size; ++i) {
+			pop_fitness.push_back(0.0);
+		}
 	}
 
     //
@@ -320,7 +343,7 @@ namespace Trainer
             population = populate(population, population_size);
 			++current_round;
         }
-        double delta_time = (clock() - time_start) / CLOCKS_PER_SEC;
+        delta_time = (clock() - time_start) / CLOCKS_PER_SEC;
 		print_end();
     }
 
