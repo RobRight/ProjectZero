@@ -31,6 +31,7 @@ namespace Trainer
         Network::Network best_network;
 		double first_avg_fitness;
 		double last_avg_fitness;
+		std::vector <std::vector <double> > fitness_history;  // .at(round).at(population)
         unsigned int current_round;
 		unsigned int ID_next;
 		unsigned int network_test_count;  // current
@@ -49,6 +50,7 @@ namespace Trainer
         void give_action();
         void get_reward();
 
+		void export_fitness_history();
 		CB::Pendulum generate_domain();  // DOMAIN SPECIFIC
 		Network::Network generate_network();
 		void generate_population();
@@ -152,6 +154,18 @@ namespace Trainer
     }
     //-----------------------------
 
+	void export_fitness_history() {
+		std::ofstream file;
+		file.open("fitness_history.csv", std::ofstream::out | std::ofstream::trunc);
+		for (std::size_t i=0; i<fitness_history.size(); ++i) {
+			for (std::size_t j=0; j<fitness_history.at(i).size(); ++j) {
+				if (j!=0) file << ", ";
+				file << fitness_history.at(i).at(j);
+			}
+			if (i!=fitness_history.size()) file << "\n";
+		}
+	}
+
 	// generate single domain and return
 	CB::Pendulum Trainer::generate_domain()
 	{
@@ -247,6 +261,7 @@ namespace Trainer
 			}
 		} last_avg_fitness = temp_avg_fitness / in_fitness.size();
 		if (current_round == 0) first_avg_fitness = last_avg_fitness;
+		if (network_test_count == population_size) fitness_history.push_back(pop_fitness);
 		// clear fitness
 		pop_fitness.clear();
 		for (std::size_t i=0; i<population_size; ++i) {
@@ -332,7 +347,7 @@ namespace Trainer
 #ifdef NT_VERBOSE
 			std::cout << "debug: round " << current_round << " start" << std::endl;
 #endif
-			for (std::size_t i=0; i<population.size(); ++i)
+			for (std::size_t i=0; i<population_size; ++i)
 			{
 				network_test_count = i;
 				domain = generate_domain();
@@ -343,6 +358,7 @@ namespace Trainer
             population = populate(population, population_size);
 			++current_round;
         }
+		export_fitness_history();
         delta_time = (clock() - time_start) / CLOCKS_PER_SEC;
 		print_end();
     }
