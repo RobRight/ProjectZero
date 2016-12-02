@@ -154,7 +154,7 @@ namespace Trainer
     }
     //-----------------------------
 
-	void export_fitness_history() {
+	void Trainer::export_fitness_history() {
 		std::ofstream file;
 		file.open("fitness_history.csv", std::ofstream::out | std::ofstream::trunc);
 		for (std::size_t i=0; i<fitness_history.size(); ++i) {
