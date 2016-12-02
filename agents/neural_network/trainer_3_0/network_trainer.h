@@ -31,6 +31,7 @@ namespace Trainer
         Network::Network best_network;
 		double first_best_fitness;
 		double last_best_fitness;
+		double last_avg_fitness;
 		std::vector <std::vector <double> > fitness_history;  // .at(round).at(population)
         unsigned int current_round;
 		unsigned int ID_next;
@@ -279,6 +280,7 @@ namespace Trainer
 		// check for best fitness
 		// average fitness
 		double temp_avg_fitness = 0.0;
+		double temp_best_fitness = HUGE_VAL;
 		for (std::size_t i=0; i<in_fitness.size(); ++i) {
 			double temp_fitness = in_fitness.at(i);
 			temp_avg_fitness += temp_fitness;
@@ -286,7 +288,9 @@ namespace Trainer
 				best_fitness = temp_fitness;
 				best_network = population.at(i);
 			}
-		} last_best_fitness = temp_avg_fitness / in_fitness.size();
+			if (temp_fitness < temp_best_fitness) temp_best_fitness = temp_fitness;
+		} last_avg_fitness = temp_avg_fitness / in_fitness.size();
+		last_best_fitness = temp_best_fitness;
 		if (current_round == 0) first_best_fitness = last_best_fitness;
 		if (network_test_count == population_size-1) fitness_history.push_back(pop_fitness);
 		// clear fitness
