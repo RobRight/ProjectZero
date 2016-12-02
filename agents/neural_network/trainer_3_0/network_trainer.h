@@ -38,6 +38,7 @@ namespace Trainer
 		CB::Pendulum domain;  // domain // DOMAIN SPECIFIC
 		bool runtime_error;
 		double delta_time;
+		std::vector <double> max_output;
 
 		std::vector <double> last_state;
 		std::vector <double> last_action;
@@ -81,10 +82,6 @@ namespace Trainer
 #ifdef NT_DEBUG
 		std::cout << "debug: Trainer() start" << std::endl;
 #endif
-        // do not modify
-        runtime_error = false;
-        current_round = 0;
-		ID_next = 1;
 		// settings
 		test_count = 100;
 		round_max = 100;
@@ -93,14 +90,19 @@ namespace Trainer
 	    hidden_layer_size = 4;
 		output_layer_size = 1;
 	    mutate_mod = 0.1;
-	    mutate_chance = 0.3;
-		best_fitness = HUGE_VAL;
+	    mutate_chance = 0.4;
+		double max_torque = 1.0;  // DOMAIN SPECIFIC
 		// end settings
 		// do not modify
+		runtime_error = false;
+        current_round = 0;
+		ID_next = 1;
+		best_fitness = HUGE_VAL;
 		nodes_per_layer.clear();
 		nodes_per_layer.push_back(input_layer_size);
 		nodes_per_layer.push_back(hidden_layer_size);
 		nodes_per_layer.push_back(output_layer_size);
+		max_output.push_back(max_torque);  // DOMAIN SPECIFIC
     }
 
     void Trainer::print_intro() {
@@ -167,10 +169,11 @@ namespace Trainer
     //-----------------------------
 
 	void Trainer::scale_state() {
-		std::cout << "x: " << last_state.at(0) << std::endl;
-		std::cout << "y: " << last_state.at(1) << std::endl;
-		std::cout << "omega: " << last_state.at(2) << std::endl;
-		std::cout << std::endl;
+		// no need as they are all close in range and less than one
+		//std::cout << "x: " << last_state.at(0) << std::endl;
+		//std::cout << "y: " << last_state.at(1) << std::endl;
+		//std::cout << "omega: " << last_state.at(2) << std::endl;
+		//std::cout << std::endl;
 	}
 
 	void Trainer::export_fitness_history() {
@@ -242,6 +245,10 @@ namespace Trainer
 		if (in_val.size() != input_layer_size) runtime_error = true; // ERROR
 		std::vector <double> t_out;
 		t_out = population.at(in_count).cycle(in_val);
+		if (t_out.size() != max_output.size()) runtime_error = true; // ERROR
+		for (std::size_t i=0; i<t_out.size(); ++i) {
+			t_out.at(i) = t_out.at(i) * max_output.at(i);
+		}
 		return t_out;
 	}
 
