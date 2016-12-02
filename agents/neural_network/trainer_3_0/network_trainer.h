@@ -121,10 +121,10 @@ namespace Trainer
 #endif
         std::cout << std::endl;
         std::cout << "--------------------" << std::endl;
-		if (delta_time > 60)
+		if (delta_time > 60) {
 			unsigned int t_min = (unsigned int)(delta_time/60);
 			std::cout << "run time: " << t_min << "m" << delta_time-60*t_min << "s" << std::endl;
-		else
+		} else
 			std::cout << "run time: " << delta_time << "s" << std::endl;
 		std::cout << "training complete" << std::endl;
         std::cout << "best fitness: " << best_fitness << std::endl;
