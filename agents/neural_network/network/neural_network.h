@@ -496,6 +496,10 @@ namespace Network {
 			srand(time(0));
 		}
 
+		void custom_srand(int in) {
+			srand(in);
+		}
+
 		// setup (main) (single)
 		void setup( std::vector <unsigned int>& in_npl,
 					double& in_m,

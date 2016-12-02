@@ -95,6 +95,7 @@ namespace Trainer
 		double max_torque = 1.0;  // DOMAIN SPECIFIC
 		// end settings
 		// do not modify
+		srand(time(0));
 		runtime_error = false;
         current_round = 0;
 		ID_next = 1;
@@ -213,6 +214,7 @@ namespace Trainer
 		std::cout << "debug: generate_network() start" << std::endl;
 #endif
 		Network::Network net;
+		net.custom_srand(rand());
 		net.ID_value = ID_next;
 		net.run_type = 1;
 		net.setup(nodes_per_layer, mutate_mod, mutate_chance);
