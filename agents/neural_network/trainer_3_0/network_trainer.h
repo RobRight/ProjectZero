@@ -123,9 +123,9 @@ namespace Trainer
         std::cout << "--------------------" << std::endl;
 		if (delta_time > 60) {
 			unsigned int t_min = (unsigned int)(delta_time/60);
-			std::cout << "run time: " << t_min << "m" << delta_time-60*t_min << "s" << std::endl;
+			std::cout << "run time: " << t_min << " m" << delta_time-60*t_min << " s" << std::endl;
 		} else
-			std::cout << "run time: " << delta_time << "s" << std::endl;
+			std::cout << "run time: " << delta_time << " s" << std::endl;
 		std::cout << "training complete" << std::endl;
         std::cout << "best fitness: " << best_fitness << std::endl;
 		std::cout << "inital avg fitness: " << first_avg_fitness << std::endl;
@@ -161,6 +161,7 @@ namespace Trainer
     //-----------------------------
 
 	void Trainer::export_fitness_history() {
+		std::cout << fitness_history.size() << std::endl;
 		std::ofstream file;
 		file.open("fitness_history.csv", std::ofstream::out | std::ofstream::trunc);
 		for (std::size_t i=0; i<fitness_history.size(); ++i) {
