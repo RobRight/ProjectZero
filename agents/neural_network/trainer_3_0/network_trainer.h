@@ -161,7 +161,6 @@ namespace Trainer
     //-----------------------------
 
 	void Trainer::export_fitness_history() {
-		std::cout << fitness_history.size() << std::endl;
 		std::ofstream file;
 		file.open("fitness_history.csv", std::ofstream::out | std::ofstream::trunc);
 		for (std::size_t i=0; i<fitness_history.size(); ++i) {
@@ -269,7 +268,7 @@ namespace Trainer
 			}
 		} last_avg_fitness = temp_avg_fitness / in_fitness.size();
 		if (current_round == 0) first_avg_fitness = last_avg_fitness;
-		if (network_test_count == population_size) fitness_history.push_back(pop_fitness);
+		if (network_test_count == population_size-1) fitness_history.push_back(pop_fitness);
 		// clear fitness
 		pop_fitness.clear();
 		for (std::size_t i=0; i<population_size; ++i) {
