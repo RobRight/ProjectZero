@@ -58,6 +58,7 @@ namespace Trainer
 		void log_reward(double&, unsigned int&);
 		void cycle();
 		void error_manager(std::vector <double>&);
+		void scale_state();  // scales last_state
 
         std::vector <Network::Network> prune(std::vector <Network::Network>&, std::vector <double>&);
         std::vector <Network::Network> populate(std::vector <Network::Network>&, unsigned int&);
@@ -88,7 +89,7 @@ namespace Trainer
 		test_count = 100;
 		round_max = 100;
 		population_size = 100;
-		input_layer_size = 2;
+		input_layer_size = 3;
 	    hidden_layer_size = 4;
 		output_layer_size = 1;
 	    mutate_mod = 0.1;
@@ -139,8 +140,13 @@ namespace Trainer
 #ifdef NT_DEBUG
 		std::cout << "debug: get_state() start" << std::endl;
 #endif
-		last_state = domain.give_state();
+		std::vector <double> t_state = domain.give_state();  // theta, theta dot
+		last_state.clear();
+		last_state.push_back(cos(t_state.at(0)));  // x
+		last_state.push_back(sin(t_state.at(0)));  // y
+		last_state.push_back(t_state.at(1));  // theta dot
 		//last_state = in;
+		scale_state();
     }
 
     // give action to domain
@@ -159,6 +165,13 @@ namespace Trainer
 		last_fitness = domain.give_reward().at(0);
     }
     //-----------------------------
+
+	void scale_state() {
+		std::cout << "x: " << last_state.at(0) << std::endl;
+		std::cout << "y: " << last_state.at(1) << std::endl;
+		std::cout << "omega: " << last_state.at(2) << std::endl;
+		std::cout << std::endl;
+	}
 
 	void Trainer::export_fitness_history() {
 		std::ofstream file;
