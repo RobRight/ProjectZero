@@ -86,7 +86,7 @@ namespace Trainer
 		ID_next = 1;
 		// settings
 		test_count = 100;
-		round_max = 1000;
+		round_max = 100;
 		population_size = 100;
 		input_layer_size = 2;
 	    hidden_layer_size = 4;
@@ -109,6 +109,8 @@ namespace Trainer
         std::cout << std::endl;
         std::cout << "Network Trainer" << std::endl;
         std::cout << "version 3.0" << std::endl;
+		std::cout << std::endl;
+		std::cout << "Domain: Cart Balance by sierra121314" << std::endl;
         std::cout << "--------------------" << std::endl;
         std::cout << std::endl;
     }
@@ -119,7 +121,11 @@ namespace Trainer
 #endif
         std::cout << std::endl;
         std::cout << "--------------------" << std::endl;
-		std::cout << "run time: " << delta_time << std::endl;
+		if (delta_time > 60)
+			unsigned int t_min = (unsigned int)(delta_time/60);
+			std::cout << "run time: " << t_min << "m" << delta_time-60*t_min << "s" << std::endl;
+		else
+			std::cout << "run time: " << delta_time << "s" << std::endl;
 		std::cout << "training complete" << std::endl;
         std::cout << "best fitness: " << best_fitness << std::endl;
 		std::cout << "inital avg fitness: " << first_avg_fitness << std::endl;
@@ -164,6 +170,7 @@ namespace Trainer
 			}
 			if (i!=fitness_history.size()) file << "\n";
 		}
+		file.close();
 	}
 
 	// generate single domain and return
