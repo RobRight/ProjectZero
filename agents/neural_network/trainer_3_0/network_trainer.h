@@ -166,7 +166,7 @@ namespace Trainer
     }
     //-----------------------------
 
-	void scale_state() {
+	void Trainer::scale_state() {
 		std::cout << "x: " << last_state.at(0) << std::endl;
 		std::cout << "y: " << last_state.at(1) << std::endl;
 		std::cout << "omega: " << last_state.at(2) << std::endl;
