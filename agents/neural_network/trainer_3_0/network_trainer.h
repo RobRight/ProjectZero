@@ -29,8 +29,8 @@ namespace Trainer
 		std::vector <double> pop_fitness;
         double best_fitness;
         Network::Network best_network;
-		double first_avg_fitness;
-		double last_avg_fitness;
+		double first_best_fitness;
+		double last_best_fitness;
 		std::vector <std::vector <double> > fitness_history;  // .at(round).at(population)
         unsigned int current_round;
 		unsigned int ID_next;
@@ -131,8 +131,8 @@ namespace Trainer
 			std::cout << "run time: " << delta_time << " s" << std::endl;
 		std::cout << "training complete" << std::endl;
         std::cout << "best fitness: " << best_fitness << std::endl;
-		std::cout << "inital avg fitness: " << first_avg_fitness << std::endl;
-		std::cout << "last avg fitness: " << last_avg_fitness << std::endl;
+		std::cout << "inital best fitness: " << first_best_fitness << std::endl;
+		std::cout << "last best fitness: " << last_best_fitness << std::endl;
         std::cout << std::endl;
     }
 
@@ -286,8 +286,8 @@ namespace Trainer
 				best_fitness = temp_fitness;
 				best_network = population.at(i);
 			}
-		} last_avg_fitness = temp_avg_fitness / in_fitness.size();
-		if (current_round == 0) first_avg_fitness = last_avg_fitness;
+		} last_best_fitness = temp_avg_fitness / in_fitness.size();
+		if (current_round == 0) first_best_fitness = last_best_fitness;
 		if (network_test_count == population_size-1) fitness_history.push_back(pop_fitness);
 		// clear fitness
 		pop_fitness.clear();
