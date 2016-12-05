@@ -111,10 +111,12 @@ namespace CB {
 		initial.theta_dd = 0;
 
 		pend.push_back(initial); //push_back pushes it to the back of the vector
-		
+
+#ifdef CB_FILE		
 		std::ofstream fout;
 		fout.open("pendulumdata.csv", std::ofstream::out | std::ofstream::trunc);
 		fout.close();
+#endif
 	}
 
 

@@ -478,7 +478,7 @@ namespace Network {
 
 	public:
 		/// variables
-		bool run_type;  // 0:single, 1:train
+		unsigned int run_type;  // 0:single, 1:train
 		unsigned int ID_value;
 		std::vector <unsigned int> npl;  // including bias
 		//double input_max;  // for scaling
