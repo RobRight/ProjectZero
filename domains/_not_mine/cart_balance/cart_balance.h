@@ -70,6 +70,7 @@ namespace CB {
 
 	class Pendulum {
 	private:
+		std::vector <double> torq_history;
 		// static variables
 		double mass_p; // Mass of Pendulum
 		double length; // Length of the Pendulum
@@ -99,8 +100,8 @@ namespace CB {
 	{
 		Pend_state initial;
 		// able to change //
-		mass_p = 5;
-		length = 1;
+		mass_p = 5; // kg
+		length = 1; // m
 		//output_filename = "Pendulumdata.csv";
 		////////////////////
 		cycle_count = 1;
@@ -110,8 +111,12 @@ namespace CB {
 		// initialize theta_dot=0 and theta double dot= little less that 90 degrees
 		initial.theta_dot = 0; // rad/s // theta dot of this specific pendulum
 		initial.theta_dd = 0;
+		torq = 0; // N*m
 
 		pend.push_back(initial); //push_back pushes it to the back of the vector
+	
+		torq_history.push_back(torq);
+
 }
 
 	void Pendulum::cycle() {
@@ -120,24 +125,31 @@ namespace CB {
 		Pend_state nextState;
 		//note
 
-		// does all necessary calculations, given an action (already set from set_action), to arrive at the next state at the next timestep.
+		// does all necessary calculations, given an action (already set from set_action),
+		// to arrive at the next state at the next timestep.
 		//torque to theta dd
-		nextState.theta_dd = -g*cos(pend.at(pend.size() - 1).theta) / (mass_p*length) + torq; //rad/s^2   // define theta_dd with t variable 
+		nextState.theta_dd = -g*cos(pend.at(pend.size() - 1).theta) / (mass_p*length) + torq;
+		//rad/s^2   // define theta_dd with t variable 
 		//thetat_dd to theta_dot
 		nextState.theta_dot = pend.at(pend.size() - 1).theta_dot + nextState.theta_dd*dt;
 		//theta_dot to theta
 		nextState.theta = pend.at(pend.size() - 1).theta + nextState.theta_dot*dt;
+		// keep theta between 0 and 2*PI
+		if (nextState.theta < 0.0) nextState.theta = nextState.theta + 2*M_PI;
 		//theta to xy
 		nextState.Px = length*cos(nextState.theta);
 		nextState.Py = length*sin(nextState.theta);
+
 #ifdef CB_CONSULE
 		std::cout << nextState.theta << "," << nextState.theta_dot << "," \
 		<< nextState.theta_dd << "," << nextState.Px << "," << nextState.Py \
 		<< std::endl;
-#endif		
+#endif
 
 		pend.push_back(nextState); //update state
 
+		torq_history.push_back(torq);
+		
 		fitness = determine_reward();
 		
 		++cycle_count;
@@ -145,10 +157,16 @@ namespace CB {
 
 	double Pendulum::determine_reward() {
 		double total_fitness;
-		double fitness_1 = abs(M_PI/2 - pend.at(pend.size()-1).theta);
-		double fitness_2 = abs(0 - pend.at(pend.size()-1).theta_dot);
+		double fitness_1 = abs(M_PI/2 - pend.at(pend.size()-1).theta); // 90* - theta // max: 6
+		double fitness_2 = abs(pend.at(pend.size()-1).theta_dot)*10;  // theta_dot // max:10 ( inf )
 		
-		total_fitness = fitness_1 + fitness_2;
+		double fitness_ch = 0.0;  // cross horizontal for better positon 
+		if (pend.at(pend.size()-2).theta < M_PI) // no negitive theta
+			if (pend.at(pend.size()-1).theta > M_PI)
+				fitness_ch = 20;
+				// penalty for crossing horizontal axis
+
+		total_fitness = fitness_1 + fitness_2 + fitness_ch;
 		
 		return total_fitness;
 	}
@@ -157,7 +175,7 @@ namespace CB {
 
 		//name vector
 		// torq=t@0
-		torq = in_action.at(0); 
+		torq = in_action.at(0);
 		cycle();
 	}
 
@@ -177,9 +195,10 @@ namespace CB {
 	void Pendulum::export_all_states() {
 		std::ofstream fout;
 		fout.open("pend_state_log.csv", std::ofstream::out | std::ofstream::trunc);
+		fout << "torq, x, y, theta, theta_dot, theta_dd" << "\n";
 		for (std::size_t i=0; i<pend.size(); ++i) {
-			fout << torq << ", " << pend.at(i).Px << ", " << pend.at(i).Py << ", " << \
-				pend.at(i).theta << ", " << pend.at(i).theta_dot << ", " << \
+			fout << torq_history.at(i) << ", " << pend.at(i).Px << ", " << pend.at(i).Py << ", " << \
+				pend.at(i).theta*180/M_PI << ", " << pend.at(i).theta_dot << ", " << \
 				pend.at(i).theta_dd << "\n";
 		}	
 		fout.close();

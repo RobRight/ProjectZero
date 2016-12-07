@@ -56,11 +56,12 @@ namespace Trainer
 		CB::Pendulum generate_domain();  // DOMAIN SPECIFIC
 		Network::Network generate_network();
 		void generate_population();
-		std::vector <double> cycle_network(std::vector <double>&, unsigned int&);
+		std::vector <double> cycle_network(std::vector <double>&, Network::Network&);
 		void log_reward(double&, unsigned int&);
 		void cycle();
 		void error_manager(std::vector <double>&);
 		void scale_state();  // scales last_state
+		void run_best_network();
 
         std::vector <Network::Network> prune(std::vector <Network::Network>&, std::vector <double>&);
         std::vector <Network::Network> populate(std::vector <Network::Network>&, unsigned int&);
@@ -84,8 +85,8 @@ namespace Trainer
 		std::cout << "debug: Trainer() start" << std::endl;
 #endif
 		// settings
-		test_count = 100;
-		round_max = 100;
+		test_count = 100; // network/domain cycles
+		round_max = 500;
 		population_size = 100;
 		input_layer_size = 3;
 	    hidden_layer_size = 4;
@@ -241,13 +242,13 @@ namespace Trainer
 	}
 
 	// cycle network with given inputs and return outputs
-	std::vector <double> Trainer::cycle_network(std::vector <double>& in_val, unsigned int& in_count) {
+	std::vector <double> Trainer::cycle_network(std::vector <double>& in_val, Network::Network& in_net) {
 #ifdef NT_DEBUG
 		std::cout << "debug: cycle_network() start" << std::endl;
 #endif
 		if (in_val.size() != input_layer_size) runtime_error = true; // ERROR
 		std::vector <double> t_out;
-		t_out = population.at(in_count).cycle(in_val);
+		t_out = in_net.cycle(in_val);
 		if (t_out.size() != max_output.size()) runtime_error = true; // ERROR
 		for (std::size_t i=0; i<t_out.size(); ++i) {
 			t_out.at(i) = t_out.at(i) * max_output.at(i);
@@ -260,7 +261,7 @@ namespace Trainer
 #ifdef NT_DEBUG
 		std::cout << "debug: log_reward() start" << std::endl;
 #endif
-		pop_fitness.at(in_count) += in_val;
+		pop_fitness.at(in_count) = pop_fitness.at(in_count) + in_val;
 	}
 
 	// cycle agent - domain for 'test_count' iterations
@@ -270,36 +271,57 @@ namespace Trainer
 #endif
 		for (std::size_t i = 0; i<test_count; ++i) {
 			get_state();
-			last_action = cycle_network(last_state, network_test_count);
+			last_action = cycle_network(last_state, population.at(network_test_count));
 			give_action();
 			get_reward();
 			log_reward(last_fitness, network_test_count);
 		}
 	}
 
-	//
+	// input: pop_fitness vector
+	// find average fitness for entire round
+	// find average fitness for each network
 	void Trainer::error_manager(std::vector <double>& in_fitness) {
-		// check for best fitness
-		// average fitness
-		double temp_avg_fitness = 0.0;
-		double temp_best_fitness = HUGE_VAL;
+		// average fitness for each
+		std::vector <double> temp_avg_fitness_all;
+		double temp_best_fitness = HUGE_VAL; // for this round
 		for (std::size_t i=0; i<in_fitness.size(); ++i) {
-			double temp_fitness = in_fitness.at(i);
-			temp_avg_fitness += temp_fitness;
-			if (in_fitness.at(i) < best_fitness) {
-				best_fitness = temp_fitness;
+			temp_avg_fitness_all.push_back(in_fitness.at(i) / test_count);
+			// best fitness (overall)
+			if (temp_avg_fitness_all.at(i) < best_fitness) {
+				best_fitness = temp_avg_fitness_all.at(i);
 				best_network = population.at(i);
 			}
-			if (temp_fitness < temp_best_fitness) temp_best_fitness = temp_fitness;
-		} last_avg_fitness = temp_avg_fitness / in_fitness.size();
+			// round best fitness
+			if (temp_avg_fitness_all.at(i) < temp_best_fitness) {
+				temp_best_fitness = temp_avg_fitness_all.at(i);
+			}
+		}
+		// log best fitness
 		last_best_fitness = temp_best_fitness;
-		if (current_round == 0) first_best_fitness = last_best_fitness;
-		if (network_test_count == population_size-1) fitness_history.push_back(pop_fitness);
-		// clear fitness
+		if (current_round == 0) first_best_fitness = temp_best_fitness;
+		// add to fitness history
+		if (network_test_count == population_size-1) fitness_history.push_back(temp_avg_fitness_all);
+		// total average fitness
+		double temp_avg_fitness = 0.0;
+		for (std::size_t i=0; i<temp_avg_fitness_all.size(); ++i) {
+			temp_avg_fitness += temp_avg_fitness_all.at(i);
+		} temp_avg_fitness = temp_avg_fitness / temp_avg_fitness_all.size();
+		// reset 'pop_fitness'
 		pop_fitness.clear();
 		for (std::size_t i=0; i<population_size; ++i) {
 			pop_fitness.push_back(0.0);
 		}
+	}
+
+	void Trainer::run_best_network() {
+		domain = generate_domain();
+		for (std::size_t i = 0; i<test_count; ++i) {
+			get_state();
+			last_action = cycle_network(last_state, population.at(network_test_count));
+			give_action();
+		}
+		domain.export_all_states();
 	}
 
     //
@@ -392,6 +414,7 @@ namespace Trainer
 			++current_round;
         }
 		export_fitness_history();
+		run_best_network();
         delta_time = (clock() - time_start) / CLOCKS_PER_SEC;
 		print_end();
     }
