@@ -11,6 +11,8 @@ int main()
 		pend.cycle();
 	}
 
+	pend.export_all_states();
+
 	// initialize cart weight
 	//Cart cart; // Object call cart of type cart
 	//cart.x = 0;
