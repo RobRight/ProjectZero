@@ -157,16 +157,15 @@ namespace CB {
 
 	double Pendulum::determine_reward() {
 		double total_fitness;
-		double fitness_1 = abs(M_PI/2 - pend.at(pend.size()-1).theta); // 90* - theta // max: 6
-		double fitness_2 = abs(pend.at(pend.size()-1).theta_dot)*10;  // theta_dot // max:10 ( inf )
+		double fitness_1 = abs((M_PI/2 - pend.at(pend.size()-1).theta)*1000); // 90* - theta // max: 6
+		double fitness_2 = abs((pend.at(pend.size()-1).theta_dot)*10);  // theta_dot // max:10 ( inf )
 		
 		double fitness_ch = 0.0;  // cross horizontal for better positon 
-		if (pend.at(pend.size()-2).theta < M_PI) // no negitive theta
-			if (pend.at(pend.size()-1).theta > M_PI)
-				fitness_ch = 20;
+		if (pend.at(pend.size()-1).theta > M_PI)
+			fitness_ch = 1000;
 				// penalty for crossing horizontal axis
 
-		total_fitness = fitness_1 + fitness_2 + fitness_ch;
+		total_fitness = abs(fitness_1) + abs(fitness_2) + abs(fitness_ch);
 		
 		return total_fitness;
 	}

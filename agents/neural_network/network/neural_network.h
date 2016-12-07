@@ -493,11 +493,12 @@ namespace Network {
 			runtime_error = false;
 			ID_value = 007;
 			run_type = 0;
-			srand(time(0));
+			//srand(time(0));
 		}
 
 		void custom_srand(int in) {
-			srand(in);
+			//srand(in);
+			//std::cout << rand() << std::endl;
 		}
 
 		// setup (main) (single)
