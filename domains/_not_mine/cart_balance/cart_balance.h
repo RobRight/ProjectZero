@@ -48,7 +48,7 @@ namespace CB {  // Cart Balance
 		// all actions for log
 		std::vector <double> torq_history;
 		// all states.  last element is most current
-		std::vector <Pend_state> pend;
+		std::vector <PendState> pend;
 		// applied torq - action
 		double torq;
 		// last determined fitness
