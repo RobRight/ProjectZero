@@ -156,24 +156,36 @@ namespace CB {
 	}
 
 	double Pendulum::determine_reward() {
-		double total_fitness;
-		double fitness_1 = abs((M_PI/2 - pend.at(pend.size()-1).theta)*1000); // 90* - theta // max: 6
-		double fitness_2 = abs((pend.at(pend.size()-1).theta_dot)*10);  // theta_dot // max:10 ( inf )
-		
-		double fitness_ch = 0.0;  // cross horizontal for better positon 
-		if (pend.at(pend.size()-1).theta > M_PI)
-			fitness_ch = 1000;
-				// penalty for crossing horizontal axis
 
-		total_fitness = abs(fitness_1) + abs(fitness_2) + abs(fitness_ch);
+		// fitness weights
+		// ---------------------
+		double tp_weight = 4.0;  // theta position
+		double tv_weight = 1.0;  // theta velocity
+		double ch_weight = 0.0;  // below horizontal axis
+		// ---------------------
+
+		// max range for each fitness is 0 to 1 times its set weight
+
+		// theta position
+		double fitness_1 = abs((M_PI/2 - pend.at(pend.size()-1).theta)*tp_weight)/2*M_PI;
+
+		// theta velocity
+		double fitness_2 = abs((pend.at(pend.size()-1).theta_dot)*tv_weight);
+		if (fitness_2 > 10) fitness_2 = 10;
+		fitness_2 = fitness_2/10;
 		
+		// below horizontal axis
+		double fitness_ch = 0.0;
+		if (pend.at(pend.size()-1).theta > M_PI) fitness_ch = ch_weight;
+
+		double total_fitness;
+		total_fitness = fitness_1 + fitness_2 + fitness_ch;
 		return total_fitness;
 	}
 
 	void Pendulum::get_action(std::vector <double> in_action) { //receives "action vection", which in the first case will just consist of the torque at the joint
 
 		//name vector
-		// torq=t@0
 		torq = in_action.at(0);
 		cycle();
 	}

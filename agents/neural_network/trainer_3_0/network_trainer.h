@@ -89,11 +89,11 @@ namespace Trainer
 		round_max = 500;
 		population_size = 100;
 		input_layer_size = 3;
-	    hidden_layer_size = 4;
+	    hidden_layer_size = 6;
 		output_layer_size = 1;
 	    mutate_mod = 0.1;
 	    mutate_chance = 0.4;
-		double max_torque = 50.0;  // DOMAIN SPECIFIC
+		double max_torque = 100.0;  // DOMAIN SPECIFIC
 		// end settings
 		// do not modify
 		srand(time(0));
