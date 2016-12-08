@@ -9,7 +9,7 @@ Copyright (c) William Gregory.  All rights reserved.
 
 */
 
-// last note: progress bar not showing. unknown reason.
+// last note: progress bar not showing. unknown reason. commented out for now.
 
 #ifndef _NETWORK_TRAINER_
 #define _NETWORK_TRAINER_
@@ -131,7 +131,7 @@ namespace Trainer
         std::cout << "--------------------" << std::endl;
 		if (delta_time > 60) {
 			unsigned int t_min = (unsigned int)(delta_time/60);
-			std::cout << "run time: " << t_min << " m" << delta_time-60*t_min << " s" << std::endl;
+			std::cout << "run time: " << t_min << "m " << delta_time-60*t_min << "s" << std::endl;
 		} else
 			std::cout << "run time: " << delta_time << " s" << std::endl;
 		std::cout << "training complete" << std::endl;
@@ -440,7 +440,7 @@ namespace Trainer
 		run_best_network();
         delta_time = (clock() - time_start) / CLOCKS_PER_SEC;
 		print_end();
-		progress();
+		//progress();
     }
 
 }
