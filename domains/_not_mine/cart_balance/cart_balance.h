@@ -86,8 +86,6 @@ namespace CB {  // Cart Balance
 
 		// do not modify - setup inital state
 		initial.theta = theta_init * M_PI / 180;
-		initial.Px = length*cos(initial.theta);
-		initial.Py = length*cos(initial.theta);
 		initial.theta_dot = 0; // rad/s
 		initial.theta_dd = 0;  // rad/s^2
 		torq = 0; // N*m
