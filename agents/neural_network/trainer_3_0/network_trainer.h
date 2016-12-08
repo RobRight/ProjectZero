@@ -9,6 +9,8 @@ Copyright (c) William Gregory.  All rights reserved.
 
 */
 
+// last note: progress bar not showing. unknown reason.
+
 #ifndef _NETWORK_TRAINER_
 #define _NETWORK_TRAINER_
 
