@@ -52,6 +52,7 @@ namespace Trainer
         void give_action();
         void get_reward();
 
+		void progress();
 		void export_fitness_history();
 		CB::Pendulum generate_domain();  // DOMAIN SPECIFIC
 		Network::Network generate_network();
@@ -60,7 +61,6 @@ namespace Trainer
 		void log_reward(double&, unsigned int&);
 		void cycle();
 		void error_manager(std::vector <double>&);
-		void scale_state();  // scales last_state
 		void run_best_network();
 
         std::vector <Network::Network> prune(std::vector <Network::Network>&, std::vector <double>&);
@@ -150,8 +150,6 @@ namespace Trainer
 		last_state.push_back(cos(t_state.at(0)));  // x
 		last_state.push_back(sin(t_state.at(0)));  // y
 		last_state.push_back(t_state.at(1));  // theta dot
-		//last_state = in;
-		scale_state();
     }
 
     // give action to domain
@@ -160,7 +158,6 @@ namespace Trainer
 		std::cout << "debug: give_action() start" << std::endl;
 #endif
 		domain.get_action(last_action);
-		//return last_action;
     }
 
     void Trainer::get_reward() {
@@ -171,14 +168,33 @@ namespace Trainer
     }
     //-----------------------------
 
-	void Trainer::scale_state() {
-		// no need as they are all close in range and less than one
-		//std::cout << "x: " << last_state.at(0) << std::endl;
-		//std::cout << "y: " << last_state.at(1) << std::endl;
-		//std::cout << "omega: " << last_state.at(2) << std::endl;
-		//std::cout << std::endl;
+	//
+	// progress: sub
+	//
+	void Trainer::progress()
+	{
+		unsigned int update_interval = 100.0;  // setting
+		double progress = (double)current_round/round_max;
+		unsigned int t_progress = int(progress*10000);
+		if (t_progress % update_interval == 0) {
+			
+			unsigned int bar_width = 40;  // setting
+			std::cout << "[";
+			unsigned int bar_pos = bar_width * progress;
+			unsigned int bar_pos_em = bar_width - bar_pos;
+			for (std::size_t i=1; i<=bar_pos; ++i) {
+				if (i < bar_pos) std::cout << "=";
+				else std::cout << ">";
+			}
+			for (std::size_t i=0; i<bar_pos_em; ++i) {
+				std::cout << " ";
+			}
+			std::cout << "] " << int(progress * 100) << "%" << "\r";
+			std::cout.flush();
+		}
 	}
 
+	// export all fitness history to file
 	void Trainer::export_fitness_history() {
 		std::ofstream file;
 		file.open("fitness_history.csv", std::ofstream::out | std::ofstream::trunc);
@@ -215,7 +231,6 @@ namespace Trainer
 		std::cout << "debug: generate_network() start" << std::endl;
 #endif
 		Network::Network net;
-		net.custom_srand(rand());
 		net.ID_value = ID_next;
 		net.run_type = 1;
 		net.setup(nodes_per_layer, mutate_mod, mutate_chance);
@@ -246,10 +261,16 @@ namespace Trainer
 #ifdef NT_DEBUG
 		std::cout << "debug: cycle_network() start" << std::endl;
 #endif
-		if (in_val.size() != input_layer_size) runtime_error = true; // ERROR
+#ifdef NT_TEST
+		if (in_val.size() != input_layer_size) runtime_error = true; // ERROR - input size mismatch
+#endif
+		// cycle network
 		std::vector <double> t_out;
 		t_out = in_net.cycle(in_val);
-		if (t_out.size() != max_output.size()) runtime_error = true; // ERROR
+#ifdef NT_TEST
+		if (t_out.size() != max_output.size()) runtime_error = true; // ERROR - output size mismatch
+#endif
+		// scale output
 		for (std::size_t i=0; i<t_out.size(); ++i) {
 			t_out.at(i) = t_out.at(i) * max_output.at(i);
 		}
@@ -417,6 +438,7 @@ namespace Trainer
 		run_best_network();
         delta_time = (clock() - time_start) / CLOCKS_PER_SEC;
 		print_end();
+		progress();
     }
 
 }
