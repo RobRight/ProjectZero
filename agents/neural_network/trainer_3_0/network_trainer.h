@@ -18,7 +18,7 @@ Copyright (c) William Gregory.  All rights reserved.
 #define PI 3.14159265
 
 #include "../network/neural_network.h"  // agent
-#include "../../../domains/_not_mine/cart_balance/cart_balance_old.h"  // DOMAIN SPECIFIC
+#include "../../../domains/_not_mine/cart_balance/cart_balance.h"  // DOMAIN SPECIFIC
 
 namespace Trainer
 {
