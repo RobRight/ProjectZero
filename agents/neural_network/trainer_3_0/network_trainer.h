@@ -85,7 +85,7 @@ namespace Trainer
 		std::cout << "debug: Trainer() start" << std::endl;
 #endif
 		// settings
-		test_count = 100; // network/domain cycles
+		test_count = 300; // network/domain cycles
 		round_max = 500;
 		population_size = 100;
 		input_layer_size = 3;

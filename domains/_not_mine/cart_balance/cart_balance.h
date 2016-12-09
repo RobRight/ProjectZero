@@ -21,7 +21,7 @@ namespace CB {  // Cart Balance
 
 	// global constants
 	const double g = 9.81; // gravity - m/s^2
-	const double dt = 0.1; // time step - s
+	const double dt = 0.01; // time step - s
 
 	// cart structure
 	struct Cart {
@@ -113,7 +113,6 @@ namespace CB {  // Cart Balance
 		<< nextState.theta_dd << "," << cos(nextState.theta) << "," << sin(nextState.theta) \
 		<< std::endl;
 #endif
-		std::cout << nextState.theta << std::endl;
 		pend.push_back(nextState); // save new state
 		torq_history.push_back(torq); // save torq for log
 		fitness = determine_reward(); // determine fitness
