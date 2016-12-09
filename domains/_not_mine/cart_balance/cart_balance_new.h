@@ -20,7 +20,7 @@
 namespace CB {  // Cart Balance
 
 	// global constants
-	const float g = 9.81f; // gravity - m/s^2
+	const double g = 9.81; // gravity - m/s^2
 	const double dt = 0.1; // time step - s
 
 	// cart structure
