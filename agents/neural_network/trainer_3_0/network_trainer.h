@@ -86,7 +86,7 @@ namespace Trainer
 #endif
 		// settings
 		test_count = 300; // network/domain cycles
-		round_max = 500;
+		round_max = 5000;
 		population_size = 100;
 		input_layer_size = 3;
 	    hidden_layer_size = 6;
