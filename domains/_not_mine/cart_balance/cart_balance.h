@@ -107,6 +107,7 @@ namespace CB {  // Cart Balance
 		// - end calculations -
 		// keep theta between 0 and 2*PI
 		if (nextState.theta < 0.0) nextState.theta = nextState.theta + 2*M_PI;
+		if (nextState.theta > 2*M_PI) nextState.theta = nextState.theta - 2*M_PI;
 #ifdef CB_CONSULE
 		std::cout << nextState.theta << "," << nextState.theta_dot << "," \
 		<< nextState.theta_dd << "," << cos(nextState.theta) << "," << sin(nextState.theta) \
@@ -126,6 +127,7 @@ namespace CB {  // Cart Balance
 		double tp_weight = 4.0;  // theta position
 		double tv_weight = 1.0;  // theta velocity
 		double ch_weight = 0.0;  // below horizontal axis
+		double av_weihgt = 5.0;  // high angular velocity
 		// ---------------------
 
 		// theta position
@@ -134,9 +136,12 @@ namespace CB {  // Cart Balance
 		double fitness_2 = abs((pend.at(pend.size()-1).theta_dot)*tv_weight);
 		if (fitness_2 > 10) fitness_2 = 10;
 		fitness_2 = fitness_2/10;
-		// below horizontal axis
+		// below horizontal axis (change to pass)
 		double fitness_ch = 0.0;
 		if (pend.at(pend.size()-1).theta > M_PI) fitness_ch = ch_weight;
+		// high angular velocity
+		double fitness_av = 0.0;
+		if (pend.at(pend.size()-1).theta_dot > 20.0) fitness_av = av_weight;
 
 		double total_fitness;
 		total_fitness = fitness_1 + fitness_2 + fitness_ch;
