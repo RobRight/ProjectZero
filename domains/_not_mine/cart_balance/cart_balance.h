@@ -93,7 +93,7 @@ namespace CB {  // Cart Balance
 		pend.push_back(initial);
 		torq_history.push_back(torq);
 		fitness_history.push_back(determine_reward());
-}
+	}
 
 	// calculates the next state given a previously set action with a timestep of 'dt'
 	// note: aciton must have been set. use 'get_action'
