@@ -46,6 +46,8 @@ namespace CB {  // Cart Balance
 		/// variables
 		// all actions for log
 		std::vector <double> torq_history;
+		// all fitness' for log
+		std::vector <double> fitness_history;
 		// all states.  last element is most current
 		std::vector <PendState> pend;
 		// applied torq - action
@@ -90,6 +92,7 @@ namespace CB {  // Cart Balance
 		torq = 0; // N*m
 		pend.push_back(initial);
 		torq_history.push_back(torq);
+		fitness_history.push_back(determine_reward);
 }
 
 	// calculates the next state given a previously set action with a timestep of 'dt'
@@ -115,6 +118,7 @@ namespace CB {  // Cart Balance
 		pend.push_back(nextState); // save new state
 		torq_history.push_back(torq); // save torq for log
 		fitness = determine_reward(); // determine fitness
+		fitness_history.push_back(fitness);
 	}
 
 	// determine reward based on current state
@@ -177,11 +181,12 @@ namespace CB {  // Cart Balance
 	void Pendulum::export_all_states() {
 		std::ofstream fout;
 		fout.open("pend_state_log.csv", std::ofstream::out | std::ofstream::trunc);
-		fout << "torq, x, y, theta, theta_dot, theta_dd" << "\n";
+		fout << "torq, x, y, theta, theta_dot, theta_dd, fitness" << "\n";
 		for (std::size_t i=0; i<pend.size(); ++i) {
 			fout << torq_history.at(i) << ", " << cos(pend.at(i).theta) << \
 				", " << sin(pend.at(i).theta) << ", " << pend.at(i).theta*180/M_PI << \
-				", " << pend.at(i).theta_dot << ", " << pend.at(i).theta_dd << "\n";
+				", " << pend.at(i).theta_dot << ", " << pend.at(i).theta_dd << \
+				", " << fitness_history.at(i) << "\n";
 		}	
 		fout.close();
 	}
