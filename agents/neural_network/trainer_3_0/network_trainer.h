@@ -93,7 +93,7 @@ namespace Trainer
 		output_layer_size = 1;
 	    mutate_mod = 0.1;
 	    mutate_chance = 0.4;
-		double max_torque = 100.0;  // DOMAIN SPECIFIC
+		double max_torque = 5.0;  // DOMAIN SPECIFIC
 		// end settings
 		// do not modify
 		srand(time(0));
