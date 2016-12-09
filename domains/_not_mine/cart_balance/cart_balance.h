@@ -124,10 +124,9 @@ namespace CB {  // Cart Balance
 
 		// fitness weights
 		// ---------------------
-		double tp_weight = 4.0;  // theta position
-		double tv_weight = 1.0;  // theta velocity
-		double ch_weight = 0.0;  // below horizontal axis
-		double av_weight = 5.0;  // high angular velocity
+		double tp_weight = 4.0;  // theta
+		double tv_weight = 6.0;  // angular velocity
+		double ch_weight = 10.0;  // below horizontal axis
 		// ---------------------
 
 		// theta position
@@ -139,9 +138,6 @@ namespace CB {  // Cart Balance
 		// below horizontal axis (change to pass)
 		double fitness_ch = 0.0;
 		if (pend.at(pend.size()-1).theta > M_PI) fitness_ch = ch_weight;
-		// high angular velocity
-		double fitness_av = 0.0;
-		if (pend.at(pend.size()-1).theta_dot > 20.0) fitness_av = av_weight;
 
 		double total_fitness;
 		total_fitness = fitness_1 + fitness_2 + fitness_ch;
