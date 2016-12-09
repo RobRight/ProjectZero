@@ -127,7 +127,7 @@ namespace CB {  // Cart Balance
 		double tp_weight = 4.0;  // theta position
 		double tv_weight = 1.0;  // theta velocity
 		double ch_weight = 0.0;  // below horizontal axis
-		double av_weihgt = 5.0;  // high angular velocity
+		double av_weight = 5.0;  // high angular velocity
 		// ---------------------
 
 		// theta position
