@@ -113,6 +113,7 @@ namespace CB {  // Cart Balance
 		<< nextState.theta_dd << "," << cos(nextState.theta) << "," << sin(nextState.theta) \
 		<< std::endl;
 #endif
+		std::cout << nextState.theta << std::endl;
 		pend.push_back(nextState); // save new state
 		torq_history.push_back(torq); // save torq for log
 		fitness = determine_reward(); // determine fitness
