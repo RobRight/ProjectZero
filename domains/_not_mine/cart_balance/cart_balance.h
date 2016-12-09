@@ -1,7 +1,6 @@
 // Cart Balance by Sierra
+// inverted pendulum on a cart
 // main objective to keep theta around 90*
-
-// note: removed I, unused.
 
 #ifndef _CART_BALANCE_CODE_
 #define _CART_BALANCE_CODE_
