@@ -9,8 +9,6 @@ Copyright (c) William Gregory.  All rights reserved.
 
 */
 
-// last note: progress bar not showing. unknown reason. commented out for now.
-
 #ifndef _NETWORK_TRAINER_
 #define _NETWORK_TRAINER_
 
@@ -435,12 +433,12 @@ namespace Trainer
 			population = prune(population, pop_fitness);
             population = populate(population, population_size);
 			++current_round;
+			progress();
         }
 		export_fitness_history();
 		run_best_network();
         delta_time = (clock() - time_start) / CLOCKS_PER_SEC;
 		print_end();
-		//progress();
     }
 
 }
