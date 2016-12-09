@@ -127,10 +127,10 @@ namespace CB {  // Cart Balance
 
 		// fitness weights
 		// ---------------------
-		double tp_weight = 4.0;  	// theta
-		double tv_weight = 1.0;  	// angular velocity
-		double ch_weight = 1000.0;  // below horizontal axis
-		double tu_weight = 1.0;  	// torq used penalty - not normalized
+		double tp_weight = 10.0;  	// theta
+		double tv_weight = 0.0;  	// angular velocity
+		double ch_weight = 100000.0;  // below horizontal axis
+		double tu_weight = 0.0;  	// torq used penalty - not normalized
 		// ---------------------
 
 		// theta position

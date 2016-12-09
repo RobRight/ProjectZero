@@ -85,15 +85,15 @@ namespace Trainer
 		std::cout << "debug: Trainer() start" << std::endl;
 #endif
 		// settings
-		test_count = 300; // network/domain cycles
-		round_max = 5000;
+		test_count = 200; // network/domain cycles
+		round_max = 1000;
 		population_size = 100;
 		input_layer_size = 3;
-	    hidden_layer_size = 6;
+	    hidden_layer_size = 3;
 		output_layer_size = 1;
 	    mutate_mod = 0.1;
 	    mutate_chance = 0.4;
-		double max_torque = 10.0;  // DOMAIN SPECIFIC
+		double max_torque = 60.0;  // DOMAIN SPECIFIC
 		// end settings
 		// do not modify
 		srand(time(0));
