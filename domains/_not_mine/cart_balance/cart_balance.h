@@ -127,10 +127,11 @@ namespace CB {  // Cart Balance
 
 		// fitness weights
 		// ---------------------
-		double tp_weight = 10.0;  	// theta
-		double tv_weight = 0.0;  	// angular velocity
-		double ch_weight = 100000.0;  // below horizontal axis
-		double tu_weight = 0.0;  	// torq used penalty - not normalized
+		double tp_weight = 10.0;  		// theta
+		double tv_weight = 0.0;  		// angular velocity
+		double ch_weight = 100000.0;  	// below horizontal axis
+		double tu_weight = 0.0;  		// torq used penalty - not normalized
+		double wd_weight = 1.0;			// wrong direction
 		// ---------------------
 
 		// theta position
@@ -144,6 +145,12 @@ namespace CB {  // Cart Balance
 		if (pend.at(pend.size()-1).theta > M_PI) fitness_ch = ch_weight;
 		// effort used
 		double fitness_tu = tu_weight * torq;
+		// wrong direction
+		double fitness_wd = 0.0;
+		if (pend.at(pend.size()-2).theta > M_PI/2 && pend.at(pend.size()-1).theta > pend.at(pend.size()-2))
+			fitness_wd = wd_weight * (pend.at(pend.size()-1).theta - pend.at(pend.size()-2).theta) / 3/2*M_PI;
+		else if (pend.at(pend.size()-2).theta < M_PI/2 && pend.at(pend.size()-1).theta < pend.at(pend.size()-2))
+			fitness_wd = wd_weight * (pend.at(pend.size()-2).theta - pend.at(pend.size()-1).theta) / 1/2*M_PI;
 
 		double total_fitness;
 		total_fitness = fitness_1 + fitness_2 + fitness_ch;
