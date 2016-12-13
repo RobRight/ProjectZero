@@ -86,14 +86,12 @@ namespace Trainer
 #endif
 		// settings
 		test_count = 400; // network/domain cycles
-		round_max = 10000;
-		population_size = 200;
-		input_layer_size = 3;
+		round_max = 100;
+		population_size = 100;
 	    hidden_layer_size = 8;
-		output_layer_size = 1;
-	    mutate_mod = 0.2;
+	    mutate_mod = 0.1;
 	    mutate_chance = 0.3;
-		double max_torque = 4.0;  // DOMAIN SPECIFIC
+		double max_torque = 1.0;  // DOMAIN SPECIFIC
 		// end settings
 		// do not modify
 		srand(time(0));
@@ -101,6 +99,8 @@ namespace Trainer
         current_round = 0;
 		ID_next = 1;
 		best_fitness = HUGE_VAL;
+		input_layer_size = 3;  // fixed
+		output_layer_size = 1; // fixed
 		nodes_per_layer.clear();
 		nodes_per_layer.push_back(input_layer_size);
 		nodes_per_layer.push_back(hidden_layer_size);

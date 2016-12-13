@@ -82,7 +82,7 @@ namespace CB {  // Cart Balance
 		// - settings begin -
 		mass_p = 5; // kg
 		length = 1; // m
-		theta_init = 89.9; // degrees
+		theta_init = 89; // degrees
 		// - settings end -
 
 		// do not modify - setup inital state
