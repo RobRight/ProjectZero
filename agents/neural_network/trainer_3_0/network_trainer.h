@@ -32,7 +32,7 @@ namespace Trainer
 		double first_best_fitness;
 		double last_best_fitness;
 		double last_avg_fitness;
-		std::vector <std::vector <double> > fitness_history;  // .at(round).at(population)
+		std::vector <std::vector <double> > fitness_history;  // .at(round).at(population)  // reserve?
         unsigned int current_round;
 		unsigned int ID_next;
 		unsigned int network_test_count;  // current
@@ -94,6 +94,8 @@ namespace Trainer
 		double max_torque = 1.0;  // DOMAIN SPECIFIC
 		// end settings
 		// do not modify
+		population.reserve(population_size);
+		pop_fitness.reserve(population_size);
 		srand(time(0));
 		runtime_error = false;
         current_round = 0;
@@ -215,7 +217,7 @@ namespace Trainer
 #ifdef NT_DEBUG
 		std::cout << "debug: generate_domain() start" << std::endl;
 #endif
-		CB::Pendulum pend;
+		CB::Pendulum pend(test_count);  // destructor needed?
 		return pend;
 	}
 
