@@ -50,7 +50,7 @@ namespace Trainer
 
         void get_state();
         void give_action();
-        void get_reward();
+        bool get_reward();
 
 		void progress();
 		void export_fitness_history();
@@ -160,11 +160,12 @@ namespace Trainer
 		domain.get_action(last_action);
     }
 
-    void Trainer::get_reward() {
+    bool Trainer::get_reward() {
 #ifdef NT_DEBUG
 		std::cout << "debug: get_reward() start" << std::endl;
 #endif
 		last_fitness = domain.give_reward().at(0);
+		return domain.return_below_horizontal();
     }
     //-----------------------------
 
@@ -290,12 +291,15 @@ namespace Trainer
 #ifdef NT_DEBUG
 		std::cout << "debug: cycle() start" << std::endl;
 #endif
+		bool t = false; // domain specific
 		for (std::size_t i = 0; i<test_count; ++i) {
 			get_state();
 			last_action = cycle_network(last_state, population.at(network_test_count));
 			give_action();
-			get_reward();
+			t = get_reward();  // domain specific
+			if(t) last_fitness += test_count-i-1 * 1000000.0;  // penalty for remaining tests
 			log_reward(last_fitness, network_test_count);
+			if (t) i = test_count;  // quit
 		}
 	}
 
