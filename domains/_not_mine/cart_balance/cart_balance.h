@@ -63,6 +63,9 @@ namespace CB {  // Cart Balance
 		double mass_p; // mass of pendulum
 		double length; // length of the pendulum
 		double theta_init; // inital theta
+		// network training
+		bool below_horizontal;
+		bool return_below_horizontal();
 		/// functions
 		// return last state
 		std::vector <double> give_state();
@@ -72,6 +75,8 @@ namespace CB {  // Cart Balance
 		std::vector <double> give_reward();
 		// calculates next state given previous and an action
 		void cycle();
+		//
+		double delta_theta(double);
 		// log all state history to file
 		void export_all_states();
 	};
@@ -86,6 +91,7 @@ namespace CB {  // Cart Balance
 		// - settings end -
 
 		// do not modify - setup inital state
+		below_horizontal = false;
 		initial.theta = theta_init * M_PI / 180;
 		initial.theta_dot = 0; // rad/s
 		initial.theta_dd = 0;  // rad/s^2
@@ -127,24 +133,27 @@ namespace CB {  // Cart Balance
 
 		// fitness weights
 		// ---------------------
-		double tp_weight = 1000.0;  		// theta
+		double tp_weight = 1000.0;  	// theta
 		double tv_weight = 0.0;  		// angular velocity
 		double ch_weight = 1000000.0;  	// below horizontal axis
-		double tu_weight = 0.0;  		// torq used penalty - not normalized
-		//double wd_weight = 1.0;			// wrong direction
+		//double tu_weight = 0.0;  		// torq used penalty - not normalized
+		//double wd_weight = 1.0;		// wrong direction
 		// ---------------------
 
 		// theta position
-		double fitness_1 = abs((M_PI/2 - pend.at(pend.size()-1).theta)*tp_weight)/2*M_PI;
+		double fitness_1 = abs((delta_theta(pend.at(pend.size()-1)))/2*M_PI*tp_weight);
 		// theta velocity
 		double fitness_2 = abs((pend.at(pend.size()-1).theta_dot)*tv_weight);
 		if (fitness_2 > 10) fitness_2 = 10;
 		fitness_2 = fitness_2/10;
-		// below horizontal axis (change to pass)
+		// below horizontal axis
 		double fitness_ch = 0.0;
-		if (pend.at(pend.size()-1).theta > M_PI) fitness_ch = ch_weight;
+		if (pend.at(pend.size()-1).theta > M_PI) {
+			fitness_ch = ch_weight;
+			below_horizontal = true;
+		}
 		// effort used
-		double fitness_tu = tu_weight * torq;
+		//double fitness_tu = tu_weight * torq;
 		// wrong direction
 		/*
 		double fitness_wd = 0.0;
@@ -155,7 +164,7 @@ namespace CB {  // Cart Balance
 		*/
 
 		double total_fitness;
-		total_fitness = fitness_1 + fitness_2 + fitness_ch + fitness_tu;
+		total_fitness = fitness_1 + fitness_2 + fitness_ch; //+ fitness_tu;
 		return total_fitness;
 	}
 
@@ -186,6 +195,26 @@ namespace CB {  // Cart Balance
 	}
 	// --------------------------------------
 
+	// return delta theta from PI/2 to input
+	// untested
+	double Pendulum::delta_theta(double in) {
+		double t = 0.0;
+		if (in > M_PI/2 && in < 3/2*M_PI) {
+			// between: PI/2 and 3/2*PI
+			t = in - M_PI/2;
+		} else {
+			if (in < M_PI/2) {
+				// between: 0 and PI/2
+				t = M_PI/2 - in;
+			} else {
+				// between: 3/2*PI and 2*PI
+				t = (5/2*M_PI - in); // 2*PI - in + PI/2
+			}
+		}
+		return t;
+
+	}
+
 	// export all state history to file "pend_state_log.csv" for review
 	void Pendulum::export_all_states() {
 		std::ofstream fout;
@@ -198,6 +227,10 @@ namespace CB {  // Cart Balance
 				", " << fitness_history.at(i) << "\n";
 		}	
 		fout.close();
+	}
+
+	bool return_below_horizontal() {
+		return below_horizontal;
 	}
 
 }
