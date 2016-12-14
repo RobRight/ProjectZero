@@ -58,7 +58,7 @@ namespace CB {  // Cart Balance
 		// determine fitness
 		double determine_reward();
 	public:
-		Pendulum();
+		Pendulum(unsigned int);
 		// static variables
 		double mass_p; // mass of pendulum
 		double length; // length of the pendulum
@@ -81,9 +81,12 @@ namespace CB {  // Cart Balance
 		void export_all_states();
 	};
 
-	Pendulum::Pendulum()
+	Pendulum::Pendulum(unsigned int in_rounds)
 	{
 		PendState initial;
+		torq_history.reserve(in_rounds);
+		fitness_history.reserve(in_rounds);
+		pend.reserve(in_rounds);
 		// - settings begin -
 		mass_p = 5; // kg
 		length = 1; // m
