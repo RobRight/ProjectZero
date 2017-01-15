@@ -1,0 +1,11 @@
+
+  XG server RGB
+-----------------
+
+date: 1/1/2017
+
+os: Ubuntu Server 16.04.1 LTS - 64bit
+
+hardware specs:
+- RAM: 
+- CPU cores: 2; speed: 
