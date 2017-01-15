@@ -3,4 +3,4 @@
 
 ## Agent <> Domain
 
-*note: duplicate files
+*note: duplicate files in agent and domain
