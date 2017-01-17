@@ -4,7 +4,7 @@
 
 date: 1/1/2017
 
-os: Ubuntu Server 16.04.1 LTS - 64bit
+os: ArchLinux
 
 hardware specs:
 - RAM: 
