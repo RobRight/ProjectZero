@@ -238,7 +238,6 @@ namespace InvPend {	 // Inverted Pendulum
 #endif
 		std::ofstream fout;
 		fout.open("_output/domain_state_log.csv", std::ofstream::out | std::ofstream::trunc);
-		c
 		for (std::size_t i=0; i<pend.size(); ++i) {
 			fout << torq_history.at(i) << ", " << cos(pend.at(i).theta) << \
 				", " << sin(pend.at(i).theta) << ", " << pend.at(i).theta*180/PI << \
