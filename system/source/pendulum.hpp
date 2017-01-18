@@ -14,7 +14,9 @@
 
 #define gravity 9.81  //m/s^2
 
-#define PI 3.14159
+#ifndef PI
+#define PI 3.14159265
+#endif
 
 #include <math.h>
 #include <stdio.h>

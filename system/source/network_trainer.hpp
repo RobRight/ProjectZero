@@ -7,6 +7,8 @@ Version 4.0
 Created by William Gregory on December 24th to present.
 Copyright (c) William Gregory.	All rights reserved.
 
+Migrate to system
+
 */
 
 #ifndef _NETWORK_TRAINER_
@@ -16,7 +18,9 @@ Copyright (c) William Gregory.	All rights reserved.
 //#define NT_DEBUG
 //#define NT_VERBOSE
 
+#ifndef PI
 #define PI 3.14159265
+#endif
 
 #include "neural_network.hpp"
 

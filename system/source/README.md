@@ -9,6 +9,11 @@
 
 ---
 
+### Status:
+* all work is focused on 'system.hpp'
+* migrate 'network_trainer.hpp' to 'system.hpp' as general trainer 'mode'
+* domain and agent have worked on their own
+
 ### File notes:
 * main.cpp : main system run file
 * system.hpp : agent and domain system; manages interation
@@ -21,4 +26,4 @@
 ### Folder notes:
 * _gui: Qt code (WIP)
 * _output: output data (runtime, compiler)
-* _testing: test functions and new files
+* _testing: test functions and WIP files

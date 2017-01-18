@@ -247,12 +247,12 @@ namespace System {
 			
 			//while (system_active) {
 				State s;
-		s.round_current = round_current;
 				state_last = s;
+				state_last.round_current = round_current;
 				// get state
 				state_last.state = domain.state();
 				// manage agents
-		for (std::size_t i=0; i<agents.size(); ++i) {
+				for (std::size_t i=0; i<agents.size(); ++i) {
 					// give state
 					agents.at(i).state(state_last.state);  // ERROR
 					// get action
@@ -298,13 +298,14 @@ namespace System {
 
 		void run() {
 			clock_t time_start = clock();
+			//std::cout << "system starting" << std::endl;
 
 			if (run_type == 1) run_single();
 			else if (run_type == 2) run_trainer();
 			else {
 				std::cout << "unknown run_type" << std::endl;
 			}
-			std::cout << "system exiting" << std::endl;
+			//std::cout << "system exiting" << std::endl;
 		}
 	};
 }

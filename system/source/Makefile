@@ -28,5 +28,5 @@ all: $(COP)
 system: 
 	$(CXX) $(CVER) $(SAGENT) $(SDOMAIN) $(SSYSTEM) $(SMAIN) $(SOUT)
 
-test:
-	$(CXX) $(CVER) $(SAGENT) $(SDOMAIN) $(SSYSTEM) $(TMAIN) $(TOUT)
+#test:
+#	$(CXX) $(CVER) $(SAGENT) $(SDOMAIN) $(SSYSTEM) $(TMAIN) $(TOUT)

@@ -39,7 +39,7 @@ github: RobRight
 #include "system.hpp"
 
 // settings
-unsigned int round_max = 2;
+unsigned int round_max = 1;
 unsigned int agent_count = 1;
 unsigned int run_type = 2;  // norm(1), train(2)
 // -
