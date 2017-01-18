@@ -17,7 +17,7 @@ github: RobRight
 // - SETTINGS -
 
 // system
-//#define S_DEBUG
+#define S_DEBUG
 //#define S_CONSOLE
 
 // neural network:

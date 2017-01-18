@@ -238,6 +238,8 @@ namespace System {
 			if (in.at(0) == 1.0) reset_domain();
 		}
 
+		//-----------------------------------
+
 		void run_single() {
 
 		}
@@ -254,7 +256,7 @@ namespace System {
 				// manage agents
 				for (std::size_t i=0; i<agents.size(); ++i) {
 					// give state
-					agents.at(i).state(state_last.state);  // ERROR
+					//agents.at(i).state(state_last.state);  // ERROR
 					// get action
 					//state_last.action_all.push_back(agents.at(i).action());
 				}

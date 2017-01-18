@@ -4,9 +4,9 @@
 # Optional test file named "test"
 
 # compile option
-#COP	=	system
+COP	=	system
 #COP	=	test
-COP	=	system test
+#COP	=	system test
 
 # system files
 SMAIN	=	main.cpp
@@ -28,5 +28,6 @@ all: $(COP)
 system: 
 	$(CXX) $(CVER) $(SAGENT) $(SDOMAIN) $(SSYSTEM) $(SMAIN) $(SOUT)
 
-#test:
-#	$(CXX) $(CVER) $(SAGENT) $(SDOMAIN) $(SSYSTEM) $(TMAIN) $(TOUT)
+# WIP
+test:
+	$(CXX) $(CVER) $(SAGENT) $(SDOMAIN) $(SSYSTEM) $(TMAIN) $(TOUT)
