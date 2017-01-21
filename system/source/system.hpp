@@ -12,41 +12,55 @@ date: 12/20/2016 to Present
 
 about:
 - multi agent; single domain
+- 'updates' allow communication between agent, domain, and system
+- each agent is treated the same besides an optional 'action' weight
+
+cycle:
+- domain state > agent(s)
+- compile agent(s) actions using weights
+- action > domain
+- domain fitness > agent(s)
+- posible configuration change or end of program
 
 setup:
 - single agent; single objective
 
-notes:
+inline note format:
 - DOMAIN : domain specific
 - FIX : needs work
 - ERROR : current error point
 
-status:
+---------------------------------
+
+status: keep updated log here
 - adding steps in System::run() to find bugs
 - nural network halting at weight generation
+- - this should not be happening.  most likely a problem farther up the code.
+- - further investigation required.
 
 ---------------------------------
 
 todo:
-- add data output
-- add round to system?
+- add data output to system
+- add round to system - consider trainer
 - check update in/out for trainer and cart_balance
 - add needed local values (consider GUI) updated with 'agent_update()'
 - add test best network function to trainer
 - add trainer domain.exort_all_states() control
 - efnorce namespace and class standards to prevent code modification need
-- posibly create connection class in agent and domain namespace
 - how to handle which network is being tested in agent
 - - instead of local loop, checkin and increment with report
 - - add new domain option from agent
-- - rename agent and domain object_... and move to seperate files
-- problem with neural network ***
-- - compare with past version
-- maybe add folders to source
 
 ideas:
-- system has two modes (single and train (multiple)) replace run code
+- system has two modes (single and train (multiple)) alternate main run code
+- - make network_trainer a general purpose 'agent trainer'
+- - incorperate trainer into the system
 - add class for iostream use (error, debug, ...)
+- create individual test files for agent, domain and system
+- - see _testing folder
+
+---------------------------------
 
 //double progress = (double)in_cr/in_rm;
 
@@ -63,9 +77,7 @@ ideas:
 namespace System {
 
 	/*
-
 		agent class - "port" between agent and system
-
 	*/
 	class Agent {
 		private:
@@ -104,9 +116,7 @@ namespace System {
 	};
 
 	/*
-
 		domain class - "port" between domain and system
-
 	*/
 	class Domain {
 		private:
@@ -133,10 +143,11 @@ namespace System {
 			out = domain.give_fitness();
 			return out;
 		}
-		// pass other information
+		// data from system; update domain
 		void update_in(std::vector <double> in) {
 			domain.update_in(in);
 		}
+		// data from domain; update system
 		std::vector <double> update_out() {
 			std::vector <double> u;
 			u = domain.update_out();
@@ -170,19 +181,19 @@ namespace System {
 		//
 		double best_fitness;
 		Agent best_agent;
-		std::vector <double> agent_weights;	 // action weight
+		std::vector <double> agent_weights;	 // action weights
 		//
 		std::vector <Agent> agents;
 		Domain domain;
 		//
-		std::vector <State> state_all;
+		std::vector <State> state_all;  // collection of all previous states
 		State state_last;
 		//
-		unsigned int agent_count;
+		unsigned int agent_count; // total number of agents
 		//
 		unsigned int round_current;
 		unsigned int round_max;
-		bool round_last;
+		bool round_last; // last round - posible name 'last_round'
 		//
 		bool domain_fail;
 
@@ -193,6 +204,8 @@ namespace System {
 			round_last = false;
 		}
 
+		// create agent(s) and domain
+		// set inital system parameters
 		void setup(unsigned int in_rm, unsigned int in_ac, unsigned int in_rt) {
 			round_max = in_rm;
 			agent_count = in_ac;
@@ -203,10 +216,15 @@ namespace System {
 				agents.push_back(a);
 				agent_weights.push_back(1.0); // FIX
 			}
-			//
+			// create domain
+			Domain d;
+			domain = d;
+			// set system parameters
 			system_active = true;
 		}
 
+		// replace domain with a fresh domain
+		// note: old domain is lost
 		void reset_domain() {
 			Domain d;
 			domain = d;
@@ -214,6 +232,8 @@ namespace System {
 
 		//-----------------------------------
 
+		// update creation for domain:
+		// - round_last
 		std::vector <double> create_domain_update() {
 			std::vector <double> t;
 			if (round_last) t.push_back(1.0);
@@ -221,6 +241,8 @@ namespace System {
 			return t;
 		}
 
+		// update creation for agent:
+		// - domain_update.at(0) // domain_fail
 		std::vector <double> create_agent_update(State in) {
 			std::vector <double> t;
 			if (in.domain_update.at(0) == 1.0) t.push_back(1.0);
@@ -228,11 +250,13 @@ namespace System {
 			return t;
 		}
 
+		// domain update interpretation
 		void check_domain_update(std::vector <double> in) {
 			// domain fail
 			if (in.at(0) == 1.0) domain_fail = true;
 		}
 
+		// agent update interpretation
 		void check_agent_update(std::vector <double> in) {
 			// index: 0 reset domain
 			if (in.at(0) == 1.0) reset_domain();
@@ -299,7 +323,7 @@ namespace System {
 		}
 
 		void run() {
-			clock_t time_start = clock();
+			//clock_t time_start = clock();
 			//std::cout << "system starting" << std::endl;
 
 			if (run_type == 1) run_single();
