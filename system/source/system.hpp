@@ -305,11 +305,11 @@ namespace System {
 				// manage agents
 				for (std::size_t i=0; i<agents.size(); ++i) {
 					// give state
-					//agents.at(i).state(state_last.state);  // ERROR
+					agents.at(i).state(state_last.state);  // ERROR
 					// get action
-					//state_last.action_all.push_back(agents.at(i).action());
+					state_last.action_all.push_back(agents.at(i).action());
 				}
-		/*
+				/*
 				// compile actions
 				for (std::size_t i=0; i<state_last.action_all.size(); ++i) {
 					for (std::size_t j=0; j<state_last.action_all.at(i).size(); ++j) {
