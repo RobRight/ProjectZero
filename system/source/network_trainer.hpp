@@ -227,7 +227,6 @@ public:
 #ifdef NT_DEBUG
 		std::cout << "debug: Trainer() start" << std::endl;
 #endif
-		srand(time(0));
 		ID_next = 1;
 		nodes_per_layer.clear();
 		nodes_per_layer.push_back(3);  // input

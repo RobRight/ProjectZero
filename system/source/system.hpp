@@ -325,12 +325,13 @@ namespace System {
 		void run() {
 			//clock_t time_start = clock();
 			//std::cout << "system starting" << std::endl;
-
+			
 			if (run_type == 1) run_single();
 			else if (run_type == 2) run_trainer();
 			else {
 				std::cout << "unknown run_type" << std::endl;
 			}
+
 			//std::cout << "system exiting" << std::endl;
 		}
 	};

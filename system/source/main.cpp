@@ -38,6 +38,9 @@ github: RobRight
 
 #include "system.hpp"
 
+#include <stdlib.h> // srand
+#include <time.h> // time for srand
+
 // settings
 unsigned int round_max = 1;
 unsigned int agent_count = 1;
@@ -45,10 +48,11 @@ unsigned int run_type = 2;  // norm(1), train(2)
 // -
 
 int main() {
+	srand(time(0));
 
 	System::System s;
 	s.setup(round_max, agent_count, run_type);
-	s.run();  // reset and run
+	//s.run();  // reset and run
 
 	return 0;
 
