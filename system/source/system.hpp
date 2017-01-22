@@ -48,6 +48,7 @@ todo:
 - how to handle which network is being tested in agent
 - - instead of local loop, checkin and increment with report
 - - add new domain option from agent
+- update Makefile so only modified files are compiled
 
 ideas:
 - system has two modes (single and train (multiple)) alternate main run code
@@ -309,7 +310,6 @@ namespace System {
 					// get action
 					state_last.action_all.push_back(agents.at(i).action());
 				}
-				/*
 				// compile actions
 				for (std::size_t i=0; i<state_last.action_all.size(); ++i) {
 					for (std::size_t j=0; j<state_last.action_all.at(i).size(); ++j) {
@@ -343,7 +343,6 @@ namespace System {
 				} else if (round_current-1 == round_max) {
 					round_last = true;
 				}
-			*/
 			//}
 		}
 
