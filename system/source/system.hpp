@@ -34,6 +34,7 @@ inline note format:
 
 status: keep updated log here
 - adding steps in System::run() to find bugs
+- network trainer is not complete.  need to manage cycle after state recieved.
 
 ---------------------------------
 
