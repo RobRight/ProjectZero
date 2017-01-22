@@ -196,6 +196,9 @@ namespace System {
 
 		public:
 		System() {
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: system online" << std::endl;
+#endif
 			round_current = 1;
 			domain_fail = false;
 			round_last = false;
@@ -204,6 +207,9 @@ namespace System {
 		// create agent(s) and domain
 		// set inital system parameters
 		void setup(unsigned int in_rm, unsigned int in_ac, unsigned int in_rt) {
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: system setup" << std::endl;
+#endif
 			Agent a;
 			round_max = in_rm;
 			agent_count = in_ac;
@@ -224,6 +230,9 @@ namespace System {
 		// replace domain with a fresh domain
 		// note: old domain is lost
 		void reset_domain() {
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: reset domain" << std::endl;
+#endif
 			Domain d;
 			domain = d;
 		}
@@ -233,6 +242,9 @@ namespace System {
 		// update creation for domain:
 		// - round_last
 		std::vector <double> create_domain_update() {
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: create domain update" << std::endl;
+#endif
 			std::vector <double> t;
 			if (round_last) t.push_back(1.0);
 			else t.push_back(0.0);
@@ -242,6 +254,9 @@ namespace System {
 		// update creation for agent:
 		// - domain_update.at(0) // domain_fail
 		std::vector <double> create_agent_update(State in) {
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: create agent update" << std::endl;
+#endif
 			std::vector <double> t;
 			if (in.domain_update.at(0) == 1.0) t.push_back(1.0);
 			else t.push_back(0.0);
@@ -250,12 +265,18 @@ namespace System {
 
 		// domain update interpretation
 		void check_domain_update(std::vector <double> in) {
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: check domain update" << std::endl;
+#endif
 			// domain fail
 			if (in.at(0) == 1.0) domain_fail = true;
 		}
 
 		// agent update interpretation
 		void check_agent_update(std::vector <double> in) {
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: check agent update" << std::endl;
+#endif
 			// index: 0 reset domain
 			if (in.at(0) == 1.0) reset_domain();
 		}
@@ -263,10 +284,16 @@ namespace System {
 		//-----------------------------------
 
 		void run_single() {
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: run single" << std::endl;
+#endif
 
 		}
 
 		void run_trainer() {
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: run trainer" << std::endl;
+#endif
 			// MAIN LOOP
 			
 			//while (system_active) {
@@ -321,8 +348,11 @@ namespace System {
 		}
 
 		void run() {
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: run" << std::endl;
+#endif
 			//clock_t time_start = clock();
-			//std::cout << "system starting" << std::endl;
+			std::cout << "system starting" << std::endl;
 
 			if (run_type == 1) run_single();
 			else if (run_type == 2) run_trainer();
@@ -330,7 +360,7 @@ namespace System {
 				std::cout << "unknown run_type" << std::endl;
 			}
 
-			//std::cout << "system exiting" << std::endl;
+			std::cout << "system exiting" << std::endl;
 		}
 	};
 }
