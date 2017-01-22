@@ -207,6 +207,8 @@ namespace System {
 		// create agent(s) and domain
 		// set inital system parameters
 		void setup(unsigned int in_rm, unsigned int in_ac, unsigned int in_rt) {
+			Agent a;
+			/*
 			round_max = in_rm;
 			agent_count = in_ac;
 			run_type = in_rt;
@@ -228,6 +230,7 @@ namespace System {
 		void reset_domain() {
 			Domain d;
 			domain = d;
+		*/
 		}
 
 		//-----------------------------------
@@ -325,7 +328,7 @@ namespace System {
 		void run() {
 			//clock_t time_start = clock();
 			//std::cout << "system starting" << std::endl;
-			
+
 			if (run_type == 1) run_single();
 			else if (run_type == 2) run_trainer();
 			else {
