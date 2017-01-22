@@ -95,6 +95,7 @@ namespace System {
 		std::vector <double> action() {
 			std::vector <double> out;
 			out = agent.give_action();
+			std::cout << "action out: " << out.size() << std::endl;
 			return out;
 		}
 		// send fitness to agent
@@ -306,7 +307,7 @@ namespace System {
 				// manage agents
 				for (std::size_t i=0; i<agents.size(); ++i) {
 					// give state
-					agents.at(i).state(state_last.state);  // ERROR
+					agents.at(i).state(state_last.state);
 					// get action
 					state_last.action_all.push_back(agents.at(i).action());
 				}
