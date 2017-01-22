@@ -311,6 +311,7 @@ namespace System {
 					state_last.action_all.push_back(agents.at(i).action());
 				}
 				// compile actions
+				std::cout << "info: " << state_last.action_all.size() << ":" << state_last.action_all.at(0).size() << std::endl;
 				for (std::size_t i=0; i<state_last.action_all.size(); ++i) {
 					for (std::size_t j=0; j<state_last.action_all.at(i).size(); ++j) {
 						if (i == 0) state_last.action_sum.push_back(0.0);
