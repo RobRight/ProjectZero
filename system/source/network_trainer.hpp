@@ -234,7 +234,7 @@ public:
 		hidden_layer_size = 8;
 		mutate_mod = 0.1;
 		mutate_chance = 0.3;
-		double max_torque = 1.0;  // DOMAIN SPECIFIC\
+		double max_torque = 1.0;  // DOMAIN SPECIFIC
 	}
 
 	void setup() {
