@@ -21,7 +21,7 @@ github: RobRight
 //#define S_CONSOLE
 
 // neural network:
-#define NN_DEBUG
+//#define NN_DEBUG
 //#define NN_VERBOSE
 //#define NN_TEST
 
@@ -52,7 +52,7 @@ int main() {
 
 	System::System s;
 	s.setup(round_max, agent_count, run_type);
-	//s.run();  // reset and run
+	s.run();  // reset and run
 
 	return 0;
 
