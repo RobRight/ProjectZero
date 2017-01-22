@@ -320,6 +320,8 @@ namespace System {
 				}
 				
 				// domain action
+				std::cout << "info: " << state_last.action_sum.size() << std::endl;
+				std::cout << state_last.action_sum.at(0).size() << std::endl;
 				domain.action(state_last.action_sum);  // ERROR
 				/*
 				// domain fitness
