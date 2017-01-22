@@ -352,7 +352,6 @@ namespace System {
 			std::cout << "S_DEBUG: run" << std::endl;
 #endif
 			//clock_t time_start = clock();
-			std::cout << "system starting" << std::endl;
 
 			if (run_type == 1) run_single();
 			else if (run_type == 2) run_trainer();
@@ -360,7 +359,9 @@ namespace System {
 				std::cout << "unknown run_type" << std::endl;
 			}
 
-			std::cout << "system exiting" << std::endl;
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: system complete" << std::endl;
+#endif
 		}
 	};
 }
