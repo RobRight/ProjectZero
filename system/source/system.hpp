@@ -318,6 +318,7 @@ namespace System {
 						state_last.action_sum.at(j) += state_last.action_all.at(i).at(j) * agent_weights.at(i);
 					}
 				}
+				/*
 				// domain action
 				domain.action(state_last.action_sum);
 				// domain fitness
@@ -343,6 +344,7 @@ namespace System {
 				} else if (round_current-1 == round_max) {
 					round_last = true;
 				}
+				*/
 			//}
 		}
 
