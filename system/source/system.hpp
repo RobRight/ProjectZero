@@ -34,9 +34,6 @@ inline note format:
 
 status: keep updated log here
 - adding steps in System::run() to find bugs
-- nural network halting at weight generation
-- - this should not be happening.  most likely a problem farther up the code.
-- - further investigation required.
 
 ---------------------------------
 
@@ -208,7 +205,6 @@ namespace System {
 		// set inital system parameters
 		void setup(unsigned int in_rm, unsigned int in_ac, unsigned int in_rt) {
 			Agent a;
-			/*
 			round_max = in_rm;
 			agent_count = in_ac;
 			run_type = in_rt;
@@ -223,7 +219,6 @@ namespace System {
 			domain = d;
 			// set system parameters
 			system_active = true;
-			*/
 		}
 
 		// replace domain with a fresh domain
