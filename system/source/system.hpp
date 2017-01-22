@@ -223,6 +223,7 @@ namespace System {
 			domain = d;
 			// set system parameters
 			system_active = true;
+			*/
 		}
 
 		// replace domain with a fresh domain
@@ -230,7 +231,6 @@ namespace System {
 		void reset_domain() {
 			Domain d;
 			domain = d;
-		*/
 		}
 
 		//-----------------------------------

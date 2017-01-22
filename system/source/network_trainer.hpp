@@ -227,6 +227,9 @@ public:
 #ifdef NT_DEBUG
 		std::cout << "debug: Trainer() start" << std::endl;
 #endif
+	}
+
+	void setup() {
 		// settings
 		domain_test_max = 400; // network/domain cycles
 		round_max = 100;  // population evolutions
@@ -235,9 +238,6 @@ public:
 		mutate_mod = 0.1;
 		mutate_chance = 0.3;
 		double max_torque = 1.0;  // DOMAIN SPECIFIC
-	}
-
-	void setup() {
 		// do not modify
 		ID_next = 1;
 		nodes_per_layer.clear();
