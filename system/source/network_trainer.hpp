@@ -227,14 +227,6 @@ public:
 #ifdef NT_DEBUG
 		std::cout << "debug: Trainer() start" << std::endl;
 #endif
-		ID_next = 1;
-		nodes_per_layer.clear();
-		nodes_per_layer.push_back(3);  // input
-		nodes_per_layer.push_back(hidden_layer_size);
-		nodes_per_layer.push_back(1);  // output
-	}
-
-	void setup() {
 		// settings
 		domain_test_max = 400; // network/domain cycles
 		round_max = 100;  // population evolutions
@@ -242,11 +234,19 @@ public:
 		hidden_layer_size = 8;
 		mutate_mod = 0.1;
 		mutate_chance = 0.3;
-		double max_torque = 1.0;  // DOMAIN SPECIFIC
+		double max_torque = 1.0;  // DOMAIN SPECIFIC\
+	}
+
+	void setup() {
 		// do not modify
+		ID_next = 1;
+		nodes_per_layer.clear();
+		nodes_per_layer.push_back(3);  // input
+		nodes_per_layer.push_back(hidden_layer_size);
+		nodes_per_layer.push_back(1);  // output
 		domain_test_current = 0;
 		runtime_error = false;
-			current_round = 0;
+		current_round = 0;
 		max_output.push_back(max_torque);  // DOMAIN SPECIFIC
 		best_fitness = HUGE_VAL;
 		population = generate_population();

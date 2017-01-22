@@ -88,7 +88,7 @@ namespace System {
 		public:
 		Agent() {
 			agent.setup();
-	}
+		}
 		// send state to agent
 		void state(std::vector <double> in) {
 			agent.get_state(in);
