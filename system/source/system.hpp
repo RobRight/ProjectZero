@@ -320,7 +320,7 @@ namespace System {
 				}
 				
 				// domain action
-				domain.action(state_last.action_sum);
+				domain.action(state_last.action_sum);  // ERROR
 				/*
 				// domain fitness
 				state_last.fitness = domain.fitness();
