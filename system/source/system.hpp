@@ -33,8 +33,6 @@ inline note format:
 ---------------------------------
 
 status: keep updated log here
-- adding steps in System::run() to find bugs
-- network trainer is not complete.  need to manage cycle after state recieved.
 - next step is merging the trainer into the system.
 - - no seperate trainer class.  manage the population of agents from the system.
 - - posible Evolutionary Algorithm seperate from system for easy modification.
@@ -300,7 +298,7 @@ namespace System {
 #ifdef S_DEBUG
 			std::cout << "S_DEBUG: run trainer" << std::endl;
 #endif
-			//while (system_active) {
+			while (system_active) {
 				// new system state
 				State s;
 				state_last = s;
@@ -347,7 +345,7 @@ namespace System {
 				} else if (round_current-1 == round_max) {
 					round_last = true;
 				}
-			//}
+			}
 		}
 
 		void run() {
