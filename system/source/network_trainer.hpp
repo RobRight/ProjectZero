@@ -306,10 +306,10 @@ public:
 			domain_test_current = domain_test_max;
 		}
 		// second index - last round
-		if (in.at(1) == 1.0) {
+		//if (in.at(1) == 1.0) {
 			// export values
 			// test best network
-		}
+		//}
 		// third index - next domain test?
 		//if (in.at(2) == 1.0) {
 

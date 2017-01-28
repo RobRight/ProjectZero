@@ -339,9 +339,8 @@ namespace System {
 					// update out (from agent)
 					state_last.agent_updates.push_back(agents.at(i).update_out());
 				}
-				/*
+				// round cleanup
 				state_all.push_back(state_last);
-
 				++round_current;
 				if (round_current == round_max) {
 					system_active = false;
