@@ -35,6 +35,11 @@ inline note format:
 status: keep updated log here
 - adding steps in System::run() to find bugs
 - network trainer is not complete.  need to manage cycle after state recieved.
+- next step is merging the trainer into the system.
+- - no seperate trainer class.  manage the population of agents from the system.
+- - posible Evolutionary Algorithm seperate from system for easy modification.
+- - consider alternitives to currention 'update_in/out' method.
+- - testing seperate trainer; no mutation; only running population at first index.
 
 ---------------------------------
 
@@ -213,7 +218,6 @@ namespace System {
 #ifdef S_DEBUG
 			std::cout << "S_DEBUG: system setup" << std::endl;
 #endif
-			Agent a;
 			round_max = in_rm;
 			agent_count = in_ac;
 			run_type = in_rt;
@@ -221,7 +225,7 @@ namespace System {
 			for (std::size_t i=0; i<agent_count; ++i) {
 				Agent a;
 				agents.push_back(a);
-				agent_weights.push_back(1.0); // FIX
+				agent_weights.push_back(1.0); // FIX - pre-define?
 			}
 			// create domain
 			Domain d;
@@ -290,20 +294,19 @@ namespace System {
 #ifdef S_DEBUG
 			std::cout << "S_DEBUG: run single" << std::endl;
 #endif
-
+			
 		}
 
 		void run_trainer() {
 #ifdef S_DEBUG
 			std::cout << "S_DEBUG: run trainer" << std::endl;
 #endif
-			// MAIN LOOP
-			
 			//while (system_active) {
+				// new system state
 				State s;
 				state_last = s;
 				state_last.round_current = round_current;
-				// get state
+				// get domain state
 				state_last.state = domain.state();
 				// manage agents
 				for (std::size_t i=0; i<agents.size(); ++i) {

@@ -31,6 +31,7 @@ void cart_balance_delta_theta() {
 	std::cout << "cart_balance_delta_theta - done" << std::endl;
 }
 
+// agent
 void neural_network() {
 	std::cout << "neural_network" << std::endl;
 	std::vector <unsigned int> nc = {2,4,2};

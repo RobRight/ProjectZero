@@ -227,6 +227,7 @@ public:
 #ifdef NT_DEBUG
 		std::cout << "debug: Trainer() start" << std::endl;
 #endif
+		setup();
 	}
 
 	void setup() {
@@ -237,7 +238,7 @@ public:
 		hidden_layer_size = 8;
 		mutate_mod = 0.1;
 		mutate_chance = 0.3;
-		double max_torque = 1.0;  // DOMAIN SPECIFIC
+		double max_torque = 1.0;  // DOMAIN SPECIFIC  // REMOVE - auto max 1
 		// do not modify
 		ID_next = 1;
 		nodes_per_layer.clear();
@@ -265,8 +266,7 @@ public:
 		last_state.push_back(sin(in.at(0)));  // y
 		last_state.push_back(in.at(1));	 // theta dot
 		// cycle
-		//std::cout << population.size() << std::endl;
-		//last_action = cycle_network(last_state, population.at(0));  // FIX
+		last_action = cycle_network(last_state, population.at(0));  // FIX - single network?????
 
 	}
 
