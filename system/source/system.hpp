@@ -204,7 +204,7 @@ namespace System {
 #ifdef S_DEBUG
 			std::cout << "S_DEBUG: system online" << std::endl;
 #endif
-			round_current = 1;
+			round_current = 0;
 			domain_fail = false;
 			round_last = false;
 		}
