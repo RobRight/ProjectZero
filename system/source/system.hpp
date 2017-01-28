@@ -316,7 +316,6 @@ namespace System {
 					state_last.action_all.push_back(agents.at(i).action());
 				}
 				// compile actions
-				std::cout << "info: " << state_last.action_all.size() << ":" << state_last.action_all.at(0).size() << std::endl;
 				for (std::size_t i=0; i<state_last.action_all.size(); ++i) {
 					for (std::size_t j=0; j<state_last.action_all.at(i).size(); ++j) {
 						if (i == 0) state_last.action_sum.push_back(0.0);
@@ -324,14 +323,12 @@ namespace System {
 						state_last.action_sum.at(j) += state_last.action_all.at(i).at(j) * agent_weights.at(i);
 					}
 				}
-				
 				// domain action
-				std::cout << "info: " << state_last.action_sum.size() << std::endl;
-				domain.action(state_last.action_sum);  // ERROR
-				/*
+				domain.action(state_last.action_sum);
 				// domain fitness
 				state_last.fitness = domain.fitness();
-				//domain update in
+				/*
+				// domain update in
 				domain.update_in(create_domain_update());
 				// domain update out
 				state_last.domain_update = domain.update_out();
