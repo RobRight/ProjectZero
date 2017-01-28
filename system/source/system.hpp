@@ -38,6 +38,7 @@ status: keep updated log here
 - - posible Evolutionary Algorithm seperate from system for easy modification.
 - - consider alternitives to currention 'update_in/out' method.
 - - testing seperate trainer; no mutation; only running population at first index.
+- - note: single run agents are wrong.  both should be agents, no trainer.
 
 ---------------------------------
 
