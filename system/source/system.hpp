@@ -328,9 +328,9 @@ namespace System {
 				state_last.fitness = domain.fitness();
 				// domain update in
 				domain.update_in(create_domain_update());
-				/*
 				// domain update out
 				state_last.domain_update = domain.update_out();
+				/*
 				// manage agents
 				for (std::size_t i=0; i<agents.size(); ++i) {
 					// fitness
