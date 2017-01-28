@@ -266,7 +266,6 @@ namespace System {
 			std::vector <double> t;
 			if (in.domain_update.at(0) == 1.0) t.push_back(1.0);
 			else t.push_back(0.0);
-			std::cout << "beep boop" << std::endl;
 			return t;
 		}
 

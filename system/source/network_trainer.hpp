@@ -314,6 +314,7 @@ public:
 		//if (in.at(2) == 1.0) {
 
 		//}
+		std::cout << "beep boop" << std::endl;
 	}
 };
 }
