@@ -330,16 +330,16 @@ namespace System {
 				domain.update_in(create_domain_update());
 				// domain update out
 				state_last.domain_update = domain.update_out();
-				/*
 				// manage agents
 				for (std::size_t i=0; i<agents.size(); ++i) {
-					// fitness
+					// give fitness to agents
 					agents.at(i).fitness(state_last.fitness);
-					// update in
+					// update in (to agent)
 					agents.at(i).update_in(create_agent_update(state_last));
-					// update out
+					// update out (from agent)
 					state_last.agent_updates.push_back(agents.at(i).update_out());
 				}
+				/*
 				state_all.push_back(state_last);
 
 				++round_current;
