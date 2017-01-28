@@ -101,7 +101,6 @@ namespace System {
 		std::vector <double> action() {
 			std::vector <double> out;
 			out = agent.give_action();
-			std::cout << "action out: " << out.size() << std::endl;
 			return out;
 		}
 		// send fitness to agent
@@ -327,9 +326,9 @@ namespace System {
 				domain.action(state_last.action_sum);
 				// domain fitness
 				state_last.fitness = domain.fitness();
-				/*
 				// domain update in
 				domain.update_in(create_domain_update());
+				/*
 				// domain update out
 				state_last.domain_update = domain.update_out();
 				// manage agents
