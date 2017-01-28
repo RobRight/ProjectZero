@@ -347,7 +347,6 @@ namespace System {
 				} else if (round_current-1 == round_max) {
 					round_last = true;
 				}
-				*/
 			//}
 		}
 
