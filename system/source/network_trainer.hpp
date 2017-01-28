@@ -294,6 +294,7 @@ public:
 		// generate new domain - new for new net
 		if (true) t.push_back(1.0);	 // check count
 		else t.push_back(0.0);
+		return t;
 	}
 
 
@@ -314,7 +315,6 @@ public:
 		//if (in.at(2) == 1.0) {
 
 		//}
-		std::cout << "beep boop" << std::endl;
 	}
 };
 }
