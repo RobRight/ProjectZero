@@ -6,6 +6,6 @@
 
 ## Images:
 
-![system_tab.png](media/system_tab.png)
+![system_tab.png](source/media/system_tab.png)
 
-![data_tab.png](media/data_tab.png)
+![data_tab.png](source/media/data_tab.png)
