@@ -171,26 +171,45 @@ namespace System {
 	/*
 		State: system state container
 	*/
-	struct State {
-		std::vector <double> state;
-		std::vector <double> action_sum;
-		std::vector <std::vector <double> > action_all;
-		std::vector <double> fitness;
+	struct StateSingle {
+		std::vector <double> state;  // from domain
+		std::vector <std::vector <double> > action_all;  // from agent
+        std::vector <double> action_sum;
+		std::vector <double> fitness_all;
+        double fitness; // sum of fitness_all (cycle specific)
 		//
 		std::vector <double> domain_update;	 // from domain
-		std::vector <std::vector <double> > agent_updates; // from agent
-		unsigned int round_current;
+		unsigned int cycle_current;
 	};
 
-
+    /*
+     *  SystemSingle
+     */
 	class SystemSingle {
-	
+        std::vector <StateSingle> states;  // collection of states
+        std::vector <Agent> agents;
+        Domain domain;
+        std::vector <double> agent_weights;
+        unsigned int cycle_max;  // run count
+        unsigned int cycle_current;
+        double fitness; // sum of all states fitness - result
 	public:
-		void run_single(std::vector<Agent> agent, Domain domain, unsigned int run_count) {
+        void setup_single(std::vector<Agent> in_a, Domain in_d, unsigned int in_c, std::vector <double> in_w) {
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: setup single" << std::endl;
+#endif
+            agents = in_a;
+            domain = in_d;
+            cycle_max = in_c;
+            agent_weights = in_w;
+        }
+        // return fitness
+		double run_single() {
 #ifdef S_DEBUG
 			std::cout << "S_DEBUG: run single" << std::endl;
 #endif
-			while (system_active) {
+			while (cycle_current < cycle_max) {
+                /*
 				// new system state
 				State s;
 				state_last = s;
@@ -235,15 +254,44 @@ namespace System {
 				} else if (round_current-1 == round_max) {
 					round_last = true;
 				}
+				*/
 			}
+			return fitness;
 		}
 	};
 
-
+    /*
+     *  SystemTrainer
+     */
 	class SystemTrainer {
-	
+    private:
+        std::vector <std::vector <Agent> > population;   // groups of agents
+        std::vector <double> fitness; // double per group
+        //
+        unsigned int pop_size;  // population size
+        unsigned int agent_count;  // agents in a group
+        unsigned int cycle_max;
+        unsigned int cycle_current;
 	public:
-		void run_trainer() {
+        void setup(unsigned int in_pop_size, unsigned int in_agent_count, unsigned int in_cycle) {
+            // parameters
+            pop_size = in_pop_size;
+            agent_count = in_agent_count;
+            cycle_max = in_cycle;
+            cycle_current = 0;
+            // create population
+            population.clear();
+            for (std::size_t p=0; p<pop_size; ++p) {
+                std::vector <Agent> t;
+                for (std::size_t i=0; i<agent_count; ++i) {
+                    Agent a;
+                    t.push_back(a);
+                    //agent_weights.push_back(1.0); // FIX - pre-define
+                }
+                population.push_back(t);
+            }
+        }
+		void run() {
 #ifdef S_DEBUG
 			std::cout << "S_DEBUG: run trainer" << std::endl;
 #endif
@@ -256,38 +304,13 @@ namespace System {
 
 	*/
 	class System {
-		private:
-		bool system_active;
-		unsigned int run_type;
-		//
-		double best_fitness;
-		Agent best_agent;
-		std::vector <double> agent_weights;	 // action weights
-		//
-		std::vector <Agent> agents;
-		Domain domain;
-		//
-		std::vector <State> state_all;  // collection of all previous states
-		State state_last;
-		//
+    private:
+		unsigned int type_run;  // run type (0:single, 1:trainer)
 		unsigned int agent_count; // total number of agents
 		//
-		unsigned int round_current;
-		unsigned int round_max;
-		bool round_last; // last round - posible name 'last_round'
-		//
-		bool domain_fail;
-
-		public:
-		System() {
-#ifdef S_DEBUG
-			std::cout << "S_DEBUG: system online" << std::endl;
-#endif
-			round_current = 0;
-			domain_fail = false;
-			round_last = false;
-		}
-
+		double best_fitness;
+        std::vector <Agent> best_agents;
+    public:
 		// create agent(s) and domain
 		// set inital system parameters
 		void setup(unsigned int in_rm, unsigned int in_ac, unsigned int in_rt) {
@@ -297,12 +320,7 @@ namespace System {
 			round_max = in_rm;
 			agent_count = in_ac;
 			run_type = in_rt;
-			// create agent(s)
-			for (std::size_t i=0; i<agent_count; ++i) {
-				Agent a;
-				agents.push_back(a);
-				agent_weights.push_back(1.0); // FIX - pre-define?
-			}
+			
 			// create domain
 			Domain d;
 			domain = d;
