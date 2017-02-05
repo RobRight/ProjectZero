@@ -1,6 +1,6 @@
 
 - seperate EA from trainer
-- system runs either trainer or single  (HOW)
+- system runs either trainer or single  (two systems...)
 - system includes agent and domain
 - system manages communication
 
