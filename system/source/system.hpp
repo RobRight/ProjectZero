@@ -10,6 +10,13 @@ date: 12/20/2016 to Present
 
 ---------------------------------
 
+info:
+- Agent
+- Domain
+- SystemSingle
+- SystemTrainer
+- System
+
 about:
 - multi agent; single domain
 - 'updates' allow communication between agent, domain, and system
@@ -33,6 +40,9 @@ inline note format:
 ---------------------------------
 
 status: keep updated log here
+-- serate SystemSingle and SystemTrainer
+-- SystemTrainer uses SystemSingle
+
 - next step is merging the trainer into the system.
 - - no seperate trainer class.  manage the population of agents from the system.
 - - posible Evolutionary Algorithm seperate from system for easy modification.
@@ -74,8 +84,8 @@ ideas:
 
 #include "utilities.hpp"
 
-#include "network_trainer.hpp"	// AGENT
-#include "pendulum.hpp"	 // DOMAIN
+#include "agent/network_trainer.hpp"	// AGENT
+#include "domain/pendulum.hpp"	 // DOMAIN
 
 namespace System {
 
@@ -170,6 +180,74 @@ namespace System {
 		std::vector <double> domain_update;	 // from domain
 		std::vector <std::vector <double> > agent_updates; // from agent
 		unsigned int round_current;
+	};
+
+
+	class SystemSingle {
+	
+	public:
+		void run_single(std::vector<Agent> agent, Domain domain, unsigned int run_count) {
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: run single" << std::endl;
+#endif
+			while (system_active) {
+				// new system state
+				State s;
+				state_last = s;
+				state_last.round_current = round_current;
+				// get domain state
+				state_last.state = domain.state();
+				// manage agents
+				for (std::size_t i=0; i<agents.size(); ++i) {
+					// give state
+					agents.at(i).state(state_last.state);
+					// get action
+					state_last.action_all.push_back(agents.at(i).action());
+				}
+				// compile actions
+				for (std::size_t i=0; i<state_last.action_all.size(); ++i) {
+					for (std::size_t j=0; j<state_last.action_all.at(i).size(); ++j) {
+						if (i == 0) state_last.action_sum.push_back(0.0);
+						// sum actions from each agent with agent action weight
+						state_last.action_sum.at(j) += state_last.action_all.at(i).at(j) * agent_weights.at(i);
+					}
+				}
+				// domain action
+				domain.action(state_last.action_sum);
+				// domain fitness
+				state_last.fitness = domain.fitness();
+				// domain update in
+				domain.update_in(create_domain_update());
+				// domain update out
+				state_last.domain_update = domain.update_out();
+				// manage agents
+				for (std::size_t i=0; i<agents.size(); ++i) {
+					// update in (to agent)
+					agents.at(i).update_in(create_agent_update(state_last));
+					// update out (from agent)
+					state_last.agent_updates.push_back(agents.at(i).update_out());
+				}
+				// round cleanup
+				state_all.push_back(state_last);
+				++round_current;
+				if (round_current == round_max) {
+					system_active = false;
+				} else if (round_current-1 == round_max) {
+					round_last = true;
+				}
+			}
+		}
+	};
+
+
+	class SystemTrainer {
+	
+	public:
+		void run_trainer() {
+#ifdef S_DEBUG
+			std::cout << "S_DEBUG: run trainer" << std::endl;
+#endif
+		}
 	};
 
 	/*
@@ -288,114 +366,6 @@ namespace System {
 
 		//-----------------------------------
 
-		void run_single() {
-#ifdef S_DEBUG
-			std::cout << "S_DEBUG: run single" << std::endl;
-#endif
-			while (system_active) {
-				// new system state
-				State s;
-				state_last = s;
-				state_last.round_current = round_current;
-				// get domain state
-				state_last.state = domain.state();
-				// manage agents
-				for (std::size_t i=0; i<agents.size(); ++i) {
-					// give state
-					agents.at(i).state(state_last.state);
-					// get action
-					state_last.action_all.push_back(agents.at(i).action());
-				}
-				// compile actions
-				for (std::size_t i=0; i<state_last.action_all.size(); ++i) {
-					for (std::size_t j=0; j<state_last.action_all.at(i).size(); ++j) {
-						if (i == 0) state_last.action_sum.push_back(0.0);
-						// sum actions from each agent with agent action weight
-						state_last.action_sum.at(j) += state_last.action_all.at(i).at(j) * agent_weights.at(i);
-					}
-				}
-				// domain action
-				domain.action(state_last.action_sum);
-				// domain fitness
-				state_last.fitness = domain.fitness();
-				// domain update in
-				domain.update_in(create_domain_update());
-				// domain update out
-				state_last.domain_update = domain.update_out();
-				// manage agents
-				for (std::size_t i=0; i<agents.size(); ++i) {
-					// update in (to agent)
-					agents.at(i).update_in(create_agent_update(state_last));
-					// update out (from agent)
-					state_last.agent_updates.push_back(agents.at(i).update_out());
-				}
-				// round cleanup
-				state_all.push_back(state_last);
-				++round_current;
-				if (round_current == round_max) {
-					system_active = false;
-				} else if (round_current-1 == round_max) {
-					round_last = true;
-				}
-			}
-		}
-
-		void run_trainer() {
-#ifdef S_DEBUG
-			std::cout << "S_DEBUG: run trainer" << std::endl;
-#endif
-			while (system_active) {
-				// new system state
-				State s;
-				state_last = s;
-				state_last.round_current = round_current;
-				// get domain state
-				state_last.state = domain.state();
-				// manage agents
-				for (std::size_t i=0; i<agents.size(); ++i) {
-					// give state
-					agents.at(i).state(state_last.state);
-					// get action
-					state_last.action_all.push_back(agents.at(i).action());
-				}
-				// compile actions
-				for (std::size_t i=0; i<state_last.action_all.size(); ++i) {
-					for (std::size_t j=0; j<state_last.action_all.at(i).size(); ++j) {
-						if (i == 0) state_last.action_sum.push_back(0.0);
-						// sum actions from each agent with agent action weight
-						state_last.action_sum.at(j) += state_last.action_all.at(i).at(j) * agent_weights.at(i);
-					}
-				}
-				// domain action
-				domain.action(state_last.action_sum);
-				// domain fitness
-				state_last.fitness = domain.fitness();
-				// domain update in
-				domain.update_in(create_domain_update());
-				// domain update out
-				state_last.domain_update = domain.update_out();
-				// manage agents
-				for (std::size_t i=0; i<agents.size(); ++i) {
-					// give fitness to agents
-					agents.at(i).fitness(state_last.fitness);
-					// update in (to agent)
-					agents.at(i).update_in(create_agent_update(state_last));
-					// update out (from agent)
-					state_last.agent_updates.push_back(agents.at(i).update_out());
-				}
-				// round cleanup
-				state_all.push_back(state_last);
-				++round_current;
-				if (round_current == round_max) {
-					system_active = false;
-				} else if (round_current-1 == round_max) {
-					round_last = true;
-				} else if (round_current > round_max) {
-					std::cout << "S_NOTE: exiting with round current past round max" << std::endl;
-					system_active = false;
-				}
-			}
-		}
 
 		void run() {
 #ifdef S_DEBUG
@@ -414,6 +384,8 @@ namespace System {
 #endif
 		}
 	};
+
 }
 
 #endif
+

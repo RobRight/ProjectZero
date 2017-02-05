@@ -6,16 +6,16 @@
 
 #include <iostream>
 
-#include "../cart_balance.hpp"
+#include "../pendulum.hpp"
 
-void cart_balance_delta_theta() {
-	std::cout << "cart_balance_delta_theta" << std::endl;
+void delta_theta() {
+	std::cout << "TEST: cart_balance_delta_theta" << std::endl;
 
 	// add test P/F
 	// FIX : last two failing
 
 	// test 1, 359, 91, 89
-	CB::Pendulum pend;
+	InvPend::Pendulum pend;
 	std::cout << "0:90" << "\t" << pend.delta_theta(0*PI/180)*180/PI << std::endl;	// 90
 	std::cout << "90:0" << "\t" << pend.delta_theta(90*PI/180)*180/PI << std::endl;	 // 0
 	std::cout << "180:90" << "\t" << pend.delta_theta(180*PI/180)*180/PI << std::endl;	// 90
@@ -27,7 +27,7 @@ void cart_balance_delta_theta() {
 
 int main() {
 
-
-
-    return 0;
+	delta_theta();
+	
+	return 0;
 }
