@@ -190,8 +190,8 @@ namespace System {
         std::vector <Agent> agents;
         Domain domain;
         std::vector <double> agent_weights;
-        unsigned int cycle_max;  // run count
-        unsigned int cycle_current;
+        unsigned int round_max;  // run count
+        unsigned int round_current;
         double fitness; // sum of all states fitness - result
 	public:
         void setup_single(std::vector<Agent> in_a, Domain in_d, unsigned int in_c, std::vector <double> in_w) {
@@ -208,8 +208,7 @@ namespace System {
 #ifdef S_DEBUG
 			std::cout << "S_DEBUG: run single" << std::endl;
 #endif
-			while (cycle_current < cycle_max) {
-                /*
+			while (round_current < round_max) {
 				// new system state
 				State s;
 				state_last = s;
@@ -236,25 +235,19 @@ namespace System {
 				// domain fitness
 				state_last.fitness = domain.fitness();
 				// domain update in
-				domain.update_in(create_domain_update());
+				//domain.update_in(create_domain_update());
 				// domain update out
-				state_last.domain_update = domain.update_out();
+				//state_last.domain_update = domain.update_out();
 				// manage agents
-				for (std::size_t i=0; i<agents.size(); ++i) {
-					// update in (to agent)
-					agents.at(i).update_in(create_agent_update(state_last));
-					// update out (from agent)
-					state_last.agent_updates.push_back(agents.at(i).update_out());
-				}
+				//for (std::size_t i=0; i<agents.size(); ++i) {
+				//	// update in (to agent)
+				//	agents.at(i).update_in(create_agent_update(state_last));
+				//	// update out (from agent)
+				//	state_last.agent_updates.push_back(agents.at(i).update_out());
+				//}
 				// round cleanup
 				state_all.push_back(state_last);
 				++round_current;
-				if (round_current == round_max) {
-					system_active = false;
-				} else if (round_current-1 == round_max) {
-					round_last = true;
-				}
-				*/
 			}
 			return fitness;
 		}

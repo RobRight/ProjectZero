@@ -1,6 +1,19 @@
+
+// EA by William Gregory
+// todo: check function vector type <network? no>
+
+#ifndef _EVOLUTIONARY_ALG_
+#define _EVOLUTIONARY_ALG_
+
+//#define IA_DEBUG
+
+#include <vector>
+
+class IA {
+
 	// prune population
 	std::vector <Network::Network> prune(std::vector <Network::Network>& in_pop, std::vector <double>& in_pop_error) {
-#ifdef NT_DEBUG
+#ifdef IA_DEBUG
 		std::cout << "debug: prune() start" << std::endl;
 #endif
 		unsigned int try_1;
@@ -22,7 +35,7 @@
 
 	// fill population
 	std::vector <Network::Network> populate(std::vector <Network::Network>& in_pop, unsigned int& in_pop_size) {
-#ifdef NT_DEBUG
+#ifdef IA_DEBUG
 		std::cout << "debug: populate() start" << std::endl;
 #endif
 		int copy_index;
@@ -40,3 +53,7 @@
 		}
 		return temp_new_pop;
 	}
+
+};
+
+#endif
