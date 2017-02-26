@@ -8,14 +8,16 @@
 //#define IA_DEBUG
 
 #include <vector>
+#include "agent.hpp"
 
 class IA {
-
+private:
 	// prune population
 	std::vector <Network::Network> prune(std::vector <Network::Network>& in_pop, std::vector <double>& in_pop_error) {
 #ifdef IA_DEBUG
-		std::cout << "debug: prune() start" << std::endl;
+		std::cout << "DEBUG:IA:PRUNE" << std::endl;
 #endif
+/*
 		unsigned int try_1;
 		unsigned int try_2;
 		std::vector <Network::Network> temp_new_pop;
@@ -30,14 +32,17 @@ class IA {
 			else
 				temp_new_pop.push_back(in_pop.at(try_2));
 		}
+*/
 		return temp_new_pop;
 	}
 
 	// fill population
-	std::vector <Network::Network> populate(std::vector <Network::Network>& in_pop, unsigned int& in_pop_size) {
+	std::vector <Network::Network> populate(std::vector <Agent>& in_pop, unsigned int& in_pop_size) {
 #ifdef IA_DEBUG
-		std::cout << "debug: populate() start" << std::endl;
+		std::cout << "DEBUG:IA:POPULATE" << std::endl;
 #endif
+		std::vector <Agent> temp_new_pop = in_pop;
+/*
 		int copy_index;
 		Network::Network net;
 		std::vector <Network::Network> temp_new_pop = in_pop;
@@ -51,9 +56,14 @@ class IA {
 			net.mutate();
 			temp_new_pop.push_back(net);
 		}
+*/
 		return temp_new_pop;
 	}
-
+public:
+	std::vector <Agent> cycle(std::vector <Agent> in_p, std::vector <double> in_f) {
+		std::vector <Agent> a;
+		return a;
+	}
 };
 
 #endif
