@@ -189,9 +189,8 @@ namespace System {
         std::vector <StateSingle> states;  // collection of states
         std::vector <Agent> agents;
         Domain domain;
-        std::vector <double> action_weights;  // action weights
-        unsigned int round_max;  // run count
-        unsigned int round_current;
+        std::vector <double> action_weights;
+        unsigned int round_max;
         double fitness; // sum of all states fitness - result
 	public:
 		// in: agents, domain, cycles, action weights
@@ -209,7 +208,7 @@ namespace System {
 #ifdef S_DEBUG
 			std::cout << "DEBUG:SYSTEM:SINGLE:RUN" << std::endl;
 #endif
-			while (round_current < round_max) {
+			for (std::size_t i=0; i<round_max; ++i) {
 				// new system state
 				State s;
 				state_last = s;
@@ -237,7 +236,6 @@ namespace System {
 				state_last.fitness = domain.fitness();
 				// round cleanup
 				state_all.push_back(state_last);
-				++round_current;
 			}
 			return fitness;
 		}
@@ -254,7 +252,6 @@ namespace System {
         unsigned int pop_size;  // population size
         unsigned int agent_count;  // agents in a group
         unsigned int cycle_max;
-        unsigned int cycle_current;
 	public:
 		// in: pop size, agent_count, cycles
         void setup(unsigned int in_pop_size, unsigned int in_agent_count, unsigned int in_cycle) {
@@ -291,8 +288,6 @@ namespace System {
 					fitness.push_back(s.run());
 				}
 				// improvement algorithm (EA) - given fitness and population
-				// do it again!
-				++cycle_current;
 			}
 		}
 	};
