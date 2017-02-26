@@ -15,25 +15,23 @@ github: RobRight
 */
 
 // - SETTINGS -
-
-// system
+/// system
 #define S_DEBUG
 //#define S_CONSOLE
 
-// neural network:
+/// neural network:
 //#define NN_DEBUG
 //#define NN_VERBOSE
 //#define NN_TEST
 
-// network trainer:
+/// network trainer:
 //#define NT_DEBUG
 //#define NT_VERBOSE
 
-// pendulum domain:
+/// pendulum domain:
 //#define PD_DEBUG
 //#define PD_CONSULE
 //#define PD_MIDLOG
-
 // -   END	  -
 
 #include "system.hpp"
@@ -42,8 +40,6 @@ github: RobRight
 #include <time.h> // time for srand
 
 // settings
-unsigned int round_max = 1;
-unsigned int agent_count = 1;
 unsigned int run_type = 2;  // norm(1), train(2)
 // -
 
@@ -51,7 +47,7 @@ int main() {
 	srand(time(0));
 
 	System::System s;
-	s.setup(round_max, agent_count, run_type);
+	s.setup(run_type);
 	s.run();  // reset and run
 
 	return 0;

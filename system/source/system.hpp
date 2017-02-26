@@ -90,8 +90,8 @@ ideas:
 namespace System {
 
 	/*
-		agent class - "port" between agent and system
-	*/
+	 *	agent class - "port" between agent and system
+	 */
 	class Agent {
 		private:
 		Trainer::Trainer agent;	 // AGENT
@@ -129,8 +129,8 @@ namespace System {
 	};
 
 	/*
-		domain class - "port" between domain and system
-	*/
+	 *	domain class - "port" between domain and system
+	 */
 	class Domain {
 		private:
 		InvPend::Pendulum domain; // DOMAIN
@@ -169,8 +169,8 @@ namespace System {
 	};
 
 	/*
-		State: system state container
-	*/
+	 *	State: system state container
+	 */
 	struct StateSingle {
 		std::vector <double> state;  // from domain
 		std::vector <std::vector <double> > action_all;  // from agent
@@ -183,30 +183,31 @@ namespace System {
 	};
 
     /*
-     *  SystemSingle
+     *	SystemSingle
      */
 	class SystemSingle {
         std::vector <StateSingle> states;  // collection of states
         std::vector <Agent> agents;
         Domain domain;
-        std::vector <double> agent_weights;
+        std::vector <double> action_weights;  // action weights
         unsigned int round_max;  // run count
         unsigned int round_current;
         double fitness; // sum of all states fitness - result
 	public:
+		// in: agents, domain, cycles, action weights
         void setup_single(std::vector<Agent> in_a, Domain in_d, unsigned int in_c, std::vector <double> in_w) {
 #ifdef S_DEBUG
-			std::cout << "S_DEBUG: setup single" << std::endl;
+			std::cout << "DEBUG:SYSTEM:SINGLE:SETUP" << std::endl;
 #endif
             agents = in_a;
             domain = in_d;
             cycle_max = in_c;
-            agent_weights = in_w;
+            action_weights = in_w;
         }
         // return fitness
-		double run_single() {
+		double run() {
 #ifdef S_DEBUG
-			std::cout << "S_DEBUG: run single" << std::endl;
+			std::cout << "DEBUG:SYSTEM:SINGLE:RUN" << std::endl;
 #endif
 			while (round_current < round_max) {
 				// new system state
@@ -227,24 +228,13 @@ namespace System {
 					for (std::size_t j=0; j<state_last.action_all.at(i).size(); ++j) {
 						if (i == 0) state_last.action_sum.push_back(0.0);
 						// sum actions from each agent with agent action weight
-						state_last.action_sum.at(j) += state_last.action_all.at(i).at(j) * agent_weights.at(i);
+						state_last.action_sum.at(j) += state_last.action_all.at(i).at(j) * action_weights.at(i);
 					}
 				}
 				// domain action
 				domain.action(state_last.action_sum);
 				// domain fitness
 				state_last.fitness = domain.fitness();
-				// domain update in
-				//domain.update_in(create_domain_update());
-				// domain update out
-				//state_last.domain_update = domain.update_out();
-				// manage agents
-				//for (std::size_t i=0; i<agents.size(); ++i) {
-				//	// update in (to agent)
-				//	agents.at(i).update_in(create_agent_update(state_last));
-				//	// update out (from agent)
-				//	state_last.agent_updates.push_back(agents.at(i).update_out());
-				//}
 				// round cleanup
 				state_all.push_back(state_last);
 				++round_current;
@@ -254,7 +244,7 @@ namespace System {
 	};
 
     /*
-     *  SystemTrainer
+     *	SystemTrainer
      */
 	class SystemTrainer {
     private:
@@ -266,6 +256,7 @@ namespace System {
         unsigned int cycle_max;
         unsigned int cycle_current;
 	public:
+		// in: pop size, agent_count, cycles
         void setup(unsigned int in_pop_size, unsigned int in_agent_count, unsigned int in_cycle) {
             // parameters
             pop_size = in_pop_size;
@@ -279,7 +270,6 @@ namespace System {
                 for (std::size_t i=0; i<agent_count; ++i) {
                     Agent a;
                     t.push_back(a);
-                    //agent_weights.push_back(1.0); // FIX - pre-define
                 }
                 population.push_back(t);
             }
@@ -288,14 +278,28 @@ namespace System {
 #ifdef S_DEBUG
 			std::cout << "S_DEBUG: run trainer" << std::endl;
 #endif
+			for (std::size_t i=0; i<cycle_max; ++i) {
+				for (std::size_t p=0; p<population.size(); ++p) {
+					SystemSingle s;
+					std::vector <double> tw;
+					for (std::size_t w=0; w<agent_count; ++w) {
+						tw.push_back(1.0); // FIX - pre-define
+					}
+					Domain td;
+					// in: agents, domain, cycles, action weights
+					s.setup(population.at(p), td, 100, tw);
+					fitness.push_back(s.run());
+				}
+				// improvement algorithm (EA) - given fitness and population
+				// do it again!
+				++cycle_current;
+			}
 		}
 	};
 
 	/*
-
-		System
-
-	*/
+	 *	System
+	 */
 	class System {
     private:
 		unsigned int type_run;  // run type (0:single, 1:trainer)
@@ -304,94 +308,33 @@ namespace System {
 		double best_fitness;
         std::vector <Agent> best_agents;
     public:
-		// create agent(s) and domain
-		// set inital system parameters
-		void setup(unsigned int in_rm, unsigned int in_ac, unsigned int in_rt) {
+		void setup(unsigned int in_rt) {
 #ifdef S_DEBUG
-			std::cout << "S_DEBUG: system setup" << std::endl;
+			std::cout << "DEBUG:SYSTEM:SETUP" << std::endl;
 #endif
-			round_max = in_rm;
-			agent_count = in_ac;
 			run_type = in_rt;
-			
-			// create domain
-			Domain d;
-			domain = d;
-			// set system parameters
-			system_active = true;
 		}
-
-		// replace domain with a fresh domain
-		// note: old domain is lost
-		void reset_domain() {
-#ifdef S_DEBUG
-			std::cout << "S_DEBUG: reset domain" << std::endl;
-#endif
-			Domain d;
-			domain = d;
+		void run_single() {
+			SystemSingle s;
+			// in: agents, domain, cycles, action weights
+			//s.setup();
+			std::cout << "NOTE:SYSTEM:RUN_SINGLE - not implemented" << std::endl;
 		}
-
-		//-----------------------------------
-
-		// update creation for domain:
-		// - round_last
-		std::vector <double> create_domain_update() {
-#ifdef S_DEBUG
-			std::cout << "S_DEBUG: create domain update" << std::endl;
-#endif
-			std::vector <double> t;
-			if (round_last) t.push_back(1.0);
-			else t.push_back(0.0);
-			return t;
+		void run_trainer() {
+			SystemTrainer t;
+			// in: pop size, agent_count, cycles
+			t.setup(100, 2, 100);
+			t.run();
 		}
-
-		// update creation for agent:
-		// - domain_update.at(0) // domain_fail
-		std::vector <double> create_agent_update(State in) {
-#ifdef S_DEBUG
-			std::cout << "S_DEBUG: create agent update" << std::endl;
-#endif
-			std::vector <double> t;
-			if (in.domain_update.at(0) == 1.0) t.push_back(1.0);
-			else t.push_back(0.0);
-			return t;
-		}
-
-		// domain update interpretation
-		void check_domain_update(std::vector <double> in) {
-#ifdef S_DEBUG
-			std::cout << "S_DEBUG: check domain update" << std::endl;
-#endif
-			// domain fail
-			if (in.at(0) == 1.0) domain_fail = true;
-		}
-
-		// agent update interpretation
-		void check_agent_update(std::vector <double> in) {
-#ifdef S_DEBUG
-			std::cout << "S_DEBUG: check agent update" << std::endl;
-#endif
-			// index: 0 reset domain
-			if (in.at(0) == 1.0) reset_domain();
-		}
-
-		//-----------------------------------
-
-
 		void run() {
 #ifdef S_DEBUG
-			std::cout << "S_DEBUG: run" << std::endl;
+			std::cout << "DEBUG:SYSTEM:RUN - start" << std::endl;
 #endif
-			//clock_t time_start = clock();
-
 			if (run_type == 1) run_single();
 			else if (run_type == 2) run_trainer();
-			else {
-				std::cout << "unknown run_type" << std::endl;
-			}
-
+			else std::cout << "ERROR:SYSTEM:RUN - unknown run_type" << std::endl;
 #ifdef S_DEBUG
-			std::cout << "S_DEBUG: system complete" << std::endl;
+			std::cout << "DEBUG:SYSTEM:RUN - complete" << std::endl;
 #endif
 		}
 	};
