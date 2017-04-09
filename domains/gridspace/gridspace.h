@@ -504,7 +504,7 @@ void Grid::main_run_human()
 	}
 }
 
-void Grid::main_run_bot()
+void Grid::setup_game_bot()
 {
 	unsigned int t_targets = 1;  // target count (const)
 	// generate grid
@@ -518,6 +518,7 @@ void Grid::main_run_bot()
 	}
 	// place player
 	grid = place_grid_player(grid, player_x, player_y);
+	/*
 	while(play && !runtime_error)
 	{
 		if (bot_display_grid) display_grid(grid);
@@ -535,6 +536,13 @@ void Grid::main_run_bot()
 			}
 		}
 	}
+	*/
+}
+
+bool Grid::move_bot(unsigned int move)
+{
+	grid = apply_move(grid, move);
+	return check_target_reached();
 }
 
 void Grid::play_game(int in_x, int in_y, bool in_pt)
@@ -544,7 +552,8 @@ void Grid::play_game(int in_x, int in_y, bool in_pt)
 	grid_x = in_x;
 	grid_y = in_y;
 	// start game
-	if (human_player) main_run_human();
-	else main_run_bot();
+	//if (human_player) main_run_human();
+	//else main_run_bot();
+	setup_game_bot();
 }
 
